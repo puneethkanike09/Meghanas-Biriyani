@@ -1,5 +1,9 @@
-import HomePage from "./(home)/page";
+import HeroSection from "./(home)/HeroSection";
 
-export default function DefaultPage() {
-    return <HomePage />;
+export default function HomePage() {
+    return (
+        <>
+            <HeroSection />
+        </>
+    );
 }
