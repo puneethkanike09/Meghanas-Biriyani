@@ -13,6 +13,9 @@ const config: Config = {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        'proxima-nova': ['var(--font-proxima-nova)', 'sans-serif'],
+      },
     },
   },
   plugins: [],
