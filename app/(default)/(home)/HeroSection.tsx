@@ -1,12 +1,13 @@
 "use client";
 
+import Image from "next/image";
 
 export default function HeroSection() {
   return (
-    <div className="relative flex items-center justify-center bg-gradient-to-br from-orange-500 to-yellow-500">
+    <div className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-500 to-yellow-500">
       <div className="absolute inset-0 bg-black/10 z-0" />
 
-      <div className="section-container py-32 relative z-10">
+      <div className="container mx-auto px-4 py-32 relative z-10">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="text-white space-y-6">
             <h1 className="text-5xl md:text-6xl font-bold">
@@ -26,7 +27,34 @@ export default function HeroSection() {
             </div>
           </div>
 
-       
+          <div className="relative">
+            <div className="relative w-full aspect-square">
+              <Image
+                src="/biriyani-hero.jpg"
+                alt="Delicious Biriyani"
+                fill
+                className="object-cover rounded-2xl shadow-2xl"
+                priority
+              />
+              {/* Floating elements */}
+              <div className="absolute -top-4 -left-4 w-24 h-24">
+                <Image
+                  src="/leaf1.png"
+                  alt="Decorative leaf"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-24 h-24">
+                <Image
+                  src="/leaf2.png"
+                  alt="Decorative leaf"
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
