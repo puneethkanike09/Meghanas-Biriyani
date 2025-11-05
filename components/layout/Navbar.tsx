@@ -45,12 +45,12 @@ export default function Navbar() {
                         {/* Search Bar */}
                         <div className="hidden md:flex flex-1 max-w-md">
                             <div className="relative w-full">
+                                <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input
                                     type="text"
                                     placeholder="Search for dishes, cuisines..."
-                                    className="w-full px-4 py-2 pr-10 rounded-xl border-none bg-inputBgColor text-black placeholder:inputPlaceholderColor focus:outline-none"
+                                    className="w-full px-4 py-2 pl-10 rounded-xl border-none bg-inputBgColor text-black placeholder:inputPlaceholderColor focus:outline-none"
                                 />
-                                <MagnifyingGlassIcon className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                             </div>
                         </div>
 
