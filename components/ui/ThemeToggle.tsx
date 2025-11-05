@@ -44,7 +44,7 @@ export default function ThemeToggle() {
                     return "dark";
                 });
             }}
-            className="rounded-lg p-2 hover:bg-gray-100 text-black dark:text-white dark:hover:bg-gray-800"
+            className="rounded-lg p-2 hover:bg-gray-100 text-black dark:text-primary dark:hover:bg-gray-800"
         >
             {theme === "dark" && (
                 <svg

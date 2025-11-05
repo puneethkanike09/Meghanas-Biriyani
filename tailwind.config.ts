@@ -10,8 +10,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: '#F47729',
+        bgColor: '#FFFFFF',
+        textColor: '#000000'
       },
       fontFamily: {
         'proxima-nova': ['var(--font-proxima-nova)', 'sans-serif'],

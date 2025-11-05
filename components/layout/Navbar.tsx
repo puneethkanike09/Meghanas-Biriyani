@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function Navbar() {
     return (
         <div className="fixed top-4 left-0 right-0 z-50 section">
-            <nav className="mx-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg py-4 px-4">
+            <nav className="mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-lg py-4 px-4">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <Link href="/" className="flex items-center space-x-2">
