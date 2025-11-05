@@ -12,7 +12,9 @@ const config: Config = {
       colors: {
         primary: '#F47729',
         bgColor: '#FFFFFF',
-        textColor: '#000000'
+        textColor: '#000000',
+        inputBgColor: '#F5F5F5',
+        inputPlaceholderColor: '#717680',
       },
       fontFamily: {
         'proxima-nova': ['var(--font-proxima-nova)', 'sans-serif'],

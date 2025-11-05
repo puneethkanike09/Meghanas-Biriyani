@@ -56,7 +56,7 @@ export default function ThemeToggle() {
                     system: "dark"
                 }[current] as Theme));
             }}
-            className="rounded-lg p-2 hover:bg-gray-100 text-black dark:text-primary dark:hover:bg-gray-800 transition-colors"
+            className="rounded-full p-2 hover:bg-gray-100 text-gray-700 transition-colors"
             aria-label={`Switch to ${
                 theme === "dark" ? "light" : theme === "light" ? "system" : "dark"
             } mode`}
