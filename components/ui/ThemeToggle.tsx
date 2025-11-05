@@ -5,30 +5,35 @@ import { useEffect, useState } from "react";
 type Theme = "dark" | "light" | "system";
 
 export default function ThemeToggle() {
-    const [theme, setTheme] = useState<Theme>(() => {
-        if (typeof localStorage !== "undefined" && localStorage.theme) {
-            return localStorage.theme as Theme;
-        }
-        return "system";
-    });
-
+    const [theme, setTheme] = useState<Theme>("system");
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
+        // Initialize theme from localStorage on mount
+        const storedTheme = localStorage.getItem("theme") as Theme;
+        if (storedTheme) {
+            setTheme(storedTheme);
+        }
         setMounted(true);
     }, []);
 
     useEffect(() => {
+        if (!mounted) return;
+
         const isDark =
             theme === "dark" ||
             (theme === "system" &&
                 window.matchMedia("(prefers-color-scheme: dark)").matches);
 
         document.documentElement.classList.toggle("dark", isDark);
-        localStorage.theme = theme;
-    }, [theme]);
+        localStorage.setItem("theme", theme);
+    }, [theme, mounted]);
 
-    if (!mounted) return null;
+    if (!mounted) {
+        return (
+            <div className="rounded-lg p-2 w-10 h-10" />
+        );
+    }
 
     return (
         <button

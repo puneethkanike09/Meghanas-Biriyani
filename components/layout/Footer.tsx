@@ -18,7 +18,6 @@ export default function Footer() {
                                 height={40}
                                 className="w-10 h-10"
                             />
-                            <span className="text-xl font-bold">Meghana&apos;s Biriyani</span>
                         </Link>
                         <p className="text-gray-400">
                             Authentic South Indian cuisine, served with love since 2000.

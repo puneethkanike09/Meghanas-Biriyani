@@ -18,9 +18,7 @@ export default function Navbar() {
                             height={40}
                             className="w-10 h-10"
                         />
-                        <span className="text-xl font-bold text-gray-900 dark:text-white">
-                            Meghanas Biriyani
-                        </span>
+                        
                     </Link>
 
                     {/* Navigation Links */}
