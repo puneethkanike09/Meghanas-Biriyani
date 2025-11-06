@@ -22,7 +22,7 @@ export default function Button({
   const baseStyles = "inline-flex items-center justify-center font-medium rounded-[8px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none";
 
   const variants = {
-    default: "bg-white text-black hover:bg-gray-100",
+    default: "bg-white text-black hover:bg-gray-100 border border-[#D5D7DA]",
     dark: "bg-black text-white hover:bg-gray-800",
     primary: "bg-primary text-white hover:bg-orange-700"
   };
