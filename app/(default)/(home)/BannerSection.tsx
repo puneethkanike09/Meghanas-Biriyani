@@ -122,14 +122,14 @@ export default function BannerSection() {
                     <div className="flex gap-3">
                         <button
                             onClick={scrollPrev}
-                            className="w-10 h-10 tablet:w-12 tablet:h-12 desktop:w-[72px] desktop:h-[72px] flex items-center justify-center bg-[#F5F5F5] rounded-full hover:bg-[#D5D7DA] transition-all duration-200"
+                            className=" w-10 h-10 flex items-center justify-center bg-[#F5F5F5] hover:bg-[#D5D7DA] rounded-full hover:bg- transition-all duration-200"
                             aria-label="Previous slide"
                         >
                             <ChevronLeftIcon className="w-5 h-5 tablet:w-6 tablet:h-6 desktop:w-5 desktop:h-5" />
                         </button>
                         <button
                             onClick={scrollNext}
-                            className="w-10 h-10 tablet:w-12 tablet:h-12 desktop:w-[72px] desktop:h-[72px] flex items-center justify-center rounded-full bg-[#F5F5F5] hover:bg-[#D5D7DA] transition-all duration-200"
+                            className=" w-10 h-10 flex items-center justify-center bg-[#F5F5F5] hover:bg-[#D5D7DA] rounded-full hover:bg- transition-all duration-200"
                             aria-label="Next slide"
                         >
                             <ChevronRightIcon className="w-5 h-5 tablet:w-6 tablet:h-6 desktop:w-5 desktop:h-5" />
