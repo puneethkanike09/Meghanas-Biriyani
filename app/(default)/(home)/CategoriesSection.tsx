@@ -172,7 +172,7 @@ export default function CategoriesSection() {
                         {DISHES.map((dish) => (
                             <div
                                 key={dish.id}
-                                className="flex-[0_0_280px] tablet:flex-[0_0_320px] desktop:flex-[0_0_300px] min-w-0 px-2 tablet:px-3 first:pl-0 last:pr-0"
+                                className="flex-[0_0_300px] tablet:flex-[0_0_340px] desktop:flex-[0_0_320px] min-w-0 px-2 tablet:px-3 first:pl-0 last:pr-0"
                             >
                                 <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300">
                                     {/* Image */}

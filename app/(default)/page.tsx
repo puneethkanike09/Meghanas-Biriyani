@@ -1,4 +1,5 @@
 import HeroSection from "./(home)/HeroSection";
+import VibeSection from "./(home)/VibeSection";
 import CategoriesSection from "./(home)/CategoriesSection";
 import BannerSection from "./(home)/BannerSection";
 import TopDishesSection from "./(home)/TopDishesSection";
@@ -8,6 +9,7 @@ export default function HomePage() {
     return (
         <>
             <HeroSection />
+            <VibeSection />
             <CategoriesSection />
             <BannerSection />
             <TopDishesSection />
