@@ -28,7 +28,7 @@ export default function ValuesSection() {
                 <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-white">
                     Our Values
                 </h2>
-                <div className="grid md:grid-cols-3 gap-8">
+                <div className="grid gap-8 tablet:grid-cols-2 desktop:grid-cols-3">
                     {VALUES.map((value) => (
                         <div
                             key={value.title}

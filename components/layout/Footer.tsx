@@ -7,7 +7,7 @@ export default function Footer() {
     return (
         <footer className="bg-gray-100 dark:bg-gray-900 text-white">
             <div className="section-container py-12">
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-black dark:text-white">
+                <div className="grid grid-cols-1 gap-8 text-black dark:text-white tablet:grid-cols-2 desktop:grid-cols-4">
                     {/* Brand */}
                     <div className="space-y-4">
                         <Link href="/" className="flex items-center space-x-2">

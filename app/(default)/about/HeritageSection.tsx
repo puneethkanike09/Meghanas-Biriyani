@@ -6,7 +6,7 @@ export default function HeritageSection() {
     return (
         <section className="py-16">
             <div className="section-container">
-                <div className="grid md:grid-cols-2 gap-12 items-center">
+                <div className="grid gap-8 items-center tablet:grid-cols-2 desktop:gap-16">
                     <div>
                         <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">
                             Our Heritage

@@ -9,6 +9,10 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      screens: {
+        tablet: "768px",
+        desktop: "1280px",
+      },
       colors: {
         primary: '#F47729',
         bgColor: '#FFFFFF',

@@ -13,10 +13,10 @@ import {
 export default function Navbar() {
     return (
         <div className="fixed top-4 left-0 right-0 z-50 section">
-            <nav className="mx-auto bg-white dark:bg-white rounded-xl shadow-sm py-4 px-6">
-                <div className="flex items-center justify-between gap-28">
+            <nav className="mx-auto bg-white dark:bg-white rounded-xl shadow-sm py-3 px-4 tablet:py-4 tablet:px-6">
+                <div className="flex items-center justify-between gap-4 tablet:gap-10 desktop:gap-24">
                     {/* Left Section */}
-                    <div className="flex items-center justify-between gap-8 flex-1">
+                    <div className="flex items-center justify-between gap-4 tablet:gap-8 tablet:flex-1">
                         {/* Logo */}
                         <Link href="/" className="flex items-center">
                             <Image
@@ -29,7 +29,7 @@ export default function Navbar() {
                         </Link>
 
                         {/* Location */}
-                        <div className="hidden md:flex items-center gap-2">
+                        <div className="hidden tablet:flex items-center gap-2">
                             <MapPinIcon className="w-5 h-5 text-gray-600" />
                             <div className="flex flex-col">
                                 <span className="text-xs text-gray-500">Deliver To</span>
@@ -41,9 +41,9 @@ export default function Navbar() {
                     </div>
 
                     {/* Right Section */}
-                    <div className="flex items-center justify-between gap-6 flex-1">
+                    <div className="flex items-center justify-end gap-4 tablet:gap-6 tablet:flex-1">
                         {/* Search Bar */}
-                        <div className="hidden md:flex flex-1 max-w-md">
+                        <div className="hidden desktop:flex flex-1 max-w-md">
                             <div className="relative w-full">
                                 <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                                 <input

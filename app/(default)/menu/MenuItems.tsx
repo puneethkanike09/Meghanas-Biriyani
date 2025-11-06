@@ -55,7 +55,7 @@ export default function MenuItems() {
                         <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
                             {category.category}
                         </h2>
-                        <div className="grid md:grid-cols-2 gap-6">
+                        <div className="grid gap-6 tablet:grid-cols-2 desktop:grid-cols-3 desktop:gap-8">
                             {category.items.map((item) => (
                                 <div
                                     key={item.name}
