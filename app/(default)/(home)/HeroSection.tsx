@@ -27,8 +27,6 @@ export default function HeroSection() {
               </Button>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>

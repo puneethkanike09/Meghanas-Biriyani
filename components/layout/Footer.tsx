@@ -14,26 +14,26 @@ export default function Footer() {
                 {/* Main Footer Content */}
                 <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2 tablet:gap-12 desktop:grid-cols-4 desktop:gap-16">
                     {/* Brand Section */}
-                    <div className="space-y-4 tablet:space-y-6">
-                        <h3 className="text-xl tablet:text-2xl font-bold text-white">
+                    <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
                             Meghana Foods
                         </h3>
-                        <p className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 leading-relaxed">
+                        <p className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 leading-relaxed">
                             Authentic South Indian cuisine delivered fresh to
                             your doorstep. Experience the rich flavors of
                             traditional cooking.
                         </p>
                         {/* Social Media Icons */}
-                        <div className="flex gap-3 pt-2">
+                        <div className="flex gap-3 tablet:gap-4 desktop:gap-3 pt-2">
                             <Link
                                 href="https://facebook.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                className="flex items-center gap-2 text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 aria-label="Facebook"
                             >
                                 <svg
-                                    className="w-5 h-5"
+                                    className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5"
                                     fill="currentColor"
                                     viewBox="0 0 24 24"
                                 >
@@ -44,11 +44,11 @@ export default function Footer() {
                                 href="https://instagram.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                className="flex items-center gap-2 text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 aria-label="Instagram"
                             >
                                 <svg
-                                    className="w-5 h-5"
+                                    className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5"
                                     fill="currentColor"
                                     viewBox="0 0 24 24"
                                 >
@@ -59,11 +59,11 @@ export default function Footer() {
                                 href="https://twitter.com"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="flex items-center gap-2 text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                className="flex items-center gap-2 text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 aria-label="Twitter"
                             >
                                 <svg
-                                    className="w-5 h-5"
+                                    className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5"
                                     fill="currentColor"
                                     viewBox="0 0 24 24"
                                 >
@@ -74,15 +74,15 @@ export default function Footer() {
                     </div>
 
                     {/* Quick Links */}
-                    <div className="space-y-4 tablet:space-y-6">
-                        <h3 className="text-lg tablet:text-xl font-semibold text-white">
+                    <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
                             Quick Links
                         </h3>
                         <ul className="space-y-3">
                             <li>
                                 <Link
                                     href="/about"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     About Us
                                 </Link>
@@ -90,7 +90,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/menu"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Menu
                                 </Link>
@@ -98,7 +98,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/offers"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Offers
                                 </Link>
@@ -106,7 +106,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/catering"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Catering Services
                                 </Link>
@@ -114,7 +114,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/franchise"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Franchise
                                 </Link>
@@ -123,15 +123,15 @@ export default function Footer() {
                     </div>
 
                     {/* Customer Service */}
-                    <div className="space-y-4 tablet:space-y-6">
-                        <h3 className="text-lg tablet:text-xl font-semibold text-white">
+                    <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
                             Customer Service
                         </h3>
                         <ul className="space-y-3">
                             <li>
                                 <Link
                                     href="/help"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Help & Support
                                 </Link>
@@ -139,7 +139,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/track-order"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Track Order
                                 </Link>
@@ -147,7 +147,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/terms"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Terms & Conditions
                                 </Link>
@@ -155,7 +155,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/privacy"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Privacy Policy
                                 </Link>
@@ -163,7 +163,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/refund"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     Refund Policy
                                 </Link>
@@ -172,31 +172,31 @@ export default function Footer() {
                     </div>
 
                     {/* Contact Us */}
-                    <div className="space-y-4 tablet:space-y-6">
-                        <h3 className="text-lg tablet:text-xl font-semibold text-white">
+                    <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
                             Contact Us
                         </h3>
                         <ul className="space-y-4">
                             <li className="flex items-start gap-3">
-                                <MapPinIcon className="w-5 h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0 mt-0.5" />
-                                <span className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 leading-relaxed">
+                                <MapPinIcon className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0 mt-0.5" />
+                                <span className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 leading-relaxed">
                                     Bangalore, Karnataka, India
                                 </span>
                             </li>
                             <li className="flex items-center gap-3">
-                                <PhoneIcon className="w-5 h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0" />
+                                <PhoneIcon className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0" />
                                 <a
                                     href="tel:+919876543210"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
                                 >
                                     +91 98765 43210
                                 </a>
                             </li>
                             <li className="flex items-center gap-3">
-                                <EnvelopeIcon className="w-5 h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0" />
+                                <EnvelopeIcon className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0" />
                                 <a
                                     href="mailto:contact@meghanafoods.com"
-                                    className="text-sm tablet:text-base text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors break-all"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors break-all"
                                 >
                                     contact@meghanafoods.com
                                 </a>
