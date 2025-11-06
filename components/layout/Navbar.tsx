@@ -13,8 +13,8 @@ import {
 export default function Navbar() {
     return (
         <div className="fixed top-4 left-0 right-0 z-50 section">
-            <nav className="mx-auto bg-white dark:bg-white rounded-xl shadow-lg py-4 px-6">
-                <div className="flex items-center justify-between gap-8">
+            <nav className="mx-auto bg-white dark:bg-white rounded-xl shadow-sm py-4 px-6">
+                <div className="flex items-center justify-between gap-28">
                     {/* Left Section */}
                     <div className="flex items-center justify-between gap-8 flex-1">
                         {/* Logo */}

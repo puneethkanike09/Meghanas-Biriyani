@@ -1,5 +1,7 @@
 "use client";
 
+import Button from "@/components/ui/Button";
+
 
 export default function HeroSection() {
   return (
@@ -17,12 +19,12 @@ export default function HeroSection() {
               delivered fresh to your doorstep
             </p>
             <div className="flex flex-wrap gap-4">
-              <button className="bg-white text-orange-600 px-8 py-3 rounded-lg font-semibold hover:bg-orange-50 transition-colors">
+              <Button variant="default" className="py-3">
                 View Menu
-              </button>
-              <button className="bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-orange-700 transition-colors">
+              </Button>
+              <Button variant="dark" className="py-3">
                 Order Now
-              </button>
+              </Button>
             </div>
           </div>
 
