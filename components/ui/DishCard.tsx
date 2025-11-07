@@ -59,7 +59,7 @@ export default function DishCard({
         : "h-[180px] tablet:h-[200px] desktop:h-[220px]";
 
     return (
-        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300 border border-[#E9EAEB]">
+        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-[#E9EAEB] hover:border-[#FFCAA9]">
             {/* Image */}
             <div className={`relative w-full ${imageHeight || defaultImageHeight}`}>
                 <Image
