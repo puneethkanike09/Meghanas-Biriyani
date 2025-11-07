@@ -152,7 +152,7 @@ export default function CategoriesSection() {
                 </div>
 
                 {/* Carousel */}
-                <div className="overflow-hidden" ref={emblaRef}>
+                <div className="overflow-hidden -mb-4 pb-4" ref={emblaRef}>
                     <div className="flex">
                         {DISHES.map((dish) => (
                             <div
