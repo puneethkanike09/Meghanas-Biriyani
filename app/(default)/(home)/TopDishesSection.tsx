@@ -1,9 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/solid";
-import { PlusIcon } from "@heroicons/react/24/outline";
 import Button from "@/components/ui/Button";
+import DishCard from "@/components/ui/DishCard";
 
 const DISHES_DATA = [
     {
@@ -108,18 +107,6 @@ const DISHES_DATA = [
     },
 ];
 
-const VegIcon = () => (
-    <div className="w-4 h-4 tablet:w-5 tablet:h-5 border-2 border-green-600 flex items-center justify-center">
-        <div className="w-2 h-2 tablet:w-2.5 tablet:h-2.5 rounded-full bg-green-600"></div>
-    </div>
-);
-
-const NonVegIcon = () => (
-    <div className="w-4 h-4 tablet:w-5 tablet:h-5 border-2 border-red-600 flex items-center justify-center">
-        <div className="w-2 h-2 tablet:w-2.5 tablet:h-2.5 rounded-full bg-red-600"></div>
-    </div>
-);
-
 export default function TopDishesSection() {
     return (
         <section className="py-12 tablet:py-16 desktop:py-20 bg-white">
@@ -168,59 +155,11 @@ export default function TopDishesSection() {
                     <div className="desktop:flex-1 desktop:h-[700px] desktop:overflow-y-auto custom-scrollbar">
                         <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                             {DISHES_DATA.map((dish) => (
-                                <div
+                                <DishCard
                                     key={dish.id}
-                                    className="bg-white rounded-xl overflow-hidden border border-[#E9EAEB] flex flex-col shadow-sm hover:shadow-md transition-shadow duration-300"
-                                >
-                                    {/* Image */}
-                                    <div className="relative w-full h-[180px] tablet:h-[200px] desktop:h-[220px]">
-                                        <Image
-                                            src={dish.image}
-                                            alt={dish.name}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                    </div>
-
-                                    {/* Content */}
-                                    <div className="p-4 tablet:p-4 desktop:p-4 flex flex-col flex-1">
-                                        {/* Icon & Rating Row */}
-                                        <div className="flex items-center justify-between mb-3">
-                                            {dish.isVeg ? <VegIcon /> : <NonVegIcon />}
-                                            <div className="flex items-center gap-1">
-                                                <StarIcon className="w-4 h-4 text-primary" />
-                                                <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-[#181D27] leading-[1.4]">
-                                                    {dish.rating} ({dish.reviews})
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Name & Description */}
-                                        <div className="flex flex-col gap-2 mb-4">
-                                            <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
-                                                {dish.name}
-                                            </h3>
-                                            <p className="text-xs tablet:text-sm desktop:text-base text-[#414651] leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6] line-clamp-2">
-                                                {dish.description}
-                                            </p>
-                                        </div>
-
-                                        {/* Price & Add Button */}
-                                        <div className="flex items-center justify-between mt-auto">
-                                            <span className="text-lg tablet:text-xl desktop:text-2xl font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
-                                                {dish.price}
-                                            </span>
-                                            <Button
-                                                variant="primary"
-                                                size="sm"
-                                                className="px-3 tablet:px-4 desktop:px-4"
-                                                icon={<PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />}
-                                            >
-                                                Add
-                                            </Button>
-                                        </div>
-                                    </div>
-                                </div>
+                                    {...dish}
+                                    variant="default"
+                                />
                             ))}
                         </div>
                     </div>
