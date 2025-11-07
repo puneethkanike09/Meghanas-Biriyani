@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import ThemeToggle from "../ui/ThemeToggle";
 import Image from "next/image";
 import {
     MapPinIcon,
@@ -12,28 +11,28 @@ import {
 
 export default function Navbar() {
     return (
-        <div className="fixed top-4 left-0 right-0 z-50 section">
-            <nav className="mx-auto bg-white dark:bg-white rounded-xl shadow-sm py-3 px-4 tablet:py-4 tablet:px-6">
-                <div className="flex items-center justify-between gap-4 tablet:gap-10 desktop:gap-24">
+        <div className="fixed top-2 tablet:top-4 left-0 right-0 z-50 section">
+            <nav className="mx-auto bg-white dark:bg-white rounded-xl shadow-sm py-2 px-3 tablet:py-3 tablet:px-4 desktop:py-4 desktop:px-6">
+                <div className="flex items-center justify-between gap-2 tablet:gap-4 desktop:gap-10">
                     {/* Left Section */}
-                    <div className="flex items-center justify-between gap-4 tablet:gap-8 tablet:flex-1">
+                    <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-8 desktop:flex-1">
                         {/* Logo */}
-                        <Link href="/" className="flex items-center">
+                        <Link href="/" className="flex items-center flex-shrink-0">
                             <Image
-                                src="/assets/navbar/icons/logo.svg"
+                                src="/assets/navbar/images/logo.svg"
                                 alt="Meghana's Foods"
                                 width={120}
                                 height={40}
-                                className="h-10 w-auto"
+                                className="h-8 tablet:h-9 desktop:h-10 w-auto"
                             />
                         </Link>
 
                         {/* Location */}
-                        <div className="hidden tablet:flex items-center gap-2">
-                            <MapPinIcon className="w-5 h-5 text-gray-600" />
-                            <div className="flex flex-col">
-                                <span className="text-xs text-gray-500">Deliver To</span>
-                                <span className="text-sm font-semibold text-gray-900">
+                        <div className="hidden tablet:flex items-center gap-2 min-w-0">
+                            <MapPinIcon className="w-4 h-4 tablet:w-5 tablet:h-5 text-gray-600 flex-shrink-0" />
+                            <div className="flex flex-col min-w-0">
+                                <span className="text-[10px] tablet:text-xs text-gray-500">Deliver To</span>
+                                <span className="text-xs tablet:text-sm font-semibold text-gray-900 truncate">
                                     708, 6th Main Rd, SBI Staff Colony, H...
                                 </span>
                             </div>
@@ -41,7 +40,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Right Section */}
-                    <div className="flex items-center justify-end gap-4 tablet:gap-6 tablet:flex-1">
+                    <div className="flex items-center justify-end gap-2 tablet:gap-4 desktop:gap-6 desktop:flex-1">
                         {/* Search Bar */}
                         <div className="hidden desktop:flex flex-1 max-w-md">
                             <div className="relative w-full">
@@ -55,19 +54,24 @@ export default function Navbar() {
                         </div>
 
                         {/* Icons Section */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
+                            {/* Search Icon (Mobile/Tablet only) */}
+                            <button className="desktop:hidden p-1.5 tablet:p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                <MagnifyingGlassIcon className="w-5 h-5 tablet:w-6 tablet:h-6 text-gray-700" />
+                            </button>
+
                             {/* Profile Icon */}
-                            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                                <UserIcon className="w-6 h-6 text-gray-700" />
+                            <button className="p-1.5 tablet:p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                <UserIcon className="w-5 h-5 tablet:w-6 tablet:h-6 text-gray-700" />
                             </button>
 
                             {/* Cart Icon */}
-                            <button className="p-2 hover:bg-gray-100 rounded-full transition-colors relative">
-                                <ShoppingCartIcon className="w-6 h-6 text-gray-700" />
+                            <button className="p-1.5 tablet:p-2 hover:bg-gray-100 rounded-full transition-colors relative">
+                                <ShoppingCartIcon className="w-5 h-5 tablet:w-6 tablet:h-6 text-gray-700" />
                             </button>
 
                             {/* Theme Toggle */}
-                            <ThemeToggle />
+                            {/* <ThemeToggle /> */}
                         </div>
                     </div>
                 </div>

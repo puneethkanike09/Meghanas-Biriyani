@@ -128,7 +128,7 @@ export default function VibeSection() {
                                 className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_320px] min-w-0 px-2 tablet:px-3 first:pl-0 last:pr-0"
                             >
                                 <div className="group cursor-pointer">
-                                    <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[375px] rounded-[50px] overflow-hidden">
+                                    <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[375px] rounded-2xl overflow-hidden">
                                         <Image
                                             src={category.image}
                                             alt={category.name}
@@ -139,7 +139,7 @@ export default function VibeSection() {
                                         <div className="absolute inset-0 bg-black/35"></div>
 
                                         {/* Category Name */}
-                                        <div className="absolute bottom-0 left-0 right-0 p-6 tablet:p-7 desktop:p-8">
+                                        <div className="absolute bottom-0 left-0 right-0 p-4 tablet:p-4 desktop:p-4">
                                             <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                                                 {category.name}
                                             </h3>
