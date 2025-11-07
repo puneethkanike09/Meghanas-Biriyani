@@ -89,7 +89,7 @@ export default function VibeSection() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
                     <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
-                        Choose your vibe, we'll bring the bite
+                        Choose your vibe, we&apos;ll bring the bite
                     </h2>
 
                     {/* Navigation Buttons - Desktop Only */}

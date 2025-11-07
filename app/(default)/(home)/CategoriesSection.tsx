@@ -131,7 +131,7 @@ export default function CategoriesSection() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
                     <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
-                        What's your next bite going to be?
+                        What&apos;s your next bite going to be?
                     </h2>
 
                     {/* Navigation Buttons - Desktop Only */}
