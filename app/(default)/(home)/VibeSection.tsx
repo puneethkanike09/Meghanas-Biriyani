@@ -136,7 +136,7 @@ export default function VibeSection() {
                                             className="object-cover"
                                         />
                                         {/* Overlay */}
-                                        <div className="absolute inset-0 bg-black/35"></div>
+                                        <div className="absolute inset-0 bg-[#00000066]"></div>
 
                                         {/* Category Name */}
                                         <div className="absolute bottom-0 left-0 right-0 p-4 tablet:p-4 desktop:p-4">

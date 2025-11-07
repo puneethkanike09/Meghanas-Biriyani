@@ -59,7 +59,7 @@ export default function DishCard({
         : "h-[180px] tablet:h-[200px] desktop:h-[220px]";
 
     return (
-        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay">
+        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay select-none">
             {/* Image */}
             <div className={`relative w-full ${imageHeight || defaultImageHeight}`}>
                 <Image
@@ -71,7 +71,7 @@ export default function DishCard({
 
                 {/* Out of Stock Overlay */}
                 {outOfStock && (
-                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                    <div className="absolute inset-0 bg-[#00000080] flex items-center justify-center">
                         <Button
                             variant="default"
                             size="md"
@@ -144,7 +144,7 @@ export default function DishCard({
                     <Button
                         variant="primary"
                         size="sm"
-                        className={`${variant === "compact" ? "px-4 tablet:px-5 desktop:px-4" : "px-3 tablet:px-4 desktop:px-4"} ${outOfStock ? "opacity-50 cursor-not-allowed" : ""}`}
+                        className={`${variant === "compact" ? "px-4 tablet:px-5 desktop:px-4" : "px-3 tablet:px-4 desktop:px-4"} ${outOfStock ? "bg-brand-200" : ""}`}
                         icon={<PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />}
                         onClick={outOfStock ? undefined : onAdd}
                         disabled={outOfStock}

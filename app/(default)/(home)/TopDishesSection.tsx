@@ -126,7 +126,7 @@ export default function TopDishesSection() {
                                     className="object-cover"
                                 />
                                 {/* Gradient Overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                                <div className="absolute inset-0 bg-[#00000059]"></div>
                             </div>
 
                             {/* Content */}

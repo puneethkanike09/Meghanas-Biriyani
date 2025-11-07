@@ -9,7 +9,7 @@ export interface ReviewCardProps {
 
 export default function ReviewCard({ rating, text, author }: ReviewCardProps) {
     return (
-        <div className="bg-white rounded-xl p-5 tablet:p-6 desktop:p-6 h-full flex flex-col border border-gray-200">
+        <div className="bg-white rounded-xl p-5 tablet:p-6 desktop:p-6 h-full flex flex-col border border-gray-200 select-none">
             {/* Review Text */}
             <p className="text-sm tablet:text-[15px] desktop:text-base text-gray-700 leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6] mb-6 flex-grow">
                 {text}
