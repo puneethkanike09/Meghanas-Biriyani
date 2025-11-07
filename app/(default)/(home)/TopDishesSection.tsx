@@ -116,7 +116,7 @@ export default function TopDishesSection() {
                 <div className="flex flex-col desktop:flex-row gap-4 tablet:gap-5 desktop:gap-4">
                     {/* Left Section - Featured Card */}
                     <div className="desktop:flex-1">
-                        <div className="relative bg-white rounded-xl overflow-hidden border border-[#E9EAEB] h-full min-h-[400px] tablet:min-h-[500px] desktop:h-[700px]">
+                        <div className="relative bg-white rounded-xl overflow-hidden border border-gray-200 h-full min-h-[400px] tablet:min-h-[500px] desktop:h-[700px]">
                             {/* Background Image */}
                             <div className="absolute inset-0">
                                 <Image

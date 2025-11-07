@@ -42,8 +42,8 @@ export default function FeaturesSection() {
                                 key={feature.id}
                                 className="flex flex-col tablet:flex-row items-center justify-center gap-3 tablet:gap-4"
                             >
-                                <Icon className="w-6 h-6 tablet:w-7 tablet:h-7 desktop:w-8 desktop:h-8 text-[#181D27] flex-shrink-0" />
-                                <h3 className="text-sm tablet:text-base desktop:text-[22px] font-normal text-[#181D27] text-center leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.3]">
+                                <Icon className="w-6 h-6 tablet:w-7 tablet:h-7 desktop:w-8 desktop:h-8 text-midnight flex-shrink-0" />
+                                <h3 className="text-sm tablet:text-base desktop:text-[22px] font-normal text-midnight text-center leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.3]">
                                     {feature.title}
                                 </h3>
                             </div>

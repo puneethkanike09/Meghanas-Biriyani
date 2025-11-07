@@ -88,7 +88,7 @@ export default function VibeSection() {
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
-                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
+                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
                         Choose your vibe, we'll bring the bite
                     </h2>
 
@@ -97,24 +97,24 @@ export default function VibeSection() {
                         <button
                             onClick={scrollPrev}
                             disabled={!canScrollPrev}
-                            className={`w-10 h-10 flex items-center justify-center bg-[#F5F5F5] rounded-full transition-all duration-200 ${canScrollPrev
-                                ? "hover:bg-[#D5D7DA] cursor-pointer opacity-100"
+                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollPrev
+                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
                                 : "cursor-not-allowed opacity-40"
                                 }`}
                             aria-label="Previous"
                         >
-                            <ChevronLeftIcon className="w-5 h-5 text-[#181D27]" />
+                            <ChevronLeftIcon className="w-5 h-5 text-midnight" />
                         </button>
                         <button
                             onClick={scrollNext}
                             disabled={!canScrollNext}
-                            className={`w-10 h-10 flex items-center justify-center bg-[#F5F5F5] rounded-full transition-all duration-200 ${canScrollNext
-                                ? "hover:bg-[#D5D7DA] cursor-pointer opacity-100"
+                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollNext
+                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
                                 : "cursor-not-allowed opacity-40"
                                 }`}
                             aria-label="Next"
                         >
-                            <ChevronRightIcon className="w-5 h-5 text-[#181D27]" />
+                            <ChevronRightIcon className="w-5 h-5 text-midnight" />
                         </button>
                     </div>
                 </div>

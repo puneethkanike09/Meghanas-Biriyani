@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import Button from "@/components/ui/Button";
-import { StarIcon } from "@heroicons/react/24/solid";
+import StarRating from "@/components/ui/StarRating";
+import ReviewCard from "@/components/ui/ReviewCard";
 
 const REVIEWS_DATA = [
     {
@@ -48,20 +49,6 @@ const REVIEWS_DATA = [
 // Duplicate reviews for seamless infinite loop
 const INFINITE_REVIEWS = [...REVIEWS_DATA, ...REVIEWS_DATA];
 
-const StarRating = ({ rating }: { rating: number }) => {
-    return (
-        <div className="flex gap-1">
-            {[1, 2, 3, 4, 5].map((star) => (
-                <StarIcon
-                    key={star}
-                    className={`w-4 h-4 tablet:w-[16px] tablet:h-[16px] desktop:w-5 desktop:h-5 ${star <= rating ? "text-primary" : "text-primary/30"
-                        }`}
-                />
-            ))}
-        </div>
-    );
-};
-
 export default function TestimonialsSection() {
     const [isDesktop, setIsDesktop] = useState(false);
 
@@ -95,25 +82,24 @@ export default function TestimonialsSection() {
     );
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-[#FFF6F1]">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-peachLight">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex flex-col tablet:flex-row tablet:items-center tablet:justify-between gap-4 tablet:gap-6 mb-8 tablet:mb-10 desktop:mb-12">
                     <div>
-                        <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] mb-2">
+                        <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] mb-2">
                             Your Opinion Matters
                         </h2>
                         <div className="flex items-center gap-1">
-                            <StarRating rating={5} />
+                            <StarRating rating={5} variant="multiple" size="md" />
                             <div className="flex flex-row items-center gap-6">
-                                <span className="text-xs tablet:text-sm desktop:text-[14px] font-regular text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
+                                <span className="text-xs tablet:text-sm desktop:text-[14px] font-regular text-midnight leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                     4.5
                                 </span>
-                                <span className="text-xs tablet:text-sm desktop:text-[14px] underline font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
+                                <span className="text-xs tablet:text-sm desktop:text-[14px] underline font-semibold text-midnight leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                     280 Reviews
                                 </span>
                             </div>
-
                         </div>
                     </div>
                     <Button
@@ -133,20 +119,7 @@ export default function TestimonialsSection() {
                                 key={`${review.id}-${index}`}
                                 className="flex-[0_0_100%] tablet:flex-[0_0_50%] desktop:flex-[0_0_33.333%] min-w-0 px-2 tablet:px-2.5 desktop:px-3"
                             >
-                                <div className="bg-white rounded-xl p-5 tablet:p-6 desktop:p-6 h-full flex flex-col border border-[#E9EAEB]">
-                                    {/* Review Text */}
-                                    <p className="text-sm tablet:text-[15px] desktop:text-base text-[#414651] leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6] mb-6 flex-grow">
-                                        {review.text}
-                                    </p>
-
-                                    {/* Author and Rating */}
-                                    <div className="flex flex-col gap-2">
-                                        <StarRating rating={review.rating} />
-                                        <span className="text-base tablet:text-[17px] desktop:text-lg font-semibold text-[#414651] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
-                                            {review.author}
-                                        </span>
-                                    </div>
-                                </div>
+                                <ReviewCard {...review} />
                             </div>
                         ))}
                     </div>

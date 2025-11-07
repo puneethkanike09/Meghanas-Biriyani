@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/solid";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Button from "./Button";
+import StarRating from "./StarRating";
 import VegSymbol from "./assets/icons/vegSymbol.svg";
 import NonVegSymbol from "./assets/icons/nonvegSymbol.svg";
 
@@ -59,7 +59,7 @@ export default function DishCard({
         : "h-[180px] tablet:h-[200px] desktop:h-[220px]";
 
     return (
-        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-[#E9EAEB] hover:border-[#FFCAA9]">
+        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay">
             {/* Image */}
             <div className={`relative w-full ${imageHeight || defaultImageHeight}`}>
                 <Image
@@ -89,7 +89,7 @@ export default function DishCard({
                 {variant === "compact" ? (
                     <div className="flex flex-col items-start gap-2 mb-2">
                         {isVeg ? <VegIcon /> : <NonVegIcon />}
-                        <h3 className="text-sm tablet:text-base desktop:text-[18px] font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
+                        <h3 className="text-sm tablet:text-base desktop:text-[18px] font-semibold text-midnight leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                             {name}
                         </h3>
                     </div>
@@ -97,10 +97,12 @@ export default function DishCard({
                     <div className="flex items-center justify-between mb-3">
                         {isVeg ? <VegIcon /> : <NonVegIcon />}
                         <div className="flex items-center gap-1">
-                            <StarIcon className="w-4 h-4 text-primary" />
-                            <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-[#181D27] leading-[1.4]">
-                                {rating} {reviews && `(${reviews})`}
-                            </span>
+                            <StarRating rating={rating} variant="single" size="sm" />
+                            {reviews && (
+                                <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-midnight leading-[1.4]">
+                                    ({reviews})
+                                </span>
+                            )}
                         </div>
                     </div>
                 )}
@@ -108,10 +110,10 @@ export default function DishCard({
                 {/* Name for default variant */}
                 {variant === "default" && (
                     <div className="flex flex-col gap-2 mb-4">
-                        <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
+                        <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-midnight leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                             {name}
                         </h3>
-                        <p className="text-xs tablet:text-sm desktop:text-base text-[#414651] leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6] line-clamp-2">
+                        <p className="text-xs tablet:text-sm desktop:text-base text-gray-700 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6] line-clamp-2">
                             {description}
                         </p>
                     </div>
@@ -119,24 +121,21 @@ export default function DishCard({
 
                 {/* Description for compact variant */}
                 {variant === "compact" && (
-                    <p className="text-xs tablet:text-sm desktop:text-base text-[#414651] mb-3 line-clamp-2 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6]">
+                    <p className="text-xs tablet:text-sm desktop:text-base text-gray-700 mb-3 line-clamp-2 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6]">
                         {description}
                     </p>
                 )}
 
                 {/* Rating for compact variant */}
                 {variant === "compact" && (
-                    <div className="flex items-center gap-1 mb-4">
-                        <StarIcon className="w-4 h-4 text-primary" />
-                        <span className="text-xs tablet:text-sm desktop:text-sm font-medium text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
-                            {rating}
-                        </span>
+                    <div className="mb-4">
+                        <StarRating rating={rating} variant="single" size="sm" />
                     </div>
                 )}
 
                 {/* Price & Add Button */}
                 <div className="flex items-center justify-between mt-auto">
-                    <span className={`font-bold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] ${variant === "compact"
+                    <span className={`font-bold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] ${variant === "compact"
                         ? "text-base tablet:text-lg desktop:text-xl"
                         : "text-lg tablet:text-xl desktop:text-2xl"
                         }`}>

@@ -48,7 +48,7 @@ export default function Navbar() {
                                 <input
                                     type="text"
                                     placeholder="Search for dishes, cuisines..."
-                                    className="w-full px-4 py-2 pl-10 rounded-xl border-none bg-inputBgColor text-black placeholder:inputPlaceholderColor focus:outline-none"
+                                    className="w-full px-4 py-2 pl-10 rounded-xl border-none bg-gray-100 text-black placeholder:gray-500 focus:outline-none"
                                 />
                             </div>
                         </div>

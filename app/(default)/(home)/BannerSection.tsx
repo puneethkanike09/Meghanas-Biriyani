@@ -110,8 +110,8 @@ export default function BannerSection() {
                                 key={index}
                                 onClick={() => scrollTo(index)}
                                 className={`h-2 rounded-full transition-all duration-300 ${index === selectedIndex
-                                    ? "w-8 bg-[#181D27]"
-                                    : "w-2 bg-gray-300 hover:bg-[#D5D7DA]"
+                                    ? "w-8 bg-midnight"
+                                    : "w-2 bg-gray-300 hover:bg-gray-300"
                                     }`}
                                 aria-label={`Go to slide ${index + 1}`}
                             />
@@ -122,14 +122,14 @@ export default function BannerSection() {
                     <div className="flex gap-3">
                         <button
                             onClick={scrollPrev}
-                            className=" w-10 h-10 flex items-center justify-center bg-[#F5F5F5] hover:bg-[#D5D7DA] rounded-full hover:bg- transition-all duration-200"
+                            className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-300 rounded-full transition-all duration-200"
                             aria-label="Previous slide"
                         >
                             <ChevronLeftIcon className="w-5 h-5 tablet:w-6 tablet:h-6 desktop:w-5 desktop:h-5" />
                         </button>
                         <button
                             onClick={scrollNext}
-                            className=" w-10 h-10 flex items-center justify-center bg-[#F5F5F5] hover:bg-[#D5D7DA] rounded-full hover:bg- transition-all duration-200"
+                            className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-300 rounded-full transition-all duration-200"
                             aria-label="Next slide"
                         >
                             <ChevronRightIcon className="w-5 h-5 tablet:w-6 tablet:h-6 desktop:w-5 desktop:h-5" />

@@ -33,7 +33,7 @@ const DISHES = [
         description: "Fresh pieces of paneer are coated in our in-house andra spice missala and c...",
         price: "₹ 349",
         rating: 4.5,
-        reviews: 58,
+        reviews: 59,
         isVeg: true,
         image: "/assets/homepage/images/top10.jpg",
     },
@@ -126,11 +126,11 @@ export default function CategoriesSection() {
     }, [emblaApi, onSelect]);
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-[#F5E6D3]">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-cream">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
-                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
+                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
                         What's your next bite going to be?
                     </h2>
 
@@ -139,24 +139,24 @@ export default function CategoriesSection() {
                         <button
                             onClick={scrollPrev}
                             disabled={!canScrollPrev}
-                            className={`w-10 h-10 flex items-center justify-center bg-[#F5F5F5] rounded-full transition-all duration-200 ${canScrollPrev
-                                ? "hover:bg-[#D5D7DA] cursor-pointer opacity-100"
+                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollPrev
+                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
                                 : "cursor-not-allowed opacity-40"
                                 }`}
                             aria-label="Previous"
                         >
-                            <ChevronLeftIcon className="w-5 h-5 text-[#181D27]" />
+                            <ChevronLeftIcon className="w-5 h-5 text-midnight" />
                         </button>
                         <button
                             onClick={scrollNext}
                             disabled={!canScrollNext}
-                            className={`w-10 h-10 flex items-center justify-center bg-[#F5F5F5] rounded-full transition-all duration-200 ${canScrollNext
-                                ? "hover:bg-[#D5D7DA] cursor-pointer opacity-100"
+                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollNext
+                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
                                 : "cursor-not-allowed opacity-40"
                                 }`}
                             aria-label="Next"
                         >
-                            <ChevronRightIcon className="w-5 h-5 text-[#181D27]" />
+                            <ChevronRightIcon className="w-5 h-5 text-midnight" />
                         </button>
                     </div>
                 </div>
