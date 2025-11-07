@@ -90,7 +90,7 @@ const DISHES = [
     },
 ];
 
-export default function CategoriesSection() {
+export default function StartersSection() {
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,
         align: "start",
@@ -126,12 +126,12 @@ export default function CategoriesSection() {
     }, [emblaApi, onSelect]);
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-lightOrange">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-brand-50">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
                     <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
-                        What&apos;s your next bite going to be?
+                        Start with a Starter 😋
                     </h2>
 
                     {/* Navigation Buttons - Desktop Only */}
@@ -181,4 +181,5 @@ export default function CategoriesSection() {
         </section>
     );
 }
+
 

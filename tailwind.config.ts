@@ -46,15 +46,16 @@ const config: Config = {
 
         // Semantic Color Palette
         tango: '#F47729',          // Main brand orange
-        lightOrange: '#F3F3F4',    // Light background
+        lightOrange: '#F2E7D4',    // Light background
         hotJazz: '#BF3030',        // Red (Non-veg indicator)
         tropicalGreen: '#00804D',  // Dark green (veg symbol green)
-        midnight: '#181D2C',       // Almost black
-        mint: '#48BB6C',           // Light green (Veg indicator)
-        parchment: '#F2CDB3',      // Light peach/tan
-        sunRay: '#FFCAA9',         // Light orange/peach (hover states)
+        midnight: '#FBB21C',       // Almost black
+        mint: '#4EB57E',           // Light green (Veg indicator)
+        parchment: '#F2E7D4',      // Light peach/tan
+        sunRay: '#FBB21C',         // Light orange/peach (hover states)
         cream: '#F5E6D3',          // Light cream (Categories section bg)
-        peachLight: '#FFF6F1',     // Very light peach (Testimonials section bg)
+        peachLight: '#FFF6F1',
+        // Very light peach (Testimonials section bg)
       },
       fontFamily: {
         'proxima-nova': ['var(--font-proxima-nova)', 'sans-serif'],

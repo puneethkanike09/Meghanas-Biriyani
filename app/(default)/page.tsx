@@ -5,6 +5,7 @@ import CategoriesSection from "./(home)/CategoriesSection";
 import BannerSection from "./(home)/BannerSection";
 import TestimonialsSection from "./(home)/TestimonialsSection";
 import TopDishesSection from "./(home)/TopDishesSection";
+import StartersSection from "./(home)/StartersSection";
 
 export default function HomePage() {
     return (
@@ -15,6 +16,8 @@ export default function HomePage() {
             <CategoriesSection />
             <BannerSection />
             <TopDishesSection />
+            <StartersSection />
+            <BannerSection />
             <TestimonialsSection />
         </>
     );
