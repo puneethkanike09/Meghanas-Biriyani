@@ -135,7 +135,7 @@ export default function CategoriesSection() {
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
-                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27]">
+                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
                         What's your next bite going to be?
                     </h2>
 
@@ -190,27 +190,27 @@ export default function CategoriesSection() {
                                         {/* Veg/Non-veg Icon & Name */}
                                         <div className="flex flex-col items-start gap-2 mb-2">
                                             {dish.isVeg ? <VegIcon /> : <NonVegIcon />}
-                                            <h3 className="text-sm tablet:text-base desktop:text-[18px] font-semibold text-[#181D27] leading-tight">
+                                            <h3 className="text-sm tablet:text-base desktop:text-[18px] font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                                                 {dish.name}
                                             </h3>
                                         </div>
 
                                         {/* Description */}
-                                        <p className="text-xs tablet:text-sm desktop:text-base text-[#414651] mb-3 line-clamp-2 leading-relaxed">
+                                        <p className="text-xs tablet:text-sm desktop:text-base text-[#414651] mb-3 line-clamp-2 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6]">
                                             {dish.description}
                                         </p>
 
                                         {/* Rating */}
                                         <div className="flex items-center gap-1 mb-4">
                                             <StarIcon className="w-4 h-4 text-primary" />
-                                            <span className="text-xs tablet:text-sm desktop:text-sm font-medium text-[#181D27]">
+                                            <span className="text-xs tablet:text-sm desktop:text-sm font-medium text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                                 {dish.rating}
                                             </span>
                                         </div>
 
                                         {/* Price & Add Button */}
                                         <div className="flex items-center justify-between mt-auto">
-                                            <span className="text-base tablet:text-lg desktop:text-xl font-bold text-[#181D27]">
+                                            <span className="text-base tablet:text-lg desktop:text-xl font-bold text-[#181D27] leading-[1.3] tablet:leading-[1.3] desktop:leading-[1.2]">
                                                 {dish.price}
                                             </span>
                                             <Button

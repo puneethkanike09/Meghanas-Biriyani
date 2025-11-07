@@ -100,16 +100,16 @@ export default function TestimonialsSection() {
                 {/* Header */}
                 <div className="flex flex-col tablet:flex-row tablet:items-center tablet:justify-between gap-4 tablet:gap-6 mb-8 tablet:mb-10 desktop:mb-12">
                     <div>
-                        <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] mb-2">
+                        <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] mb-2">
                             Your Opinion Matters
                         </h2>
                         <div className="flex items-center gap-1">
                             <StarRating rating={5} />
                             <div className="flex flex-row items-center gap-6">
-                                <span className="text-xs tablet:text-sm desktop:text-[14px] font-regular text-[#181D27]">
+                                <span className="text-xs tablet:text-sm desktop:text-[14px] font-regular text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                     4.5
                                 </span>
-                                <span className="text-xs tablet:text-sm desktop:text-[14px] underline font-semibold text-[#181D27]">
+                                <span className="text-xs tablet:text-sm desktop:text-[14px] underline font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                     280 Reviews
                                 </span>
                             </div>
@@ -135,14 +135,14 @@ export default function TestimonialsSection() {
                             >
                                 <div className="bg-white rounded-xl p-5 tablet:p-6 desktop:p-6 h-full flex flex-col border border-[#E9EAEB]">
                                     {/* Review Text */}
-                                    <p className="text-sm tablet:text-[15px] desktop:text-base text-[#414651] leading-relaxed mb-6 flex-grow">
+                                    <p className="text-sm tablet:text-[15px] desktop:text-base text-[#414651] leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6] mb-6 flex-grow">
                                         {review.text}
                                     </p>
 
                                     {/* Author and Rating */}
                                     <div className="flex flex-col gap-2">
                                         <StarRating rating={review.rating} />
-                                        <span className="text-base tablet:text-[17px] desktop:text-lg font-semibold text-[#414651]">
+                                        <span className="text-base tablet:text-[17px] desktop:text-lg font-semibold text-[#414651] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                                             {review.author}
                                         </span>
                                     </div>

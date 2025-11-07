@@ -73,7 +73,7 @@ export default function TopDishesSection() {
         <section className="py-12 tablet:py-16 desktop:py-20 bg-white">
             <div className="section-container">
                 {/* Header */}
-                <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] text-center font-semibold text-[#181D27] mb-8 tablet:mb-10 desktop:mb-12">
+                <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] text-center font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] mb-8 tablet:mb-10 desktop:mb-12">
                     Cravings Ki Permanent List – Our Top 10
                 </h2>
 
@@ -96,24 +96,24 @@ export default function TopDishesSection() {
                             <div className="p-5 desktop:p-6 flex flex-col gap-3">
                                 <div className="flex flex-col items-start gap-2">
                                     <div>{featuredDish.isVeg ? <VegIcon /> : <NonVegIcon />}</div>
-                                    <h3 className="text-lg tablet:text-xl desktop:text-[18px] font-semibold text-[#181D27] leading-tight">
+                                    <h3 className="text-lg tablet:text-xl desktop:text-[18px] font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                                         {featuredDish.name}
                                     </h3>
                                 </div>
 
-                                <p className="text-sm tablet:text-base desktop:text-base text-[#414651] leading-relaxed">
+                                <p className="text-sm tablet:text-base desktop:text-base text-[#414651] leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6]">
                                     {featuredDish.description}
                                 </p>
 
                                 <div className="flex items-center gap-1 mt-1">
                                     <StarIcon className="w-4 h-4 tablet:w-5 tablet:h-5 text-primary" />
-                                    <span className="text-sm tablet:text-base desktop:text-base font-medium text-[#181D27]">
+                                    <span className="text-sm tablet:text-base desktop:text-base font-medium text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                         {featuredDish.rating}
                                     </span>
                                 </div>
 
                                 <div className="flex items-center justify-between mt-2">
-                                    <span className="text-xl tablet:text-2xl font-bold text-[#181D27]">
+                                    <span className="text-xl tablet:text-2xl font-bold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
                                         {featuredDish.price}
                                     </span>
                                     <Button
@@ -153,24 +153,24 @@ export default function TopDishesSection() {
                                             <div>
                                                 {dish.isVeg ? <VegIcon /> : <NonVegIcon />}
                                             </div>
-                                            <h4 className="text-lg tablet:text-xl desktop:text-[18px] font-semibold text-[#181D27] leading-tight">
+                                            <h4 className="text-lg tablet:text-xl desktop:text-[18px] font-semibold text-[#181D27] leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                                                 {dish.name}
                                             </h4>
                                         </div>
 
-                                        <p className="text-sm tablet:text-base desktop:text-base text-[#414651] line-clamp-2 leading-relaxed">
+                                        <p className="text-sm tablet:text-base desktop:text-base text-[#414651] line-clamp-2 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6]">
                                             {dish.description}
                                         </p>
 
                                         <div className="flex items-center gap-1">
                                             <StarIcon className="w-4 h-4 tablet:w-5 tablet:h-5 text-primary" />
-                                            <span className="text-sm tablet:text-base desktop:text-base font-medium text-[#181D27]">
+                                            <span className="text-sm tablet:text-base desktop:text-base font-medium text-[#181D27] leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.4]">
                                                 {dish.rating}
                                             </span>
                                         </div>
 
                                         <div className="flex items-center justify-between">
-                                            <span className="text-xl tablet:text-2xl font-bold text-[#181D27]">
+                                            <span className="text-xl tablet:text-2xl font-bold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
                                                 {dish.price}
                                             </span>
                                             <Button

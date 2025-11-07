@@ -15,10 +15,10 @@ export default function Footer() {
                 <div className="grid grid-cols-1 gap-8 tablet:grid-cols-2 tablet:gap-12 desktop:grid-cols-4 desktop:gap-16">
                     {/* Brand Section */}
                     <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
-                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.2]">
                             Meghana Foods
                         </h3>
-                        <p className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 leading-relaxed">
+                        <p className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6]">
                             Authentic South Indian cuisine delivered fresh to
                             your doorstep. Experience the rich flavors of
                             traditional cooking.
@@ -75,14 +75,14 @@ export default function Footer() {
 
                     {/* Quick Links */}
                     <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
-                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.2]">
                             Quick Links
                         </h3>
                         <ul className="space-y-3">
                             <li>
                                 <Link
                                     href="/about"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     About Us
                                 </Link>
@@ -90,7 +90,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/menu"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Menu
                                 </Link>
@@ -98,7 +98,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/offers"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Offers
                                 </Link>
@@ -106,7 +106,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/catering"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Catering Services
                                 </Link>
@@ -114,7 +114,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/franchise"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Franchise
                                 </Link>
@@ -124,14 +124,14 @@ export default function Footer() {
 
                     {/* Customer Service */}
                     <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
-                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.2]">
                             Customer Service
                         </h3>
                         <ul className="space-y-3">
                             <li>
                                 <Link
                                     href="/help"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Help & Support
                                 </Link>
@@ -139,7 +139,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/track-order"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Track Order
                                 </Link>
@@ -147,7 +147,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/terms"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Terms & Conditions
                                 </Link>
@@ -155,7 +155,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/privacy"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Privacy Policy
                                 </Link>
@@ -163,7 +163,7 @@ export default function Footer() {
                             <li>
                                 <Link
                                     href="/refund"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Refund Policy
                                 </Link>
@@ -173,13 +173,13 @@ export default function Footer() {
 
                     {/* Contact Us */}
                     <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
-                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white">
+                        <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.2]">
                             Contact Us
                         </h3>
                         <ul className="space-y-4">
                             <li className="flex items-start gap-3">
                                 <MapPinIcon className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0 mt-0.5" />
-                                <span className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 leading-relaxed">
+                                <span className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6]">
                                     Bangalore, Karnataka, India
                                 </span>
                             </li>
@@ -187,7 +187,7 @@ export default function Footer() {
                                 <PhoneIcon className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0" />
                                 <a
                                     href="tel:+919876543210"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     +91 98765 43210
                                 </a>
@@ -196,7 +196,7 @@ export default function Footer() {
                                 <EnvelopeIcon className="w-4 h-4 tablet:w-[18px] tablet:h-[18px] desktop:w-5 desktop:h-5 text-[#D1D5DC] dark:text-gray-400 flex-shrink-0" />
                                 <a
                                     href="mailto:contact@meghanafoods.com"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors break-all"
+                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-[#D1D5DC] dark:text-gray-400 hover:text-white dark:hover:text-white transition-colors break-all leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     contact@meghanafoods.com
                                 </a>
@@ -208,10 +208,10 @@ export default function Footer() {
                 {/* Bottom Bar */}
                 <div className="mt-8 tablet:mt-12 pt-6 tablet:pt-8 border-t border-gray-600 dark:border-gray-700">
                     <div className="flex flex-col gap-4 tablet:flex-row tablet:justify-between tablet:items-center">
-                        <p className="text-xs tablet:text-sm text-gray-400 dark:text-gray-500 text-center tablet:text-left">
+                        <p className="text-xs tablet:text-sm text-gray-400 dark:text-gray-500 text-center tablet:text-left leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]">
                             © {new Date().getFullYear()} Meghana Foods. All rights reserved.
                         </p>
-                        <p className="text-xs tablet:text-sm text-gray-400 dark:text-gray-500 text-center tablet:text-right">
+                        <p className="text-xs tablet:text-sm text-gray-400 dark:text-gray-500 text-center tablet:text-right leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]">
                             Designed & Developed by Pace Wisdom Solutions Pvt Ltd
                         </p>
                     </div>

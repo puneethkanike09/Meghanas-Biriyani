@@ -88,7 +88,7 @@ export default function VibeSection() {
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
-                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27]">
+                    <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
                         Choose your vibe, we'll bring the bite
                     </h2>
 
@@ -140,7 +140,7 @@ export default function VibeSection() {
 
                                         {/* Category Name */}
                                         <div className="absolute bottom-0 left-0 right-0 p-6 tablet:p-7 desktop:p-8">
-                                            <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-white leading-tight">
+                                            <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                                                 {category.name}
                                             </h3>
                                         </div>
