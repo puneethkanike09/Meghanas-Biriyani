@@ -3,8 +3,8 @@ import FeaturesSection from "./(home)/FeaturesSection";
 import VibeSection from "./(home)/VibeSection";
 import CategoriesSection from "./(home)/CategoriesSection";
 import BannerSection from "./(home)/BannerSection";
-import TopDishesSection from "./(home)/TopDishesSection";
 import TestimonialsSection from "./(home)/TestimonialsSection";
+import TopDishesSection from "./(home)/TopDishesSection";
 
 export default function HomePage() {
     return (
@@ -19,3 +19,5 @@ export default function HomePage() {
         </>
     );
 }
+
+
