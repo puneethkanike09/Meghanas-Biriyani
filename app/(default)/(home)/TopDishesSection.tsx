@@ -34,6 +34,7 @@ const DISHES_DATA = [
         reviews: 58,
         isVeg: false,
         image: "/assets/homepage/images/top10.jpg",
+        outOfStock: true,
     },
     {
         id: 4,

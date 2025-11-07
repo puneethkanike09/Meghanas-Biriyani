@@ -2,6 +2,8 @@ import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/solid";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import Button from "./Button";
+import VegSymbol from "./assets/icons/vegSymbol.svg";
+import NonVegSymbol from "./assets/icons/nonvegSymbol.svg";
 
 export interface DishCardProps {
     id: number;
@@ -14,19 +16,28 @@ export interface DishCardProps {
     image: string;
     variant?: "default" | "compact";
     imageHeight?: string;
+    outOfStock?: boolean;
     onAdd?: () => void;
 }
 
 const VegIcon = () => (
-    <div className="w-4 h-4 tablet:w-5 tablet:h-5 border-2 border-green-600 flex items-center justify-center">
-        <div className="w-2 h-2 tablet:w-2.5 tablet:h-2.5 rounded-full bg-green-600"></div>
-    </div>
+    <Image
+        src={VegSymbol}
+        alt="Vegetarian"
+        width={20}
+        height={20}
+        className="w-4 h-4 tablet:w-5 tablet:h-5"
+    />
 );
 
 const NonVegIcon = () => (
-    <div className="w-4 h-4 tablet:w-5 tablet:h-5 border-2 border-red-600 flex items-center justify-center">
-        <div className="w-2 h-2 tablet:w-2.5 tablet:h-2.5 rounded-full bg-red-600"></div>
-    </div>
+    <Image
+        src={NonVegSymbol}
+        alt="Non-Vegetarian"
+        width={20}
+        height={20}
+        className="w-4 h-4 tablet:w-5 tablet:h-5"
+    />
 );
 
 export default function DishCard({
@@ -39,10 +50,11 @@ export default function DishCard({
     image,
     variant = "default",
     imageHeight,
+    outOfStock = false,
     onAdd,
 }: DishCardProps) {
     // Default image heights based on variant
-    const defaultImageHeight = variant === "compact" 
+    const defaultImageHeight = variant === "compact"
         ? "h-[180px] tablet:h-[200px] desktop:h-[180px]"
         : "h-[180px] tablet:h-[200px] desktop:h-[220px]";
 
@@ -54,8 +66,21 @@ export default function DishCard({
                     src={image}
                     alt={name}
                     fill
-                    className="object-cover"
+                    className={`object-cover ${outOfStock ? "grayscale" : ""}`}
                 />
+
+                {/* Out of Stock Overlay */}
+                {outOfStock && (
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                        <Button
+                            variant="default"
+                            size="md"
+                            className="cursor-default pointer-events-none"
+                        >
+                            Out of Stock
+                        </Button>
+                    </div>
+                )}
             </div>
 
             {/* Content */}
@@ -111,19 +136,19 @@ export default function DishCard({
 
                 {/* Price & Add Button */}
                 <div className="flex items-center justify-between mt-auto">
-                    <span className={`font-bold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] ${
-                        variant === "compact" 
-                            ? "text-base tablet:text-lg desktop:text-xl"
-                            : "text-lg tablet:text-xl desktop:text-2xl"
-                    }`}>
+                    <span className={`font-bold text-[#181D27] leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] ${variant === "compact"
+                        ? "text-base tablet:text-lg desktop:text-xl"
+                        : "text-lg tablet:text-xl desktop:text-2xl"
+                        }`}>
                         {price}
                     </span>
                     <Button
                         variant="primary"
                         size="sm"
-                        className={variant === "compact" ? "px-4 tablet:px-5 desktop:px-4" : "px-3 tablet:px-4 desktop:px-4"}
+                        className={`${variant === "compact" ? "px-4 tablet:px-5 desktop:px-4" : "px-3 tablet:px-4 desktop:px-4"} ${outOfStock ? "opacity-50 cursor-not-allowed" : ""}`}
                         icon={<PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />}
-                        onClick={onAdd}
+                        onClick={outOfStock ? undefined : onAdd}
+                        disabled={outOfStock}
                     >
                         Add
                     </Button>
