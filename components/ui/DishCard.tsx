@@ -84,22 +84,22 @@ export default function DishCard({
             </div>
 
             {/* Content */}
-            <div className="p-4 tablet:p-5 desktop:p-4 flex flex-col flex-1">
+            <div className="p-4 tablet:p-5 desktop:p-4 flex flex-col flex-1 gap-4">
                 {/* Veg/Non-veg Icon & Name (for compact variant) or Icon & Rating Row (for default variant) */}
                 {variant === "compact" ? (
-                    <div className="flex flex-col items-start gap-2 mb-2">
+                    <div className="flex flex-col items-start gap-2">
                         {isVeg ? <VegIcon /> : <NonVegIcon />}
                         <h3 className="text-sm tablet:text-base desktop:text-[18px] font-semibold text-midnight leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
                             {name}
                         </h3>
                     </div>
                 ) : (
-                    <div className="flex items-center justify-between mb-3">
+                    <div className="flex items-center justify-between">
                         {isVeg ? <VegIcon /> : <NonVegIcon />}
                         <div className="flex items-center gap-1">
                             <StarRating rating={rating} variant="single" size="sm" />
                             {reviews && (
-                                <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-midnight leading-[1.4]">
+                                <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-midnight leading-5">
                                     ({reviews})
                                 </span>
                             )}
@@ -109,11 +109,11 @@ export default function DishCard({
 
                 {/* Name for default variant */}
                 {variant === "default" && (
-                    <div className="flex flex-col gap-2 mb-4">
-                        <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-midnight leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
+                    <div className="flex flex-col gap-2">
+                        <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-midnight leading-normal whitespace-nowrap overflow-hidden text-ellipsis">
                             {name}
                         </h3>
-                        <p className="text-xs tablet:text-sm desktop:text-base text-gray-700 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6] line-clamp-2">
+                        <p className="text-xs tablet:text-sm desktop:text-base text-gray-600 leading-normal line-clamp-2">
                             {description}
                         </p>
                     </div>
@@ -121,21 +121,21 @@ export default function DishCard({
 
                 {/* Description for compact variant */}
                 {variant === "compact" && (
-                    <p className="text-xs tablet:text-sm desktop:text-base text-gray-700 mb-3 line-clamp-2 leading-[1.5] tablet:leading-[1.6] desktop:leading-[1.6]">
+                    <p className="text-xs tablet:text-sm desktop:text-base text-gray-600 line-clamp-2 leading-normal">
                         {description}
                     </p>
                 )}
 
                 {/* Rating for compact variant */}
                 {variant === "compact" && (
-                    <div className="mb-4">
+                    <div>
                         <StarRating rating={rating} variant="single" size="sm" />
                     </div>
                 )}
 
                 {/* Price & Add Button */}
                 <div className="flex items-center justify-between mt-auto">
-                    <span className={`font-bold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2] ${variant === "compact"
+                    <span className={`font-semibold text-midnight leading-normal ${variant === "compact"
                         ? "text-base tablet:text-lg desktop:text-xl"
                         : "text-lg tablet:text-xl desktop:text-2xl"
                         }`}>
@@ -144,7 +144,7 @@ export default function DishCard({
                     <Button
                         variant="primary"
                         size="sm"
-                        className={`${variant === "compact" ? "px-4 tablet:px-5 desktop:px-4" : "px-3 tablet:px-4 desktop:px-4"} ${outOfStock ? "bg-brand-200" : ""}`}
+                        className={`gap-2 ${variant === "compact" ? "px-4 tablet:px-5 desktop:px-3.5" : "px-3 tablet:px-4 desktop:px-3.5"} desktop:py-2 ${outOfStock ? "bg-brand-200" : ""}`}
                         icon={<PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />}
                         onClick={outOfStock ? undefined : onAdd}
                         disabled={outOfStock}

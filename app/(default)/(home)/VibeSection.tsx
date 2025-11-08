@@ -93,28 +93,28 @@ export default function VibeSection() {
                     </h2>
 
                     {/* Navigation Buttons - Desktop Only */}
-                    <div className="hidden desktop:flex gap-3">
+                    <div className="hidden desktop:flex gap-4">
                         <button
                             onClick={scrollPrev}
                             disabled={!canScrollPrev}
-                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollPrev
-                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
-                                : "cursor-not-allowed opacity-40"
+                            className={`inline-flex items-center p-2 bg-gray-100 rounded-[100px] transition-all duration-200 ${canScrollPrev
+                                ? "hover:bg-gray-300"
+                                : "opacity-50 cursor-not-allowed"
                                 }`}
                             aria-label="Previous"
                         >
-                            <ChevronLeftIcon className="w-5 h-5 text-midnight" />
+                            <ChevronLeftIcon className="w-5 h-5" />
                         </button>
                         <button
                             onClick={scrollNext}
                             disabled={!canScrollNext}
-                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollNext
-                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
-                                : "cursor-not-allowed opacity-40"
+                            className={`inline-flex items-center p-2 bg-gray-100 rounded-[100px] transition-all duration-200 ${canScrollNext
+                                ? "hover:bg-gray-300"
+                                : "opacity-50 cursor-not-allowed"
                                 }`}
                             aria-label="Next"
                         >
-                            <ChevronRightIcon className="w-5 h-5 text-midnight" />
+                            <ChevronRightIcon className="w-5 h-5" />
                         </button>
                     </div>
                 </div>
@@ -125,10 +125,10 @@ export default function VibeSection() {
                         {CATEGORIES.map((category) => (
                             <div
                                 key={category.id}
-                                className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_320px] min-w-0 px-2 tablet:px-3 first:pl-0 last:pr-0"
+                                className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_316px] min-w-0 px-2 tablet:px-3 first:pl-0 last:pr-0"
                             >
                                 <div className="group cursor-pointer">
-                                    <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[375px] rounded-2xl overflow-hidden">
+                                    <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[380px] rounded-3xl overflow-hidden">
                                         <Image
                                             src={category.image}
                                             alt={category.name}
@@ -139,8 +139,8 @@ export default function VibeSection() {
                                         <div className="absolute inset-0 bg-[#00000066]"></div>
 
                                         {/* Category Name */}
-                                        <div className="absolute bottom-0 left-0 right-0 p-4 tablet:p-4 desktop:p-4">
-                                            <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.3]">
+                                        <div className="absolute left-4 bottom-4 tablet:left-6 tablet:bottom-6 desktop:left-8 desktop:bottom-8 flex items-end justify-center">
+                                            <h3 className="text-base tablet:text-lg desktop:text-2xl font-semibold text-white leading-normal tracking-[0]">
                                                 {category.name}
                                             </h3>
                                         </div>

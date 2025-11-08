@@ -49,7 +49,7 @@ const config: Config = {
         lightOrange: '#F2E7D4',    // Light background
         hotJazz: '#BF3030',        // Red (Non-veg indicator)
         tropicalGreen: '#00804D',  // Dark green (veg symbol green)
-        midnight: '#FBB21C',       // Almost black
+        midnight: '#101828',       // Almost black
         mint: '#4EB57E',           // Light green (Veg indicator)
         parchment: '#F2E7D4',      // Light peach/tan
         sunRay: '#FBB21C',         // Light orange/peach (hover states)

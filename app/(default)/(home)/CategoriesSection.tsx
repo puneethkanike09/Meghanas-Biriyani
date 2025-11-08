@@ -135,28 +135,28 @@ export default function CategoriesSection() {
                     </h2>
 
                     {/* Navigation Buttons - Desktop Only */}
-                    <div className="hidden desktop:flex gap-3">
+                    <div className="hidden desktop:flex gap-4">
                         <button
                             onClick={scrollPrev}
                             disabled={!canScrollPrev}
-                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollPrev
-                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
-                                : "cursor-not-allowed opacity-40"
+                            className={`inline-flex items-center p-2 bg-gray-100 rounded-[100px] transition-all duration-200 ${canScrollPrev
+                                ? "hover:bg-gray-300"
+                                : "opacity-50 cursor-not-allowed"
                                 }`}
                             aria-label="Previous"
                         >
-                            <ChevronLeftIcon className="w-5 h-5 text-midnight" />
+                            <ChevronLeftIcon className="w-5 h-5" />
                         </button>
                         <button
                             onClick={scrollNext}
                             disabled={!canScrollNext}
-                            className={`w-10 h-10 flex items-center justify-center bg-gray-50 rounded-full transition-all duration-200 ${canScrollNext
-                                ? "hover:bg-gray-300 cursor-pointer opacity-100"
-                                : "cursor-not-allowed opacity-40"
+                            className={`inline-flex items-center p-2 bg-gray-100 rounded-[100px] transition-all duration-200 ${canScrollNext
+                                ? "hover:bg-gray-300"
+                                : "opacity-50 cursor-not-allowed"
                                 }`}
                             aria-label="Next"
                         >
-                            <ChevronRightIcon className="w-5 h-5 text-midnight" />
+                            <ChevronRightIcon className="w-5 h-5" />
                         </button>
                     </div>
                 </div>

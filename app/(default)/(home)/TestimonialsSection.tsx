@@ -117,7 +117,7 @@ export default function TestimonialsSection() {
                         {(isDesktop ? INFINITE_REVIEWS : REVIEWS_DATA).map((review, index) => (
                             <div
                                 key={`${review.id}-${index}`}
-                                className="flex-[0_0_300px] tablet:flex-[0_0_360px] desktop:flex-[0_0_440px] min-w-0 px-2 tablet:px-3"
+                                className="flex-[0_0_300px] tablet:flex-[0_0_360px] desktop:flex-[0_0_427px] min-w-0 px-2 tablet:px-3"
                             >
                                 <ReviewCard {...review} />
                             </div>
