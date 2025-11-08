@@ -50,6 +50,10 @@ export default function MenuHamburger({
     useEffect(() => {
         if (!isOpen) return;
 
+        // Prevent body scroll when menu is open
+        const originalOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+
         const calculateMaxHeight = () => {
             if (containerRef.current) {
                 const rect = containerRef.current.getBoundingClientRect();
@@ -79,6 +83,8 @@ export default function MenuHamburger({
         document.addEventListener("mousedown", handleClickOutside);
         document.addEventListener("keydown", handleKeyDown);
         return () => {
+            // Restore body scroll when menu closes
+            document.body.style.overflow = originalOverflow;
             window.removeEventListener("resize", calculateMaxHeight);
             document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("keydown", handleKeyDown);
