@@ -129,7 +129,7 @@ export default function CategoriesSection() {
     }, [emblaApi, onSelect]);
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-lightOrange">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-lightOrange overflow-x-hidden">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
@@ -197,7 +197,7 @@ export default function CategoriesSection() {
                 </div>
 
                 {/* Carousel */}
-                <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
+                <div className="rounded-2xl" ref={emblaRef}>
                     <div className="flex items-start -mx-2 tablet:-mx-3">
                         {DISHES.map((dish) => (
                             <div

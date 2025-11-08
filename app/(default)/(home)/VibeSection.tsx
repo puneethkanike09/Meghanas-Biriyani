@@ -86,7 +86,7 @@ export default function VibeSection() {
     }, [emblaApi, onSelect]);
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-white">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-white overflow-x-hidden">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
@@ -154,7 +154,7 @@ export default function VibeSection() {
                 </div>
 
                 {/* Carousel */}
-                <div className="overflow-hidden select-none rounded-2xl" ref={emblaRef}>
+                <div className="select-none rounded-2xl" ref={emblaRef}>
                     <div className="flex items-start -mx-2 tablet:-mx-3">
                         {CATEGORIES.map((category) => (
                             <div

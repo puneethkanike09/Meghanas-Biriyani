@@ -82,7 +82,7 @@ export default function TestimonialsSection() {
     );
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-peachLight">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-peachLight overflow-x-hidden">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex flex-col tablet:flex-row tablet:items-center tablet:justify-between gap-4 tablet:gap-6 mb-8 tablet:mb-10 desktop:mb-12">
@@ -110,7 +110,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Carousel */}
-                <div className="overflow-hidden rounded-2xl  -mb-4 " ref={emblaRef}>
+                <div className="rounded-2xl -mb-4" ref={emblaRef}>
                     <div className="flex -mx-2 tablet:-mx-3">
                         {(isDesktop ? INFINITE_REVIEWS : REVIEWS_DATA).map((review, index) => (
                             <div

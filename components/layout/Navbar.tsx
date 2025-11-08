@@ -12,9 +12,9 @@ const ICONS = {
 
 export default function Navbar() {
     return (
-        <div className="fixed top-2 tablet:top-4 left-0 right-0 z-50 section">
-            <nav className="mx-auto rounded-xl bg-white py-2 px-3 shadow-sm tablet:py-3 tablet:px-4 desktop:py-4 desktop:px-6">
-                <div className="flex items-center justify-between gap-2 tablet:gap-4 desktop:gap-10">
+        <div className="fixed top-4 tablet:top-4 left-0 right-0 z-50 section">
+            <nav className="mx-auto rounded-2xl bg-white py-3 px-4 shadow-md tablet:rounded-xl tablet:py-3 tablet:px-4 desktop:py-4 desktop:px-6">
+                <div className="flex items-center justify-between gap-3 tablet:gap-4 desktop:gap-10">
                     {/* Left Section */}
                     <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-8 desktop:flex-1">
                         {/* Logo */}
@@ -22,9 +22,9 @@ export default function Navbar() {
                             <Image
                                 src="/assets/navbar/images/logo.svg"
                                 alt="Meghana's Foods"
-                                width={120}
-                                height={40}
-                                className="h-8 w-auto tablet:h-9 desktop:h-10"
+                                width={132}
+                                height={44}
+                                className="h-9 w-auto tablet:h-9 desktop:h-10"
                                 priority
                             />
                         </Link>
@@ -48,7 +48,7 @@ export default function Navbar() {
                     </div>
 
                     {/* Right Section */}
-                    <div className="flex items-center justify-end gap-2 tablet:gap-4 desktop:gap-6 desktop:flex-1">
+                    <div className="flex items-center justify-end gap-3 tablet:gap-4 desktop:gap-6 desktop:flex-1">
                         {/* Search Bar */}
                         <div className="hidden max-w-md flex-1 desktop:flex">
                             <div className="relative w-full">
@@ -70,35 +70,35 @@ export default function Navbar() {
                         {/* Icons Section */}
                         <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
                             {/* Search Icon (Mobile/Tablet only) */}
-                            <button className="rounded-full p-1.5 transition-colors hover:bg-gray-100 tablet:p-2 desktop:hidden">
+                            <button className="rounded-full p-2 transition-colors hover:bg-gray-100 tablet:p-2.5 desktop:hidden">
                                 <Image
                                     src={ICONS.search}
                                     alt="Open search"
-                                    width={24}
-                                    height={24}
-                                    className="h-5 w-5 tablet:h-6 tablet:w-6"
+                                    width={28}
+                                    height={28}
+                                    className="h-6 w-6 tablet:h-6 tablet:w-6"
                                 />
                             </button>
 
                             {/* Profile Icon */}
-                            <button className="rounded-full p-1.5 transition-colors hover:bg-gray-100 tablet:p-2">
+                            <button className="rounded-full p-2 transition-colors hover:bg-gray-100 tablet:p-2.5">
                                 <Image
                                     src={ICONS.profile}
                                     alt="User profile"
-                                    width={24}
-                                    height={24}
-                                    className="h-5 w-5 tablet:h-6 tablet:w-6"
+                                    width={28}
+                                    height={28}
+                                    className="h-6 w-6 tablet:h-6 tablet:w-6"
                                 />
                             </button>
 
                             {/* Cart Icon */}
-                            <button className="relative rounded-full p-1.5 transition-colors hover:bg-gray-100 tablet:p-2">
+                            <button className="relative rounded-full p-2 transition-colors hover:bg-gray-100 tablet:p-2.5">
                                 <Image
                                     src={ICONS.cart}
                                     alt="View cart"
-                                    width={24}
-                                    height={24}
-                                    className="h-5 w-5 tablet:h-6 tablet:w-6"
+                                    width={28}
+                                    height={28}
+                                    className="h-6 w-6 tablet:h-6 tablet:w-6"
                                 />
                             </button>
 
