@@ -39,7 +39,7 @@ export default function Button({
         baseStyles,
         variants[variant],
         sizes[size],
-        icon && "space-x-2",
+        icon,
         className
       )}
       {...props}
