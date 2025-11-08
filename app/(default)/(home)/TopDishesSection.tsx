@@ -141,9 +141,7 @@ export default function TopDishesSection() {
                                         </p>
                                     </div>
                                     <Button
-                                        variant="default"
-                                        size="md"
-                                        className="self-start"
+                                        variant="default" className="self-start"
                                     >
                                         Order Now
                                     </Button>
