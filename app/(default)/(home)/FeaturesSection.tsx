@@ -1,54 +1,56 @@
 "use client";
 
-import {
-    SparklesIcon,
-    ClockIcon,
-    CreditCardIcon,
-    PhoneIcon,
-} from "@heroicons/react/24/outline";
+import Image from "next/image";
 
 const FEATURES = [
     {
         id: 1,
-        icon: SparklesIcon,
+        icon: "/assets/homepage/icons/Leaf.svg",
         title: "Always Fresh",
+        alt: "Fresh ingredients icon",
     },
     {
         id: 2,
-        icon: ClockIcon,
+        icon: "/assets/homepage/icons/Clock.svg",
         title: "Fast Delivery",
+        alt: "Clock icon",
     },
     {
         id: 3,
-        icon: CreditCardIcon,
+        icon: "/assets/homepage/icons/Payment.svg",
         title: "Secure Payment",
+        alt: "Secure payment icon",
     },
     {
         id: 4,
-        icon: PhoneIcon,
+        icon: "/assets/homepage/icons/Call.svg",
         title: "Support Centre",
+        alt: "Customer support icon",
     },
 ];
 
 export default function FeaturesSection() {
     return (
-        <section className="py-8 tablet:py-10 desktop:py-12 bg-white">
+        <section className="bg-white py-8 tablet:py-10 desktop:py-12">
             <div className="section-container">
-                <div className="grid grid-cols-2 tablet:grid-cols-4 gap-6 tablet:gap-8 desktop:gap-12 justify-items-center">
-                    {FEATURES.map((feature) => {
-                        const Icon = feature.icon;
-                        return (
-                            <div
-                                key={feature.id}
-                                className="flex flex-col tablet:flex-row items-center justify-center gap-3 tablet:gap-4"
-                            >
-                                <Icon className="w-6 h-6 tablet:w-7 tablet:h-7 desktop:w-8 desktop:h-8 text-midnight flex-shrink-0" />
-                                <h3 className="text-sm tablet:text-base desktop:text-[22px] font-normal text-midnight text-center leading-[1.4] tablet:leading-[1.4] desktop:leading-[1.3]">
-                                    {feature.title}
-                                </h3>
-                            </div>
-                        );
-                    })}
+                <div className="grid grid-cols-2 justify-items-center gap-6 tablet:grid-cols-4 tablet:gap-8 desktop:gap-12">
+                    {FEATURES.map((feature) => (
+                        <div
+                            key={feature.id}
+                            className="flex flex-col items-center justify-center gap-3 tablet:flex-row tablet:gap-4"
+                        >
+                            <Image
+                                src={feature.icon}
+                                alt={feature.alt}
+                                width={20}
+                                height={20}
+                                className="h-5 w-5 tablet:h-6 tablet:w-6 desktop:h-7 desktop:w-7"
+                            />
+                            <h3 className="text-center text-sm font-normal leading-[1.4] text-midnight tablet:text-base tablet:leading-[1.4] desktop:text-[22px] desktop:leading-[1.3]">
+                                {feature.title}
+                            </h3>
+                        </div>
+                    ))}
                 </div>
             </div>
         </section>

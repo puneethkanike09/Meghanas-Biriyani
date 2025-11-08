@@ -29,7 +29,7 @@ export default function HeroSection() {
             </p>
 
             {/* Buttons */}
-            <div className="mt-6 tablet:mt-8 desktop:mt-10 flex flex-col tablet:flex-row gap-4 tablet:gap-6">
+            <div className="mt-6 tablet:mt-8 desktop:mt-10 flex flex-col tablet:flex-row gap-4 tablet:gap-5">
               <Button variant="default" className="w-full tablet:w-auto">
                 View Menu
               </Button>
