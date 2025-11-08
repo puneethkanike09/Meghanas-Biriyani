@@ -94,7 +94,7 @@ export default function CategoriesSection() {
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,
         align: "start",
-        dragFree: true,
+        dragFree: false,
     });
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
@@ -163,11 +163,11 @@ export default function CategoriesSection() {
 
                 {/* Carousel */}
                 <div className="overflow-hidden" ref={emblaRef}>
-                    <div className="flex items-start">
+                    <div className="flex items-start -mx-2 tablet:-mx-3">
                         {DISHES.map((dish) => (
                             <div
                                 key={dish.id}
-                                className="flex-[0_0_300px] tablet:flex-[0_0_340px] desktop:flex-[0_0_320px] min-w-0 px-2 tablet:px-3 first:pl-0 last:pr-0"
+                                className="flex-[0_0_300px] tablet:flex-[0_0_340px] desktop:flex-[0_0_320px] min-w-0 px-2 tablet:px-3"
                             >
                                 <DishCard
                                     {...dish}
