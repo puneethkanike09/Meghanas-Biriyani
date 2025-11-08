@@ -98,7 +98,7 @@ export default function MenuHamburger({
                 aria-label={label}
                 aria-expanded={isOpen}
                 className={cn(
-                    "relative inline-flex h-12 w-[132px] items-center justify-center overflow-hidden rounded-full bg-midnight transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ",
+                    "relative inline-flex h-12 w-[118px] items-center justify-center overflow-hidden rounded-full bg-midnight transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ",
                     isOpen && "opacity-0 pointer-events-none",
                     className,
                 )}
@@ -129,7 +129,7 @@ export default function MenuHamburger({
                 </span>
                 <span
                     className={cn(
-                        "ml-[52px] overflow-hidden whitespace-nowrap font-normal text-base text-white transition-[opacity,max-width] duration-300 ease-in-out",
+                        "ml-12 overflow-hidden whitespace-nowrap font-normal text-base text-white transition-[opacity,max-width] duration-300 ease-in-out",
                         isHovered || isOpen ? "max-w-0 opacity-0" : "max-w-[150px] opacity-100",
                     )}
                 >
