@@ -1,9 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import DishCard from "@/components/ui/DishCard";
+
+const ARROW_ENABLED = "/assets/homepage/icons/Arrow Right.svg";
+const ARROW_DISABLED = "/assets/homepage/icons/Arrow Left.svg";
 
 const DISHES = [
     {
@@ -145,7 +148,23 @@ export default function CategoriesSection() {
                                 }`}
                             aria-label="Previous"
                         >
-                            <ChevronLeftIcon className="w-5 h-5" />
+                            {canScrollPrev ? (
+                                <Image
+                                    src={ARROW_ENABLED}
+                                    alt="Previous"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5 rotate-180"
+                                />
+                            ) : (
+                                <Image
+                                    src={ARROW_DISABLED}
+                                    alt="Previous"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5"
+                                />
+                            )}
                         </button>
                         <button
                             onClick={scrollNext}
@@ -156,13 +175,29 @@ export default function CategoriesSection() {
                                 }`}
                             aria-label="Next"
                         >
-                            <ChevronRightIcon className="w-5 h-5" />
+                            {canScrollNext ? (
+                                <Image
+                                    src={ARROW_ENABLED}
+                                    alt="Next"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5"
+                                />
+                            ) : (
+                                <Image
+                                    src={ARROW_DISABLED}
+                                    alt="Next"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5 rotate-180"
+                                />
+                            )}
                         </button>
                     </div>
                 </div>
 
                 {/* Carousel */}
-                <div className="overflow-hidden" ref={emblaRef}>
+                <div className="overflow-hidden rounded-2xl" ref={emblaRef}>
                     <div className="flex items-start -mx-2 tablet:-mx-3">
                         {DISHES.map((dish) => (
                             <div

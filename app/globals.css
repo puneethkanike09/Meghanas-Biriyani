@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  html,
+  body {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
 @layer components {
   .section {
     @apply px-4 tablet:px-8 desktop:px-16;
@@ -29,4 +43,3 @@
     background: #d66520;
   }
 }
-

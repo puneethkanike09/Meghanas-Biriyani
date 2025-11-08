@@ -110,7 +110,7 @@ export default function TestimonialsSection() {
                 </div>
 
                 {/* Carousel */}
-                <div className="overflow-hidden -mb-4 pb-4" ref={emblaRef}>
+                <div className="overflow-hidden rounded-2xl  -mb-4 " ref={emblaRef}>
                     <div className="flex -mx-2 tablet:-mx-3">
                         {(isDesktop ? INFINITE_REVIEWS : REVIEWS_DATA).map((review, index) => (
                             <div

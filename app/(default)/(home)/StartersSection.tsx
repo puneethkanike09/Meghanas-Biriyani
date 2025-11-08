@@ -1,9 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import DishCard from "@/components/ui/DishCard";
+
+const ARROW_ENABLED = "/assets/homepage/icons/Arrow Right.svg";
+const ARROW_DISABLED = "/assets/homepage/icons/Arrow Left.svg";
 
 const DISHES = [
     {
@@ -131,7 +134,7 @@ export default function StartersSection() {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
                     <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
-                        Start with a Starter 😋
+                        Start with a Starter 😜
                     </h2>
 
                     {/* Navigation Buttons - Desktop Only */}
@@ -145,7 +148,23 @@ export default function StartersSection() {
                                 }`}
                             aria-label="Previous"
                         >
-                            <ChevronLeftIcon className="w-5 h-5" />
+                            {canScrollPrev ? (
+                                <Image
+                                    src={ARROW_ENABLED}
+                                    alt="Previous"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5 rotate-180"
+                                />
+                            ) : (
+                                <Image
+                                    src={ARROW_DISABLED}
+                                    alt="Previous"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5"
+                                />
+                            )}
                         </button>
                         <button
                             onClick={scrollNext}
@@ -156,7 +175,23 @@ export default function StartersSection() {
                                 }`}
                             aria-label="Next"
                         >
-                            <ChevronRightIcon className="w-5 h-5" />
+                            {canScrollNext ? (
+                                <Image
+                                    src={ARROW_ENABLED}
+                                    alt="Next"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5"
+                                />
+                            ) : (
+                                <Image
+                                    src={ARROW_DISABLED}
+                                    alt="Next"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5 rotate-180"
+                                />
+                            )}
                         </button>
                     </div>
                 </div>

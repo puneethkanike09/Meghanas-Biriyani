@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
 import useEmblaCarousel from "embla-carousel-react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+
+const ARROW_ENABLED = "/assets/homepage/icons/Arrow Right.svg";
 
 const BANNER_SLIDES = [
     {
@@ -126,14 +127,26 @@ export default function BannerSection() {
                             className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200"
                             aria-label="Previous slide"
                         >
-                            <ChevronLeftIcon className="w-5 h-5" />
+                            <Image
+                                src={ARROW_ENABLED}
+                                alt="Previous slide"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5 rotate-180"
+                            />
                         </button>
                         <button
                             onClick={scrollNext}
                             className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200"
                             aria-label="Next slide"
                         >
-                            <ChevronRightIcon className="w-5 h-5" />
+                            <Image
+                                src={ARROW_ENABLED}
+                                alt="Next slide"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5"
+                            />
                         </button>
                     </div>
                 </nav>

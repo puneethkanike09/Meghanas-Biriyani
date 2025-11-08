@@ -151,7 +151,7 @@ export default function TopDishesSection() {
                     </div>
 
                     {/* Right Section - Scrollable Grid */}
-                    <div className="desktop:flex-1 desktop:h-[700px] desktop:overflow-y-auto custom-scrollbar">
+                    <div className="desktop:flex-1  desktop:h-[700px] desktop:overflow-y-auto custom-scrollbar">
                         <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                             {DISHES_DATA.map((dish) => (
                                 <DishCard
