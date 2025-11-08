@@ -102,8 +102,6 @@ export default function Navbar() {
                                 />
                             </button>
 
-                            {/* Theme Toggle */}
-                            {/* <ThemeToggle /> */}
                         </div>
                     </div>
                 </div>
