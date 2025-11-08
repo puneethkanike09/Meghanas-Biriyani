@@ -98,7 +98,7 @@ export default function MenuHamburger({
                 aria-label={label}
                 aria-expanded={isOpen}
                 className={cn(
-                    "relative inline-flex h-12 w-[132px] items-center overflow-hidden rounded-full bg-midnight transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent hover:bg-midnight/90",
+                    "relative inline-flex h-12 w-[132px] items-center justify-center overflow-hidden rounded-full bg-midnight transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent ",
                     isOpen && "opacity-0 pointer-events-none",
                     className,
                 )}
@@ -139,7 +139,7 @@ export default function MenuHamburger({
 
             {isOpen && (
                 <div className="pointer-events-auto absolute bottom-0 left-1/2 z-50 -translate-x-1/2">
-                    <nav className="inline-flex flex-col items-center justify-center rounded-3xl bg-midnight px-2 py-3 shadow-lg ring-1 ring-black/10">
+                    <nav className="inline-flex flex-col items-center justify-center rounded-3xl bg-blackMain px-2 py-3 shadow-lg ring-1 ring-black/10">
                         <div
                             className="flex w-60 flex-col items-stretch gap-1 overflow-y-auto custom-scrollbar"
                             style={{ maxHeight: maxHeight > 0 ? `${maxHeight}px` : "70vh" }}

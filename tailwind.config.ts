@@ -55,6 +55,7 @@ const config: Config = {
         sunRay: '#FBB21C',         // Light orange/peach (hover states)
         cream: '#F5E6D3',          // Light cream (Categories section bg)
         peachLight: '#FFF6F1',
+        blackMain: '#1A1A1A',
         // Very light peach (Testimonials section bg)
       },
       fontFamily: {
