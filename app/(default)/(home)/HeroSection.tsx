@@ -24,24 +24,16 @@ export default function HeroSection() {
             <h1 className="text-3xl tablet:text-4xl desktop:text-[56px] font-normal leading-[1.2] tablet:leading-[1.2] desktop:leading-[1.1]">
               Authentic South Indian Cusine
             </h1>
-            <p className="mt-4 text-base tablet:mt-5 tablet:text-lg desktop:mt-6 desktop:text-[18px] max-w-[500px] font-normal leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.7] opacity-90">
+            <p className="mt-4 text-base tablet:mt-5 tablet:text-lg desktop:mt-6 desktop:text-[18px] max-w-[450px] font-normal leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6] opacity-90">
               Experience the rich flavors of traditional Indian food, delivered fresh to your doorstep
             </p>
 
             {/* Buttons */}
             <div className="mt-6 tablet:mt-8 desktop:mt-10 flex flex-col tablet:flex-row gap-4 tablet:gap-6">
-              <Button
-                variant="default"
-                size="lg"
-                className="w-full tablet:w-auto"
-              >
+              <Button variant="default" className="w-full tablet:w-auto">
                 View Menu
               </Button>
-              <Button
-                variant="dark"
-                size="lg"
-                className="w-full tablet:w-auto"
-              >
+              <Button variant="dark" className="w-full tablet:w-auto">
                 Order Now
               </Button>
             </div>

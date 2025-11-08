@@ -102,9 +102,7 @@ export default function TestimonialsSection() {
                             </div>
                         </div>
                     </div>
-                    <Button
-                        size="md"
-                        variant="default"
+                    <Button variant="default"
                         className="self-start tablet:self-auto"
                     >
                         Leave a Comment

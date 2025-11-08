@@ -74,7 +74,6 @@ export default function DishCard({
                     <div className="absolute inset-0 bg-[#00000080] flex items-center justify-center">
                         <Button
                             variant="default"
-                            size="md"
                             className="cursor-default pointer-events-none"
                         >
                             Out of Stock
@@ -143,8 +142,7 @@ export default function DishCard({
                     </span>
                     <Button
                         variant="primary"
-                        size="sm"
-                        className={`gap-2 ${variant === "compact" ? "px-4 tablet:px-5 desktop:px-3.5" : "px-3 tablet:px-4 desktop:px-3.5"} desktop:py-2 ${outOfStock ? "bg-brand-200" : ""}`}
+                        className={`${outOfStock ? "bg-brand-200" : ""}`}
                         icon={<PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />}
                         onClick={outOfStock ? undefined : onAdd}
                         disabled={outOfStock}
