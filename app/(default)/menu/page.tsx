@@ -293,7 +293,7 @@ export default function MenuPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Filter Bar - Sticky below navbar */}
-            <div className="sticky top-[88px] tablet:top-[88px] desktop:top-[96px] z-40 bg-white  before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-160px] before:h-[200px] before:bg-white before:-z-10 tablet:before:top-[-160px] tablet:before:h-[220px] desktop:before:top-[-180px] desktop:before:h-[240px]">
+            <div className="sticky top-[88px] tablet:top-[88px] desktop:top-[96px] z-40 bg-white relative before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-160px] before:h-[200px] before:bg-white before:-z-10 tablet:before:top-[-160px] tablet:before:h-[220px] desktop:before:top-[-180px] desktop:before:h-[240px]">
                 <FilterBar
                     categories={categories}
                     selectedCategory={selectedCategory}
