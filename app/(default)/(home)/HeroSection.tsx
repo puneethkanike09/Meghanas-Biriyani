@@ -1,4 +1,3 @@
-"use client";
 
 import Image from "next/image";
 import Button from "@/components/ui/Button";
@@ -22,7 +21,7 @@ export default function HeroSection() {
           {/* Left Content */}
           <div className="text-white z-10">
             <h1 className="text-3xl tablet:text-4xl desktop:text-[56px] font-normal leading-[1.2] tablet:leading-[1.2] desktop:leading-[1.1]">
-              Authentic South Indian Cusine
+              Authentic South Indian Cuisine
             </h1>
             <p className="mt-4 text-base tablet:mt-5 tablet:text-lg desktop:mt-6 desktop:text-[18px] max-w-[450px] font-normal leading-[1.6] tablet:leading-[1.6] desktop:leading-[1.6] opacity-90">
               Experience the rich flavors of traditional Indian food, delivered fresh to your doorstep
