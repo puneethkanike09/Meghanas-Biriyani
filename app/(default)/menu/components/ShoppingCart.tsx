@@ -62,19 +62,13 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                         {items.length === 0 ? (
                             <div className="flex flex-col items-center justify-center h-full text-center p-6">
                                 <div className="w-20 h-20 mb-4 rounded-full bg-gray-100 flex items-center justify-center">
-                                    <svg
-                                        className="w-10 h-10 text-gray-400"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            strokeLinecap="round"
-                                            strokeLinejoin="round"
-                                            strokeWidth={2}
-                                            d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                                        />
-                                    </svg>
+                                    <Image
+                                        src="/assets/menu/icons/sentiment_dissatisfied.svg"
+                                        alt="Empty cart"
+                                        width={40}
+                                        height={40}
+                                        className="w-10 h-10"
+                                    />
                                 </div>
                                 <p className="text-gray-500 text-base font-medium mb-1">
                                     Your cart is empty
