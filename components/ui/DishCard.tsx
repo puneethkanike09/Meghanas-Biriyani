@@ -137,7 +137,7 @@ export default function DishCard({
                                 <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[114px]">
                                     <button
                                         onClick={(e) => handleQuantityChange(e, -1)}
-                                        className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors"
                                     >
                                         <Image
                                             src={SubtractIcon}
@@ -152,7 +152,7 @@ export default function DishCard({
                                     </span>
                                     <button
                                         onClick={(e) => handleQuantityChange(e, 1)}
-                                        className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors"
                                     >
                                         <Image
                                             src={AddIcon}
@@ -167,7 +167,7 @@ export default function DishCard({
                                 <button
                                     className={`inline-flex h-9 items-center justify-center gap-2 px-[14px] rounded-[8px] font-semibold text-sm transition-colors min-w-[114px] ${outOfStock
                                         ? "bg-brand-200 text-white cursor-not-allowed"
-                                        : "bg-tango text-white hover:bg-brand-800"
+                                        : "bg-tango text-white"
                                         }`}
                                     onClick={handleAddClick}
                                     disabled={outOfStock}
@@ -281,7 +281,7 @@ export default function DishCard({
                         >
                             <button
                                 onClick={(e) => handleQuantityChange(e, -1)}
-                                className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                className="w-5 h-5 flex items-center justify-center rounded transition-colors"
                             >
                                 <Image
                                     src={SubtractIcon}
@@ -296,7 +296,7 @@ export default function DishCard({
                             </span>
                             <button
                                 onClick={(e) => handleQuantityChange(e, 1)}
-                                className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                className="w-5 h-5 flex items-center justify-center rounded transition-colors"
                             >
                                 <Image
                                     src={AddIcon}
@@ -311,7 +311,7 @@ export default function DishCard({
                         <button
                             className={`inline-flex h-9 items-center justify-center gap-2 px-[14px] rounded-[8px] font-semibold text-sm transition-colors min-w-[114px] ${outOfStock
                                 ? "bg-brand-200 text-white cursor-not-allowed"
-                                : "bg-tango text-white hover:bg-brand-800"
+                                : "bg-tango text-white"
                                 }`}
                             onClick={handleAddClick}
                             disabled={outOfStock}

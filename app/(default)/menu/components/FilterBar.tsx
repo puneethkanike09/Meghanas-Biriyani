@@ -21,7 +21,7 @@ export default function FilterBar({
             <div className="flex items-center gap-4">
                 {/* Filter By Button - Fixed */}
                 <div className="flex items-center gap-3 flex-shrink-0">
-                    <button className="inline-flex h-9 items-center gap-2 px-[14px] rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                    <button className="inline-flex h-9 items-center gap-2 px-[14px] rounded-full border border-gray-200 bg-white transition-colors">
                         <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
                             Filter by
                         </span>
@@ -54,7 +54,7 @@ export default function FilterBar({
                                 onClick={() => onSelectCategory(category)}
                                 className={`inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal transition-all duration-200 flex-shrink-0 border ${isSelected
                                     ? "bg-tango text-white border-transparent"
-                                    : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                                    : "bg-white text-gray-700 border-gray-200"
                                     }`}
                             >
                                 {category}

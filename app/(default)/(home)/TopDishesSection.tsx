@@ -147,7 +147,9 @@ export default function TopDishesSection({ cart, onAddToCart, onUpdateQuantity }
                                         </p>
                                     </div>
                                     <Button
-                                        variant="default" className="self-start"
+                                        variant="neutral"
+                                        href="/orders"
+                                        className="self-start"
                                     >
                                         Order Now
                                     </Button>

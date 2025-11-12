@@ -152,8 +152,8 @@ export default function MenuHamburger({
                                         type="button"
                                         variant="dark"
                                         className={cn(
-                                            "h-auto w-full flex-shrink-0 justify-center rounded-full bg-transparent px-3 py-2 text-white hover:bg-gray-800",
-                                            isClose && "bg-gray-900 hover:bg-gray-800",
+                                            "h-auto w-full flex-shrink-0 justify-center rounded-full bg-transparent px-3 py-2 text-white hover:bg-gray-800 border-none shadow-none",
+                                            isClose && "bg-gray-900 hover:bg-gray-800"
                                         )}
                                         onClick={() => {
                                             if (isClose) {

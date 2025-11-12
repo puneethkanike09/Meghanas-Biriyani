@@ -70,7 +70,7 @@ export default function Navbar() {
                         {/* Icons Section */}
                         <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
                             {/* Search Icon (Mobile/Tablet only) */}
-                            <button className="rounded-full p-2 transition-colors hover:bg-gray-100 tablet:p-2.5 desktop:hidden">
+                            <button className="rounded-full p-2 transition-colors tablet:p-2.5 desktop:hidden">
                                 <Image
                                     src={ICONS.search}
                                     alt="Open search"
@@ -81,7 +81,7 @@ export default function Navbar() {
                             </button>
 
                             {/* Profile Icon */}
-                            <button className="rounded-full p-2 transition-colors hover:bg-gray-100 tablet:p-2.5">
+                            <button className="rounded-full p-2 transition-colors tablet:p-2.5">
                                 <Image
                                     src={ICONS.profile}
                                     alt="User profile"
@@ -92,7 +92,7 @@ export default function Navbar() {
                             </button>
 
                             {/* Cart Icon */}
-                            <button className="relative rounded-full p-2 transition-colors hover:bg-gray-100 tablet:p-2.5">
+                            <button className="relative rounded-full p-2 transition-colors tablet:p-2.5">
                                 <Image
                                     src={ICONS.cart}
                                     alt="View cart"
