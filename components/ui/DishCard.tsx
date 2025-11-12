@@ -1,8 +1,10 @@
 import Image from "next/image";
-import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import StarRating from "./StarRating";
 import VegSymbol from "./assets/icons/vegSymbol.svg";
 import NonVegSymbol from "./assets/icons/nonvegSymbol.svg";
+import AddDefaultIcon from "./assets/icons/AddDefualt.svg";
+import AddIcon from "./assets/icons/Add.svg";
+import SubtractIcon from "./assets/icons/Subtract.svg";
 
 export interface DishCardProps {
     id: number;
@@ -132,33 +134,51 @@ export default function DishCard({
                             </span>
 
                             {quantity && quantity > 0 ? (
-                                <div className="inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm">
+                                <div className="inline-flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[136px]">
                                     <button
-                                        onClick={handleQuantityChange.bind(null, {} as React.MouseEvent, -1)}
+                                        onClick={(e) => handleQuantityChange(e, -1)}
                                         className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
                                     >
-                                        <MinusIcon className="w-3.5 h-3.5 text-midnight" />
+                                        <Image
+                                            src={SubtractIcon}
+                                            alt="Decrease quantity"
+                                            width={18}
+                                            height={18}
+                                            className="w-4 h-4"
+                                        />
                                     </button>
                                     <span className="w-[30px] text-center text-sm font-semibold text-midnight">
                                         {quantity}
                                     </span>
                                     <button
-                                        onClick={handleQuantityChange.bind(null, {} as React.MouseEvent, 1)}
+                                        onClick={(e) => handleQuantityChange(e, 1)}
                                         className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
                                     >
-                                        <PlusIcon className="w-5 h-5 text-midnight" />
+                                        <Image
+                                            src={AddIcon}
+                                            alt="Increase quantity"
+                                            width={18}
+                                            height={18}
+                                            className="w-4 h-4"
+                                        />
                                     </button>
                                 </div>
                             ) : (
                                 <button
-                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors ${outOfStock
-                                            ? "bg-brand-200 text-white cursor-not-allowed"
-                                            : "bg-tango text-white hover:bg-brand-800"
+                                    className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-sm transition-colors min-w-[136px] ${outOfStock
+                                        ? "bg-brand-200 text-white cursor-not-allowed"
+                                        : "bg-tango text-white hover:bg-brand-800"
                                         }`}
                                     onClick={handleAddClick}
                                     disabled={outOfStock}
                                 >
-                                    <PlusIcon className="w-5 h-5" />
+                                    <Image
+                                        src={AddDefaultIcon}
+                                        alt="Add item"
+                                        width={18}
+                                        height={18}
+                                        className="w-4 h-4"
+                                    />
                                     Add
                                 </button>
                             )}
@@ -256,14 +276,20 @@ export default function DishCard({
 
                     {quantity && quantity > 0 ? (
                         <div
-                            className="inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm"
+                            className="inline-flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[136px]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
                                 onClick={(e) => handleQuantityChange(e, -1)}
                                 className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
                             >
-                                <MinusIcon className="w-3.5 h-3.5 text-midnight" />
+                                <Image
+                                    src={SubtractIcon}
+                                    alt="Decrease quantity"
+                                    width={18}
+                                    height={18}
+                                    className="w-4 h-4"
+                                />
                             </button>
                             <span className="w-[30px] text-center text-sm font-semibold text-midnight">
                                 {quantity}
@@ -272,19 +298,31 @@ export default function DishCard({
                                 onClick={(e) => handleQuantityChange(e, 1)}
                                 className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
                             >
-                                <PlusIcon className="w-5 h-5 text-midnight" />
+                                <Image
+                                    src={AddIcon}
+                                    alt="Increase quantity"
+                                    width={18}
+                                    height={18}
+                                    className="w-4 h-4"
+                                />
                             </button>
                         </div>
                     ) : (
                         <button
-                            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors ${outOfStock
+                            className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-sm transition-colors min-w-[136px] ${outOfStock
                                 ? "bg-brand-200 text-white cursor-not-allowed"
                                 : "bg-tango text-white hover:bg-brand-800"
                                 }`}
                             onClick={handleAddClick}
                             disabled={outOfStock}
                         >
-                            <PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />
+                            <Image
+                                src={AddDefaultIcon}
+                                alt="Add item"
+                                width={18}
+                                height={18}
+                                className="w-4 h-4"
+                            />
                             Add
                         </button>
                     )}
