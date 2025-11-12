@@ -10,11 +10,6 @@ import TestimonialsSection from "./(home)/TestimonialsSection";
 import TopDishesSection from "./(home)/TopDishesSection";
 import StartersSection from "./(home)/StartersSection";
 
-interface CartItem {
-    id: number;
-    quantity: number;
-}
-
 export default function HomePage() {
     const [cart, setCart] = useState<Record<number, number>>({});
 
@@ -29,8 +24,12 @@ export default function HomePage() {
         setCart(prev => {
             const newQuantity = (prev[itemId] || 0) + change;
             if (newQuantity <= 0) {
-                const { [itemId]: _, ...rest } = prev;
-                return rest;
+                if (!(itemId in prev)) {
+                    return prev;
+                }
+                const updatedCart = { ...prev };
+                delete updatedCart[itemId];
+                return updatedCart;
             }
             return {
                 ...prev,

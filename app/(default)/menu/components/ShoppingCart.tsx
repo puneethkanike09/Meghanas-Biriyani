@@ -33,8 +33,6 @@ const NonVegIcon = () => (
 );
 
 export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: ShoppingCartProps) {
-    const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
     return (
         <div className="flex flex-col gap-4 h-full">

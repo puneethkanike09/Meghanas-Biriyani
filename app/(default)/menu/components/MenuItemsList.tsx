@@ -93,7 +93,7 @@ export default function MenuItemsList({
                             {(() => {
                                 const renderedItems: JSX.Element[] = [];
 
-                                categoryItems.forEach((item, index) => {
+                                categoryItems.forEach((item) => {
                                     const isExpanded = expandedDishId === item.id;
                                     const cartItem = cart.find(c => c.id === item.id);
 
