@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
-import Button from "@/components/ui/Button";
 import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
 import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
 import { CartItem } from "../page";
@@ -130,12 +129,11 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                     {/* Footer - Fixed at bottom */}
                     {items.length > 0 && (
                         <div className="pt-4 border-t border-gray-200">
-                            <Button
-                                variant="primary"
-                                className="w-full justify-center"
+                            <button
+                                className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors bg-tango text-white hover:bg-brand-800"
                             >
                                 Place Order
-                            </Button>
+                            </button>
                         </div>
                     )}
                 </div>

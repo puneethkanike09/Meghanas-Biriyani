@@ -1,6 +1,5 @@
 import Image from "next/image";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import Button from "./Button";
+import { PlusIcon, MinusIcon } from "@heroicons/react/24/outline";
 import StarRating from "./StarRating";
 import VegSymbol from "./assets/icons/vegSymbol.svg";
 import NonVegSymbol from "./assets/icons/nonvegSymbol.svg";
@@ -9,15 +8,18 @@ export interface DishCardProps {
     id: number;
     name: string;
     description: string;
-    price: string;
+    price: string | number;
     rating: number;
     reviews?: number;
     isVeg: boolean;
     image: string;
-    variant?: "default" | "compact";
+    variant?: "default" | "compact" | "expanded";
     imageHeight?: string;
     outOfStock?: boolean;
     onAdd?: () => void;
+    onClick?: () => void;
+    quantity?: number;
+    onUpdateQuantity?: (change: number) => void;
 }
 
 const VegIcon = () => (
@@ -52,14 +54,126 @@ export default function DishCard({
     imageHeight,
     outOfStock = false,
     onAdd,
+    onClick,
+    quantity,
+    onUpdateQuantity,
 }: DishCardProps) {
     // Default image heights based on variant
     const defaultImageHeight = variant === "compact"
         ? "h-[180px] tablet:h-[200px] desktop:h-[180px]"
         : "h-[180px] tablet:h-[200px] desktop:h-[220px]";
 
+    const handleAddClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        onAdd?.();
+    };
+
+    const handleQuantityChange = (e: React.MouseEvent, change: number) => {
+        e.stopPropagation();
+        onUpdateQuantity?.(change);
+    };
+
+    const formattedPrice = typeof price === 'number' ? `₹${price}` : price;
+
+    // Expanded variant has different layout
+    if (variant === "expanded") {
+        return (
+            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+                <div className="flex flex-col tablet:flex-row">
+                    {/* Image Section */}
+                    <div className="relative w-full tablet:w-1/2 h-[300px] tablet:h-[360px]">
+                        <Image
+                            src={image}
+                            alt={name}
+                            fill
+                            className={`object-cover ${outOfStock ? "grayscale" : ""}`}
+                        />
+                        {outOfStock && (
+                            <div className="absolute inset-0 bg-[#00000080] flex items-center justify-center">
+                                <button
+                                    className="inline-flex h-auto items-center justify-center px-4 py-2.5 whitespace-nowrap rounded-[8px] font-semibold text-[13px] desktop:text-sm bg-white text-black border border-gray-300 cursor-default pointer-events-none"
+                                >
+                                    Out of Stock
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Details Section */}
+                    <div className="flex flex-col gap-4 p-4 tablet:p-6 flex-1 bg-white">
+                        {/* Veg/Non-veg Icon & Rating */}
+                        <div className="flex items-center justify-between">
+                            {isVeg ? <VegIcon /> : <NonVegIcon />}
+                            <div className="flex items-center gap-1">
+                                <StarRating rating={rating} variant="single" size="md" />
+                                <span className="text-sm font-normal text-midnight">
+                                    ({reviews})
+                                </span>
+                            </div>
+                        </div>
+
+                        {/* Name */}
+                        <h2 className="text-xl tablet:text-2xl font-semibold text-midnight leading-tight">
+                            {name}
+                        </h2>
+
+                        {/* Description */}
+                        <p className="text-base text-gray-600 leading-relaxed">
+                            {description}
+                        </p>
+
+                        {/* Spacer */}
+                        <div className="flex-1" />
+
+                        {/* Price & Add Button */}
+                        <div className="flex items-center justify-between">
+                            <span className="text-xl tablet:text-2xl font-semibold text-midnight">
+                                {formattedPrice}
+                            </span>
+
+                            {quantity && quantity > 0 ? (
+                                <div className="inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm">
+                                    <button
+                                        onClick={handleQuantityChange.bind(null, {} as React.MouseEvent, -1)}
+                                        className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                    >
+                                        <MinusIcon className="w-3.5 h-3.5 text-midnight" />
+                                    </button>
+                                    <span className="w-[30px] text-center text-sm font-semibold text-midnight">
+                                        {quantity}
+                                    </span>
+                                    <button
+                                        onClick={handleQuantityChange.bind(null, {} as React.MouseEvent, 1)}
+                                        className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                    >
+                                        <PlusIcon className="w-5 h-5 text-midnight" />
+                                    </button>
+                                </div>
+                            ) : (
+                                <button
+                                    className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors ${outOfStock
+                                            ? "bg-brand-200 text-white cursor-not-allowed"
+                                            : "bg-tango text-white hover:bg-brand-800"
+                                        }`}
+                                    onClick={handleAddClick}
+                                    disabled={outOfStock}
+                                >
+                                    <PlusIcon className="w-5 h-5" />
+                                    Add
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
-        <div className="bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay select-none">
+        <div
+            onClick={onClick}
+            className={`bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay select-none ${onClick ? 'cursor-pointer' : ''}`}
+        >
             {/* Image */}
             <div className={`relative w-full ${imageHeight || defaultImageHeight}`}>
                 <Image
@@ -72,12 +186,11 @@ export default function DishCard({
                 {/* Out of Stock Overlay */}
                 {outOfStock && (
                     <div className="absolute inset-0 bg-[#00000080] flex items-center justify-center">
-                        <Button
-                            variant="default"
-                            className="cursor-default pointer-events-none"
+                        <button
+                            className="inline-flex h-auto items-center justify-center px-4 py-2.5 whitespace-nowrap rounded-[8px] font-semibold text-[13px] desktop:text-sm bg-white text-black border border-gray-300 cursor-default pointer-events-none"
                         >
                             Out of Stock
-                        </Button>
+                        </button>
                     </div>
                 )}
             </div>
@@ -132,23 +245,49 @@ export default function DishCard({
                     </div>
                 )}
 
-                {/* Price & Add Button */}
+                {/* Price & Add Button / Quantity Controls */}
                 <div className="flex items-center justify-between mt-auto">
                     <span className={`font-semibold text-midnight leading-normal ${variant === "compact"
                         ? "text-base tablet:text-lg desktop:text-xl"
                         : "text-lg tablet:text-xl desktop:text-2xl"
                         }`}>
-                        {price}
+                        {formattedPrice}
                     </span>
-                    <Button
-                        variant="primary"
-                        className={`${outOfStock ? "bg-brand-200" : ""}`}
-                        icon={<PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />}
-                        onClick={outOfStock ? undefined : onAdd}
-                        disabled={outOfStock}
-                    >
-                        Add
-                    </Button>
+
+                    {quantity && quantity > 0 ? (
+                        <div
+                            className="inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            <button
+                                onClick={(e) => handleQuantityChange(e, -1)}
+                                className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                            >
+                                <MinusIcon className="w-3.5 h-3.5 text-midnight" />
+                            </button>
+                            <span className="w-[30px] text-center text-sm font-semibold text-midnight">
+                                {quantity}
+                            </span>
+                            <button
+                                onClick={(e) => handleQuantityChange(e, 1)}
+                                className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                            >
+                                <PlusIcon className="w-5 h-5 text-midnight" />
+                            </button>
+                        </div>
+                    ) : (
+                        <button
+                            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors ${outOfStock
+                                ? "bg-brand-200 text-white cursor-not-allowed"
+                                : "bg-tango text-white hover:bg-brand-800"
+                                }`}
+                            onClick={handleAddClick}
+                            disabled={outOfStock}
+                        >
+                            <PlusIcon className="w-4 h-4 tablet:w-5 tablet:h-5" />
+                            Add
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

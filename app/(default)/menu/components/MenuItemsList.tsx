@@ -3,13 +3,11 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { PlusIcon } from "@heroicons/react/24/outline";
-import Button from "@/components/ui/Button";
 import StarRating from "@/components/ui/StarRating";
 import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
 import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
 import { MenuItem, CartItem } from "../page";
-import MenuDishCard from "./MenuDishCard";
-import ExpandedDishView from "./ExpandedDishView";
+import DishCard from "@/components/ui/DishCard";
 
 interface MenuItemsListProps {
     items: MenuItem[];
@@ -104,22 +102,22 @@ export default function MenuItemsList({
                                             key={item.id}
                                             className={isExpanded ? "col-span-1 tablet:col-span-2 desktop:col-span-3" : ""}
                                         >
-                                            {isExpanded ? (
-                                                <ExpandedDishView
-                                                    item={item}
-                                                    cartItem={cartItem}
-                                                    onAddClick={onAddClick}
-                                                    onUpdateQuantity={onUpdateQuantity}
-                                                />
-                                            ) : (
-                                                <MenuDishCard
-                                                    item={item}
-                                                    cartItem={cartItem}
-                                                    onClick={() => onCardClick(item.id)}
-                                                    onAddClick={() => onAddClick(item)}
-                                                    onUpdateQuantity={onUpdateQuantity}
-                                                />
-                                            )}
+                                            <DishCard
+                                                id={item.id}
+                                                name={item.name}
+                                                description={item.description}
+                                                price={item.price}
+                                                rating={item.rating}
+                                                reviews={item.reviews}
+                                                isVeg={item.isVeg}
+                                                image={item.image}
+                                                outOfStock={item.outOfStock}
+                                                variant={isExpanded ? "expanded" : "default"}
+                                                onClick={isExpanded ? undefined : () => onCardClick(item.id)}
+                                                onAdd={() => onAddClick(item)}
+                                                quantity={cartItem?.quantity}
+                                                onUpdateQuantity={(change) => onUpdateQuantity(item.id, change)}
+                                            />
                                         </div>
                                     );
 
@@ -173,14 +171,13 @@ export default function MenuItemsList({
                                                                         <span className="text-base font-semibold text-midnight">
                                                                             ₹{addOn.price}
                                                                         </span>
-                                                                        <Button
-                                                                            variant="default"
-                                                                            className="border-tango text-tango hover:bg-lightOrange"
-                                                                            icon={<PlusIcon className="w-4 h-4" />}
+                                                                        <button
+                                                                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors border border-tango text-tango hover:bg-lightOrange bg-white"
                                                                             onClick={() => onAddToCart(addOn)}
                                                                         >
+                                                                            <PlusIcon className="w-4 h-4" />
                                                                             Add
-                                                                        </Button>
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             ))}
@@ -253,14 +250,13 @@ export default function MenuItemsList({
                                                                         <span className="text-base font-semibold text-midnight">
                                                                             ₹{addOn.price}
                                                                         </span>
-                                                                        <Button
-                                                                            variant="default"
-                                                                            className="border-tango text-tango hover:bg-lightOrange"
-                                                                            icon={<PlusIcon className="w-4 h-4" />}
+                                                                        <button
+                                                                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors border border-tango text-tango hover:bg-lightOrange bg-white"
                                                                             onClick={() => onAddToCart(addOn)}
                                                                         >
+                                                                            <PlusIcon className="w-4 h-4" />
                                                                             Add
-                                                                        </Button>
+                                                                        </button>
                                                                     </div>
                                                                 </div>
                                                             ))}

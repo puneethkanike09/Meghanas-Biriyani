@@ -93,7 +93,13 @@ const DISHES = [
     },
 ];
 
-export default function CategoriesSection() {
+interface CategoriesSectionProps {
+    cart: Record<number, number>;
+    onAddToCart: (itemId: number) => void;
+    onUpdateQuantity: (itemId: number, change: number) => void;
+}
+
+export default function CategoriesSection({ cart, onAddToCart, onUpdateQuantity }: CategoriesSectionProps) {
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,
         align: "start",
@@ -207,6 +213,9 @@ export default function CategoriesSection() {
                                 <DishCard
                                     {...dish}
                                     variant="default"
+                                    quantity={cart[dish.id]}
+                                    onAdd={() => onAddToCart(dish.id)}
+                                    onUpdateQuantity={(change) => onUpdateQuantity(dish.id, change)}
                                 />
                             </div>
                         ))}

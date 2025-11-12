@@ -2,7 +2,6 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import Button from "@/components/ui/Button";
 
 interface FilterBarProps {
     categories: string[];
@@ -22,24 +21,18 @@ export default function FilterBar({
             <div className="flex items-center gap-4">
                 {/* Filter By Button - Fixed */}
                 <div className="flex items-center gap-3 flex-shrink-0">
-                    <Button
-                        variant="default"
-                        className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300"
-                        icon={
-                            <Image
-                                src="/assets/homepage/icons/Filter.svg"
-                                alt="Filter"
-                                width={16}
-                                height={16}
-                                className="w-4 h-4"
-                            />
-                        }
-                        iconPosition="right"
-                    >
+                    <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition-colors">
                         <span className="text-sm tablet:text-base font-semibold text-midnight whitespace-nowrap">
                             Filter by
                         </span>
-                    </Button>
+                        <Image
+                            src="/assets/homepage/icons/Filter.svg"
+                            alt="Filter"
+                            width={16}
+                            height={16}
+                            className="w-4 h-4"
+                        />
+                    </button>
 
                     {/* Separator */}
                     <div className="h-9 w-px bg-gray-300" />
