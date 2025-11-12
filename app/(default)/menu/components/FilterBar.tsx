@@ -21,8 +21,8 @@ export default function FilterBar({
             <div className="flex items-center gap-4">
                 {/* Filter By Button - Fixed */}
                 <div className="flex items-center gap-3 flex-shrink-0">
-                    <button className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full border border-gray-300 bg-white hover:bg-gray-100 transition-colors">
-                        <span className="text-sm tablet:text-base font-semibold text-midnight whitespace-nowrap">
+                    <button className="inline-flex h-9 items-center gap-2 px-[14px] rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                        <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
                             Filter by
                         </span>
                         <Image
@@ -46,18 +46,21 @@ export default function FilterBar({
                         scrollbarWidth: 'thin',
                     }}
                 >
-                    {categories.map((category) => (
-                        <button
-                            key={category}
-                            onClick={() => onSelectCategory(category)}
-                            className={`inline-flex items-center px-4 py-2.5 rounded-xl whitespace-nowrap text-sm tablet:text-base font-semibold transition-all duration-200 flex-shrink-0 ${selectedCategory === category
-                                ? "bg-tango text-white"
-                                : "bg-white text-gray-700 border border-gray-300 hover:bg-gray-50"
-                                }`}
-                        >
-                            {category}
-                        </button>
-                    ))}
+                    {categories.map((category) => {
+                        const isSelected = selectedCategory === category;
+                        return (
+                            <button
+                                key={category}
+                                onClick={() => onSelectCategory(category)}
+                                className={`inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal transition-all duration-200 flex-shrink-0 border ${isSelected
+                                    ? "bg-tango text-white border-transparent"
+                                    : "bg-white text-gray-700 border-gray-200 hover:bg-gray-50"
+                                    }`}
+                            >
+                                {category}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
         </div>

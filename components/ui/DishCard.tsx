@@ -120,7 +120,7 @@ export default function DishCard({
                         </h2>
 
                         {/* Description */}
-                        <p className="text-base text-gray-600 leading-relaxed">
+                        <p className="text-base text-gray-600 leading-[1.5]">
                             {description}
                         </p>
 
@@ -245,7 +245,7 @@ export default function DishCard({
                         <h3 className="text-base tablet:text-lg desktop:text-xl font-semibold text-midnight leading-normal whitespace-nowrap overflow-hidden text-ellipsis">
                             {name}
                         </h3>
-                        <p className="text-xs tablet:text-sm desktop:text-base text-gray-600 leading-normal line-clamp-2">
+                        <p className="text-sm tablet:text-base desktop:text-base text-gray-600 leading-[1.5] line-clamp-2">
                             {description}
                         </p>
                     </div>
