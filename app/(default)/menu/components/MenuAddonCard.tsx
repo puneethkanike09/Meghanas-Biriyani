@@ -3,6 +3,7 @@ import StarRating from "@/components/ui/StarRating";
 import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
 import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
 import AddDefaultIcon from "@/components/ui/assets/icons/AddOrange.svg";
+import { cn } from "@/lib/utils";
 import { MenuItem } from "../page";
 
 interface MenuAddonCardProps {
@@ -36,7 +37,10 @@ export default function MenuAddonCard({ addon, onAdd, className = "" }: MenuAddo
 
     return (
         <div
-            className={`bg-white rounded-xl border border-gray-200 p-3 flex flex-col gap-3 w-[280px] tablet:w-[300px] desktop:w-[300px] flex-shrink-0 ${className}`}
+            className={cn(
+                "bg-white rounded-xl border border-gray-200 p-3 flex flex-col gap-3 flex-1 min-w-[300px] w-full",
+                className
+            )}
         >
             <div className="flex items-start gap-3">
                 <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">

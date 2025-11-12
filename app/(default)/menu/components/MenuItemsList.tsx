@@ -109,7 +109,7 @@ export default function MenuItemsList({
                                                         Suggested Add-ons
                                                     </h3>
 
-                                                    <div className="overflow-x-auto custom-scrollbar pb-2">
+                                                    <div className="overflow-x-auto custom-scrollbar">
                                                         <div className="flex gap-4">
                                                             {item.addOns.map((addOn) => (
                                                                 <MenuAddonCard
@@ -149,7 +149,7 @@ export default function MenuItemsList({
                                                         Suggested Add-ons
                                                     </h3>
 
-                                                    <div className="overflow-x-auto custom-scrollbar pb-2">
+                                                    <div className="overflow-x-auto custom-scrollbar">
                                                         <div className="flex gap-4">
                                                             {addOnsItem.addOns.map((addOn) => (
                                                                 <MenuAddonCard

@@ -47,8 +47,10 @@ const MENU_ITEMS: MenuItem[] = [
                 image: "/assets/homepage/images/top10.jpg",
                 category: "Add-ons",
             },
+
+
             {
-                id: 102,
+                id: 103,
                 name: "Golden Baby Corn",
                 description: "Crispy baby corn with special seasoning",
                 price: 299,
@@ -59,7 +61,29 @@ const MENU_ITEMS: MenuItem[] = [
                 category: "Add-ons",
             },
             {
-                id: 103,
+                id: 18,
+                name: "Golden Baby Corn",
+                description: "Crispy baby corn with special seasoning",
+                price: 299,
+                rating: 4.5,
+                reviews: 58,
+                isVeg: true,
+                image: "/assets/homepage/images/top10.jpg",
+                category: "Add-ons",
+            },
+            {
+                id: 19,
+                name: "Golden Baby Corn",
+                description: "Crispy baby corn with special seasoning",
+                price: 299,
+                rating: 4.5,
+                reviews: 58,
+                isVeg: true,
+                image: "/assets/homepage/images/top10.jpg",
+                category: "Add-ons",
+            },
+            {
+                id: 12,
                 name: "Golden Baby Corn",
                 description: "Crispy baby corn with special seasoning",
                 price: 299,
