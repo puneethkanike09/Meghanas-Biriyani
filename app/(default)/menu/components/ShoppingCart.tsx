@@ -1,9 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { MinusIcon, PlusIcon } from "@heroicons/react/24/outline";
 import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
 import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
+import AddDefaultIcon from "@/components/ui/assets/icons/AddDefualt.svg";
+import AddIcon from "@/components/ui/assets/icons/Add.svg";
+import SubtractIcon from "@/components/ui/assets/icons/Subtract.svg";
+import Button from "@/components/ui/Button";
 import { CartItem } from "../page";
 
 interface ShoppingCartProps {
@@ -94,21 +97,33 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                                                 </span>
 
                                                 {/* Quantity Controls */}
-                                                <div className="inline-flex items-center gap-2 px-3.5 py-2 bg-white rounded-lg border border-gray-300 shadow-sm">
+                                                <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[114px]">
                                                     <button
                                                         onClick={() => onUpdateQuantity(item.id, -1)}
-                                                        className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors"
                                                     >
-                                                        <MinusIcon className="w-3.5 h-3.5 text-midnight" />
+                                                        <Image
+                                                            src={SubtractIcon}
+                                                            alt="Decrease quantity"
+                                                            width={18}
+                                                            height={18}
+                                                            className="w-4 h-4"
+                                                        />
                                                     </button>
                                                     <span className="w-[30px] text-center text-sm font-semibold text-midnight">
                                                         {item.quantity}
                                                     </span>
                                                     <button
                                                         onClick={() => onUpdateQuantity(item.id, 1)}
-                                                        className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
+                                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors"
                                                     >
-                                                        <PlusIcon className="w-5 h-5 text-midnight" />
+                                                        <Image
+                                                            src={AddIcon}
+                                                            alt="Increase quantity"
+                                                            width={18}
+                                                            height={18}
+                                                            className="w-4 h-4"
+                                                        />
                                                     </button>
                                                 </div>
                                             </div>
@@ -127,11 +142,12 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                     {/* Footer - Fixed at bottom */}
                     {items.length > 0 && (
                         <div className="pt-4 border-t border-gray-200">
-                            <button
-                                className="w-full inline-flex items-center justify-center px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors bg-tango text-white hover:bg-brand-800"
+                            <Button
+                                variant="primary"
+                                className="w-full"
                             >
                                 Place Order
-                            </button>
+                            </Button>
                         </div>
                     )}
                 </div>

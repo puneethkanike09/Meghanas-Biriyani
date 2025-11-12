@@ -1,13 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { PlusIcon } from "@heroicons/react/24/outline";
-import StarRating from "@/components/ui/StarRating";
-import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
-import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
 import { MenuItem, CartItem } from "../page";
 import DishCard from "@/components/ui/DishCard";
+import MenuAddonCard from "./MenuAddonCard";
 
 interface MenuItemsListProps {
     items: MenuItem[];
@@ -19,26 +15,6 @@ interface MenuItemsListProps {
     cart: CartItem[];
     onUpdateQuantity: (itemId: number, change: number) => void;
 }
-
-const VegIcon = () => (
-    <Image
-        src={VegSymbol}
-        alt="Vegetarian"
-        width={20}
-        height={20}
-        className="w-5 h-5"
-    />
-);
-
-const NonVegIcon = () => (
-    <Image
-        src={NonVegSymbol}
-        alt="Non-Vegetarian"
-        width={20}
-        height={20}
-        className="w-5 h-5"
-    />
-);
 
 export default function MenuItemsList({
     items,
@@ -136,50 +112,11 @@ export default function MenuItemsList({
                                                     <div className="overflow-x-auto custom-scrollbar pb-2">
                                                         <div className="flex gap-4">
                                                             {item.addOns.map((addOn) => (
-                                                                <div
+                                                                <MenuAddonCard
                                                                     key={addOn.id}
-                                                                    className="bg-white rounded-xl border border-gray-200 p-3 flex flex-col gap-3 w-[280px] tablet:w-[300px] desktop:w-[300px] flex-shrink-0"
-                                                                >
-                                                                    <div className="flex items-start gap-3">
-                                                                        <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
-                                                                            <Image
-                                                                                src={addOn.image}
-                                                                                alt={addOn.name}
-                                                                                fill
-                                                                                className="object-cover"
-                                                                            />
-                                                                        </div>
-
-                                                                        <div className="flex flex-col gap-2 flex-1 min-w-0">
-                                                                            <div className="flex items-center justify-between">
-                                                                                {addOn.isVeg ? <VegIcon /> : <NonVegIcon />}
-                                                                                <div className="flex items-center gap-1">
-                                                                                    <StarRating rating={addOn.rating} variant="single" size="sm" />
-                                                                                    <span className="text-xs font-normal text-midnight">
-                                                                                        ({addOn.reviews})
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <h4 className="text-base tablet:text-lg font-semibold text-midnight leading-tight line-clamp-1">
-                                                                                {addOn.name}
-                                                                            </h4>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span className="text-base font-semibold text-midnight">
-                                                                            ₹{addOn.price}
-                                                                        </span>
-                                                                        <button
-                                                                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors border border-tango text-tango hover:bg-lightOrange bg-white"
-                                                                            onClick={() => onAddToCart(addOn)}
-                                                                        >
-                                                                            <PlusIcon className="w-4 h-4" />
-                                                                            Add
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
+                                                                    addon={addOn}
+                                                                    onAdd={(addon) => onAddToCart(addon)}
+                                                                />
                                                             ))}
                                                         </div>
                                                     </div>
@@ -215,50 +152,11 @@ export default function MenuItemsList({
                                                     <div className="overflow-x-auto custom-scrollbar pb-2">
                                                         <div className="flex gap-4">
                                                             {addOnsItem.addOns.map((addOn) => (
-                                                                <div
+                                                                <MenuAddonCard
                                                                     key={addOn.id}
-                                                                    className="bg-white rounded-xl border border-gray-200 p-3 flex flex-col gap-3 w-[280px] tablet:w-[300px] desktop:w-[300px] flex-shrink-0"
-                                                                >
-                                                                    <div className="flex items-start gap-3">
-                                                                        <div className="relative w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
-                                                                            <Image
-                                                                                src={addOn.image}
-                                                                                alt={addOn.name}
-                                                                                fill
-                                                                                className="object-cover"
-                                                                            />
-                                                                        </div>
-
-                                                                        <div className="flex flex-col gap-2 flex-1 min-w-0">
-                                                                            <div className="flex items-center justify-between">
-                                                                                {addOn.isVeg ? <VegIcon /> : <NonVegIcon />}
-                                                                                <div className="flex items-center gap-1">
-                                                                                    <StarRating rating={addOn.rating} variant="single" size="sm" />
-                                                                                    <span className="text-xs font-normal text-midnight">
-                                                                                        ({addOn.reviews})
-                                                                                    </span>
-                                                                                </div>
-                                                                            </div>
-
-                                                                            <h4 className="text-base tablet:text-lg font-semibold text-midnight leading-tight line-clamp-1">
-                                                                                {addOn.name}
-                                                                            </h4>
-                                                                        </div>
-                                                                    </div>
-
-                                                                    <div className="flex items-center justify-between">
-                                                                        <span className="text-base font-semibold text-midnight">
-                                                                            ₹{addOn.price}
-                                                                        </span>
-                                                                        <button
-                                                                            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors border border-tango text-tango hover:bg-lightOrange bg-white"
-                                                                            onClick={() => onAddToCart(addOn)}
-                                                                        >
-                                                                            <PlusIcon className="w-4 h-4" />
-                                                                            Add
-                                                                        </button>
-                                                                    </div>
-                                                                </div>
+                                                                    addon={addOn}
+                                                                    onAdd={(addon) => onAddToCart(addon)}
+                                                                />
                                                             ))}
                                                         </div>
                                                     </div>
