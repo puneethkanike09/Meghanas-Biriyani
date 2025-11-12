@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import Link from "next/link";
 import Button from "@/components/ui/Button";
 
 export default function HeroSection() {
@@ -29,9 +30,12 @@ export default function HeroSection() {
 
             {/* Buttons */}
             <div className="mt-6 tablet:mt-8 desktop:mt-10 flex flex-col tablet:flex-row gap-4 tablet:gap-5">
-              <Button variant="default" className="w-full tablet:w-auto">
+              <Link
+                href="/menu"
+                className="inline-flex h-10 items-center justify-center px-4 py-[10px] whitespace-nowrap rounded-[8px] font-semibold text-base text-gray-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 bg-white border border-gray-300 hover:bg-gray-50 shadow-sm w-full tablet:w-auto"
+              >
                 View Menu
-              </Button>
+              </Link>
               <Button variant="dark" className="w-full tablet:w-auto">
                 Order Now
               </Button>

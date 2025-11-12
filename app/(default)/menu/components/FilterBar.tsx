@@ -26,7 +26,7 @@ export default function FilterBar({
                             Filter by
                         </span>
                         <Image
-                            src="/assets/homepage/icons/Filter.svg"
+                            src="/assets/menu/icons/Filter.svg"
                             alt="Filter"
                             width={16}
                             height={16}
