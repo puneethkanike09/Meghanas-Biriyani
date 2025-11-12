@@ -134,7 +134,7 @@ export default function DishCard({
                             </span>
 
                             {quantity && quantity > 0 ? (
-                                <div className="inline-flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[136px]">
+                                <div className="inline-flex h-11 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm w-[136px]">
                                     <button
                                         onClick={(e) => handleQuantityChange(e, -1)}
                                         className="w-5 h-5 flex items-center justify-center hover:bg-gray-50 rounded transition-colors"
@@ -165,7 +165,7 @@ export default function DishCard({
                                 </div>
                             ) : (
                                 <button
-                                    className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-sm transition-colors min-w-[136px] ${outOfStock
+                                    className={`inline-flex h-11 items-center justify-center gap-2 px-4 rounded-[8px] font-semibold text-sm transition-colors w-[136px] ${outOfStock
                                         ? "bg-brand-200 text-white cursor-not-allowed"
                                         : "bg-tango text-white hover:bg-brand-800"
                                         }`}
@@ -276,7 +276,7 @@ export default function DishCard({
 
                     {quantity && quantity > 0 ? (
                         <div
-                            className="inline-flex items-center justify-between gap-2 px-3.5 py-2.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[136px]"
+                            className="inline-flex h-11 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm w-[136px]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button
@@ -309,7 +309,7 @@ export default function DishCard({
                         </div>
                     ) : (
                         <button
-                            className={`inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-[8px] font-semibold text-sm transition-colors min-w-[136px] ${outOfStock
+                            className={`inline-flex h-11 items-center justify-center gap-2 px-4 rounded-[8px] font-semibold text-sm transition-colors w-[136px] ${outOfStock
                                 ? "bg-brand-200 text-white cursor-not-allowed"
                                 : "bg-tango text-white hover:bg-brand-800"
                                 }`}
