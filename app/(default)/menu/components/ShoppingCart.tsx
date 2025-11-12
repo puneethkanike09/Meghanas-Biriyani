@@ -41,7 +41,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
         <div className="flex flex-col gap-4 h-full">
             {/* Header */}
             <div className="flex items-center justify-between">
-                <h2 className="text-xl font-semibold text-midnight">
+                <h2 className="text-xl tablet:text-2xl font-semibold text-midnight">
                     Shopping Cart
                 </h2>
                 {items.length > 0 && (

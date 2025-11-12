@@ -293,7 +293,7 @@ export default function MenuPage() {
     return (
         <div className="min-h-screen bg-white">
             {/* Filter Bar - Sticky below navbar */}
-            <div className="sticky top-[88px] tablet:top-[88px] desktop:top-[96px] z-40 bg-white relative before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-160px] before:h-[200px] before:bg-white before:-z-10 tablet:before:top-[-160px] tablet:before:h-[220px] desktop:before:top-[-180px] desktop:before:h-[240px]">
+            <div className="sticky top-[88px] tablet:top-[88px] desktop:top-[96px] z-40 bg-white before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-160px] before:h-[200px] before:bg-white before:-z-10 tablet:before:top-[-160px] tablet:before:h-[220px] desktop:before:top-[-180px] desktop:before:h-[240px]">
                 <FilterBar
                     categories={categories}
                     selectedCategory={selectedCategory}
@@ -302,7 +302,7 @@ export default function MenuPage() {
             </div>
 
             {/* Main Content - Proper spacing and scroll behavior */}
-            <div className="section-container pt-24 tablet:pt-[104px] desktop:pt-[112px] pb-16 tablet:pb-16 desktop:pb-16">
+            <div className="section-container pt-24 tablet:pt-[104px] desktop:pt-[100px] pb-16 tablet:pb-16 desktop:pb-16">
                 <div className="flex flex-col desktop:flex-row gap-6 desktop:gap-8 items-start">
                     {/* Menu Items Section - Scrollable */}
                     <div className="flex-1 w-full">
@@ -319,7 +319,7 @@ export default function MenuPage() {
                     </div>
 
                     {/* Shopping Cart - Sticky on desktop, Full Height */}
-                    <div className="w-full desktop:w-[400px] desktop:sticky desktop:top-[200px] desktop:h-[calc(100vh-220px)]">
+                    <div className="w-full desktop:w-[400px] desktop:sticky desktop:top-[168px] desktop:h-[calc(100vh-188px)]">
                         <ShoppingCart
                             items={cart}
                             onUpdateQuantity={updateCartItemQuantity}
