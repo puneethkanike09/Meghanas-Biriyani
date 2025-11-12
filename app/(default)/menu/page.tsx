@@ -71,28 +71,6 @@ const MENU_ITEMS: MenuItem[] = [
                 image: "/assets/homepage/images/top10.jpg",
                 category: "Add-ons",
             },
-            {
-                id: 19,
-                name: "Golden Baby Corn",
-                description: "Crispy baby corn with special seasoning",
-                price: 299,
-                rating: 4.5,
-                reviews: 58,
-                isVeg: true,
-                image: "/assets/homepage/images/top10.jpg",
-                category: "Add-ons",
-            },
-            {
-                id: 12,
-                name: "Golden Baby Corn",
-                description: "Crispy baby corn with special seasoning",
-                price: 299,
-                rating: 4.5,
-                reviews: 58,
-                isVeg: true,
-                image: "/assets/homepage/images/top10.jpg",
-                category: "Add-ons",
-            },
 
 
         ],
@@ -329,7 +307,7 @@ export default function MenuPage() {
             <div className="section-container pt-24 tablet:pt-[104px] desktop:pt-[100px] pb-16 tablet:pb-16 desktop:pb-16">
                 <div className="flex flex-col desktop:flex-row gap-6 desktop:gap-8 items-start">
                     {/* Menu Items Section - Scrollable */}
-                    <div className="flex-1 w-full">
+                    <div className="flex-1 w-full desktop:basis-[70%] desktop:max-w-[70%]">
                         <MenuItemsList
                             items={filteredItems}
                             expandedDishId={expandedDishId}
@@ -343,7 +321,7 @@ export default function MenuPage() {
                     </div>
 
                     {/* Shopping Cart - Sticky on desktop, Full Height */}
-                    <div className="w-full desktop:w-[400px] desktop:sticky desktop:top-[168px] desktop:h-[calc(100vh-188px)]">
+                    <div className="w-full desktop:basis-[30%] desktop:max-w-[30%] desktop:sticky desktop:top-[168px] desktop:h-[calc(100vh-188px)]">
                         <ShoppingCart
                             items={cart}
                             onUpdateQuantity={updateCartItemQuantity}

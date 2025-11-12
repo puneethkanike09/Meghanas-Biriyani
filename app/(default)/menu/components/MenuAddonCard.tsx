@@ -38,7 +38,7 @@ export default function MenuAddonCard({ addon, onAdd, className = "" }: MenuAddo
     return (
         <div
             className={cn(
-                "bg-white rounded-xl border border-gray-200 p-3 flex flex-col gap-3 flex-1 min-w-[300px] w-full",
+                "bg-white rounded-xl border border-gray-200 p-3 flex flex-col gap-3 flex-1 min-w-[295px] w-full",
                 className
             )}
         >
