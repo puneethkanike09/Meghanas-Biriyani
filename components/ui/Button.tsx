@@ -30,11 +30,11 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 export default function Button(props: ButtonProps) {
-  const variant = props.variant ?? "neutral";
-  const classes = cn(baseStyles, variants[variant], props.className);
+  const { variant = "neutral", className, ...restProps } = props;
+  const classes = cn(baseStyles, variants[variant], className);
 
-  if ("href" in props && props.href) {
-    const { href, children, className: _className, variant: _variant, ...anchorProps } = props as AnchorButtonProps;
+  if ("href" in restProps && restProps.href) {
+    const { href, children, ...anchorProps } = restProps as AnchorButtonProps;
     return (
       <Link href={href} className={classes} {...anchorProps}>
         {children}
@@ -42,7 +42,7 @@ export default function Button(props: ButtonProps) {
     );
   }
 
-  const { children, className: _className, variant: _variant, ...buttonProps } = props as NativeButtonProps;
+  const { children, ...buttonProps } = restProps as NativeButtonProps;
 
   return (
     <button className={classes} {...buttonProps}>
