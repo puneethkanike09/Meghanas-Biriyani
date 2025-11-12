@@ -3,7 +3,6 @@
 import Image from "next/image";
 import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
 import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
-import AddDefaultIcon from "@/components/ui/assets/icons/AddDefualt.svg";
 import AddIcon from "@/components/ui/assets/icons/Add.svg";
 import SubtractIcon from "@/components/ui/assets/icons/Subtract.svg";
 import Button from "@/components/ui/Button";
