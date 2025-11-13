@@ -9,18 +9,6 @@ const navigationItems = [
     { id: "profile" as const, label: "Profile" },
     { id: "orders" as const, label: "Orders" },
     { id: "address" as const, label: "Address" },
-    { id: "profile" as const, label: "Profile" },
-    { id: "orders" as const, label: "Orders" },
-    { id: "address" as const, label: "Address" },
-    { id: "profile" as const, label: "Profile" },
-    { id: "orders" as const, label: "Orders" },
-    { id: "address" as const, label: "Address" },
-    { id: "profile" as const, label: "Profile" },
-    { id: "orders" as const, label: "Orders" },
-    { id: "address" as const, label: "Address" },
-    { id: "profile" as const, label: "Profile" },
-    { id: "orders" as const, label: "Orders" },
-    { id: "address" as const, label: "Address" },
 ];
 
 export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNavigationProps) {

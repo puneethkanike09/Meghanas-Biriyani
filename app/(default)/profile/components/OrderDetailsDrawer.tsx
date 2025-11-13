@@ -43,7 +43,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                 className="absolute inset-0 bg-gray-800/90"
                 onClick={onClose}
             />
-            <aside className="relative z-[81] ml-auto flex h-full w-full max-w-[420px] flex-col bg-white shadow-2xl">
+            <aside className="relative z-[81] ml-auto flex h-full w-full max-w-full flex-col bg-white shadow-2xl tablet:max-w-[420px]">
                 <header className="flex items-start justify-between border-b border-gray-200 px-6 py-5">
                     <div className="space-y-1">
 
