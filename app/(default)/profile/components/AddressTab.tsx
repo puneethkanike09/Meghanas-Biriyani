@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Button from "@/components/ui/Button";
 
 interface Address {
     id: number;
@@ -31,16 +32,19 @@ const addressesData: Address[] = [
     },
 ];
 
-const getIcon = (type: string) => {
-    switch (type) {
-        case "home":
-            return "🏠";
-        case "office":
-            return "🏢";
-        case "location":
-        default:
-            return "📍";
-    }
+const addressIconMap: Record<Address["iconType"], { src: string; alt: string }> = {
+    home: {
+        src: "/assets/profile/icons/Home.svg",
+        alt: "Home address",
+    },
+    office: {
+        src: "/assets/profile/icons/Building.svg",
+        alt: "Office address",
+    },
+    location: {
+        src: "/assets/profile/icons/Location.svg",
+        alt: "Saved location",
+    },
 };
 
 export default function AddressTab() {
@@ -68,10 +72,14 @@ export default function AddressTab() {
                     >
                         <div className="flex flex-col gap-4 p-4">
                             {/* Address Content */}
-                            <div className="flex items-start gap-2">
-                                <span className="text-2xl flex-shrink-0">
-                                    {getIcon(address.iconType)}
-                                </span>
+                            <div className="flex items-start gap-3">
+                                <Image
+                                    src={addressIconMap[address.iconType].src}
+                                    alt={addressIconMap[address.iconType].alt}
+                                    width={20}
+                                    height={20}
+                                    className="mt-0.5"
+                                />
                                 <div className="flex flex-col gap-2 flex-1 min-w-0">
                                     <h3 className="text-base font-semibold text-midnight">
                                         {address.title}
@@ -104,18 +112,20 @@ export default function AddressTab() {
                         <div className="text-base font-semibold text-midnight">
                             Add New Address
                         </div>
-                        <button className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg border border-tango shadow-sm transition-colors hover:bg-brand-50">
-                            <Image
-                                src="/assets/navbar/icons/Location.svg"
-                                alt="Add"
-                                width={20}
-                                height={20}
-                                className="w-5 h-5"
-                            />
-                            <span className="text-sm font-semibold text-tango whitespace-nowrap">
-                                Add
-                            </span>
-                        </button>
+                        <Button
+                            variant="primaryOutlined"
+                            icon={
+                                <Image
+                                    src="/assets/profile/icons/Add.svg"
+                                    alt="Add"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5"
+                                />
+                            }
+                        >
+                            Add
+                        </Button>
                     </div>
                 </div>
             </div>

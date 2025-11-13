@@ -109,19 +109,20 @@ export default function OrdersTab() {
                                         ORDER #{order.id}
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <div
-                                            className={`w-6 h-6 rounded-full flex items-center justify-center ${
+                                        <Image
+                                            src={
                                                 order.status === "delivered"
-                                                    ? "bg-green-500"
-                                                    : "bg-red-500"
-                                            }`}
-                                        >
-                                            {order.status === "delivered" ? (
-                                                <span className="text-white text-xs">✓</span>
-                                            ) : (
-                                                <span className="text-white text-xs">✕</span>
-                                            )}
-                                        </div>
+                                                    ? "/assets/profile/icons/CheckmarkCircle.svg"
+                                                    : "/assets/profile/icons/DismissCircle.svg"
+                                            }
+                                            alt={
+                                                order.status === "delivered"
+                                                    ? "Delivered"
+                                                    : "Cancelled"
+                                            }
+                                            width={24}
+                                            height={24}
+                                        />
                                         <h3 className="text-xl font-semibold text-midnight">
                                             {order.statusText}
                                         </h3>

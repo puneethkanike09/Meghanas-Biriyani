@@ -12,22 +12,23 @@ export default function ProfileTab() {
     return (
         <div className="flex flex-col gap-6 py-6 tablet:py-6 desktop:py-0">
             {/* Header */}
-            <header className="flex items-center justify-between py-3 border-b border-gray-200">
+            <header className="flex items-start justify-between py-3 border-b border-gray-200">
                 <h1 className="text-xl font-semibold text-midnight">
                     Profile
                 </h1>
                 <Button
                     variant="neutral"
                     onClick={() => setIsEditing(!isEditing)}
-                    className="inline-flex items-center gap-2"
+                    icon={
+                        <Image
+                            src="/assets/profile/icons/Edit.svg"
+                            alt="Edit"
+                            width={20}
+                            height={20}
+                            className="h-5 w-5"
+                        />
+                    }
                 >
-                    <Image
-                        src="/assets/navbar/icons/Person.svg"
-                        alt="Edit"
-                        width={20}
-                        height={20}
-                        className="w-5 h-5"
-                    />
                     Edit Profile
                 </Button>
             </header>
@@ -44,7 +45,7 @@ export default function ProfileTab() {
                     </label>
                     <div className="relative">
                         <Image
-                            src="/assets/navbar/icons/Person.svg"
+                            src="/assets/profile/icons/Person.svg"
                             alt="User"
                             width={20}
                             height={20}
@@ -56,11 +57,10 @@ export default function ProfileTab() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             readOnly={!isEditing}
-                            className={`w-full pl-10 px-3.5 py-2.5 rounded-lg border border-gray-300 shadow-sm text-base ${
-                                isEditing
-                                    ? "bg-white text-midnight"
-                                    : "bg-gray-50 text-gray-500"
-                            } focus:outline-none focus:ring-2 focus:ring-tango focus:border-transparent`}
+                            className={`w-full pl-10 px-3.5 py-2.5 rounded-lg border border-gray-300 shadow-sm text-base ${isEditing
+                                ? "bg-white text-midnight"
+                                : "bg-gray-50 text-gray-500"
+                                } focus:outline-none focus:ring-2 focus:ring-tango focus:border-transparent`}
                         />
                     </div>
                 </div>
@@ -75,7 +75,7 @@ export default function ProfileTab() {
                     </label>
                     <div className="relative">
                         <Image
-                            src="/assets/navbar/icons/Cart.svg"
+                            src="/assets/profile/icons/Phone.svg"
                             alt="Phone"
                             width={20}
                             height={20}
@@ -87,11 +87,10 @@ export default function ProfileTab() {
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             readOnly={!isEditing}
-                            className={`w-full pl-10 px-3.5 py-2.5 rounded-lg border border-gray-300 shadow-sm text-base ${
-                                isEditing
-                                    ? "bg-white text-midnight"
-                                    : "bg-gray-50 text-gray-500"
-                            } focus:outline-none focus:ring-2 focus:ring-tango focus:border-transparent`}
+                            className={`w-full pl-10 px-3.5 py-2.5 rounded-lg border border-gray-300 shadow-sm text-base ${isEditing
+                                ? "bg-white text-midnight"
+                                : "bg-gray-50 text-gray-500"
+                                } focus:outline-none focus:ring-2 focus:ring-tango focus:border-transparent`}
                         />
                     </div>
                 </div>
@@ -103,14 +102,12 @@ export default function ProfileTab() {
                     <Button
                         variant="primary"
                         onClick={() => setIsEditing(false)}
-                        className="flex-1 tablet:flex-initial"
                     >
                         Save Changes
                     </Button>
                     <Button
                         variant="neutral"
                         onClick={() => setIsEditing(false)}
-                        className="flex-1 tablet:flex-initial"
                     >
                         Cancel
                     </Button>

@@ -1,43 +1,61 @@
 "use client";
 
-import type { AnchorHTMLAttributes, ButtonHTMLAttributes } from "react";
+import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "neutral" | "dark" | "primary";
+type ButtonVariant = "neutral" | "dark" | "primary" | "primaryOutlined";
+
+type CommonButtonProps = {
+  variant?: ButtonVariant;
+  className?: string;
+  icon?: ReactNode;
+  iconPosition?: "left" | "right";
+};
 
 type AnchorButtonProps = {
   href: string;
-  variant?: ButtonVariant;
-  className?: string;
-} & AnchorHTMLAttributes<HTMLAnchorElement>;
+} & AnchorHTMLAttributes<HTMLAnchorElement> &
+  CommonButtonProps;
 
 type NativeButtonProps = {
   href?: undefined;
-  variant?: ButtonVariant;
-  className?: string;
-} & ButtonHTMLAttributes<HTMLButtonElement>;
+} & ButtonHTMLAttributes<HTMLButtonElement> &
+  CommonButtonProps;
 
 type ButtonProps = AnchorButtonProps | NativeButtonProps;
 
 const baseStyles =
-  "inline-flex h-10 items-center justify-center px-4 py-[10px] whitespace-nowrap rounded-[8px] font-semibold text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60";
+  "inline-flex h-10 items-center justify-center gap-2 px-4 py-[10px] whitespace-nowrap rounded-[8px] font-semibold text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60";
 
 const variants: Record<ButtonVariant, string> = {
   neutral: "bg-white text-gray-700 border border-gray-300 focus-visible:ring-gray-200",
   dark: "bg-gray-900 text-white border border-gray-900 focus-visible:ring-gray-300",
   primary: "bg-tango text-white border border-tango focus-visible:ring-brand-200",
+  primaryOutlined: "bg-white text-tango border border-tango  focus-visible:ring-brand-200",
 };
 
 export default function Button(props: ButtonProps) {
-  const { variant = "neutral", className, ...restProps } = props;
+  const { variant = "neutral", className, icon, iconPosition = "left", ...restProps } = props;
   const classes = cn(baseStyles, variants[variant], className);
+
+  const renderContent = (children: ReactNode) => (
+    <>
+      {icon && iconPosition === "left" ? (
+        <span className="inline-flex items-center justify-center">{icon}</span>
+      ) : null}
+      {children}
+      {icon && iconPosition === "right" ? (
+        <span className="inline-flex items-center justify-center">{icon}</span>
+      ) : null}
+    </>
+  );
 
   if ("href" in restProps && restProps.href) {
     const { href, children, ...anchorProps } = restProps as AnchorButtonProps;
     return (
       <Link href={href} className={classes} {...anchorProps}>
-        {children}
+        {renderContent(children)}
       </Link>
     );
   }
@@ -46,7 +64,7 @@ export default function Button(props: ButtonProps) {
 
   return (
     <button className={classes} {...buttonProps}>
-      {children}
+      {renderContent(children)}
     </button>
   );
 }
