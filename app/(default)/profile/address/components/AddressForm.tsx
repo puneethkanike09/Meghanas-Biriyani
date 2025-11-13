@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import RadioCard from "@/components/ui/RadioCard";
@@ -37,6 +37,13 @@ const DEFAULT_VALUES: AddressFormValues = {
     pincode: "",
     type: "home",
 };
+
+const CITY_OPTIONS = [
+    { value: "", label: "Select City" },
+    { value: "Bengaluru", label: "Bengaluru" },
+    { value: "Mumbai", label: "Mumbai" },
+    { value: "Delhi", label: "Delhi" },
+];
 
 export default function AddressForm({ mode, address }: AddressFormProps) {
     const router = useRouter();
@@ -92,7 +99,13 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                     onClick={handleBack}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 transition-colors hover:text-midnight"
                 >
-                    <ArrowLeftIcon className="h-5 w-5" />
+                    <Image
+                        src="/assets/profile/icons/ArrowLeft.svg"
+                        alt="Back"
+                        width={20}
+                        height={20}
+                        className="h-5 w-5"
+                    />
                     <span>Back</span>
                 </button>
 
@@ -166,14 +179,34 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                 <label htmlFor="city" className="text-sm font-medium text-gray-700">
                                     City
                                 </label>
-                                <Input
-                                    id="city"
-                                    name="city"
-                                    value={formValues.city}
-                                    onChange={handleFieldChange("city")}
-                                    placeholder="e.g., Bengaluru"
-                                    required
-                                />
+                                <div className="relative">
+                                    <select
+                                        id="city"
+                                        name="city"
+                                        value={formValues.city}
+                                        onChange={handleFieldChange("city")}
+                                        required
+                                        className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-base text-midnight shadow-sm transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20"
+                                    >
+                                        {CITY_OPTIONS.map((option) => (
+                                            <option
+                                                key={option.value || "placeholder"}
+                                                value={option.value}
+                                                disabled={option.value === ""}
+                                                hidden={option.value === ""}
+                                            >
+                                                {option.label}
+                                            </option>
+                                        ))}
+                                    </select>
+                                    <Image
+                                        src="/assets/profile/icons/Chevron.svg"
+                                        alt=""
+                                        width={16}
+                                        height={16}
+                                        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500"
+                                    />
+                                </div>
                             </div>
                         </div>
 

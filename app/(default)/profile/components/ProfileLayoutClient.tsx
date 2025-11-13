@@ -1,9 +1,10 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import ProfileNavigation from "./ProfileNavigation";
+import { cn } from "@/lib/utils";
 
 type TabType = "profile" | "orders" | "address";
 
@@ -37,6 +38,17 @@ export default function ProfileLayoutClient({ children }: ProfileLayoutClientPro
     const pathname = usePathname();
     const router = useRouter();
     const activeTab = getActiveTab(pathname);
+    const isStandaloneAddressPage = useMemo(() => {
+        if (!pathname) {
+            return false;
+        }
+
+        if (pathname === "/profile/address") {
+            return false;
+        }
+
+        return /^\/profile\/address\/(new|[^/]+\/edit)/.test(pathname);
+    }, [pathname]);
 
     const handleTabChange = useCallback(
         (tab: TabType) => {
@@ -52,18 +64,25 @@ export default function ProfileLayoutClient({ children }: ProfileLayoutClientPro
     return (
         <div className="min-h-screen bg-white">
             <div className="pt-24 tablet:pt-24 desktop:pt-28">
-                <div className="section-container pb-10">
-                    <div className="flex flex-col gap-8 desktop:flex-row desktop:items-start">
-                        <ProfileNavigation
-                            activeTab={activeTab}
-                            onTabChange={handleTabChange}
-                        />
-                        <div className="flex-1 w-full">
-                            <div className="w-full desktop:pt-4">
-                                {children}
+                <div
+                    className={cn(
+                        "section-container pb-10",
+                        isStandaloneAddressPage && "max-w-none"
+                    )}
+                >
+                    {isStandaloneAddressPage ? (
+                        <div className="w-full desktop:pt-0">{children}</div>
+                    ) : (
+                        <div className="flex flex-col gap-8 desktop:flex-row desktop:items-start">
+                            <ProfileNavigation
+                                activeTab={activeTab}
+                                onTabChange={handleTabChange}
+                            />
+                            <div className="w-full flex-1">
+                                <div className="w-full desktop:pt-4">{children}</div>
                             </div>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
