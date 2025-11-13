@@ -24,7 +24,7 @@ export default function ProfilePage() {
 
                         {/* Content Area */}
                         <div className="flex-1 w-full ">
-                            <div className="w-full desktop:max-w-[980px] desktop:pt-4">
+                            <div className="w-full desktop:pt-4">
                                 {activeTab === "profile" && <ProfileTab />}
                                 {activeTab === "orders" && <OrdersTab />}
                                 {activeTab === "address" && <AddressTab />}
