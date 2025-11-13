@@ -126,12 +126,12 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                                             className="h-3.5 w-3.5"
                                         />
                                         <div className="flex flex-col">
-                                            <span className="text-sm font-semibold text-midnight">
+                                            <span className="text-xs font-semibold text-midnight">
                                                 {item.name}
                                             </span>
                                         </div>
                                     </div>
-                                    <span className="text-sm font-medium text-gray-700">
+                                    <span className="text-xs font-normal text-gray-700">
                                         {item.price}
                                     </span>
                                 </li>
@@ -151,7 +151,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                                 >
                                     {charge.label}
                                 </span>
-                                <span className="text-xs font-medium text-gray-700">
+                                <span className="text-xs font-normal text-gray-700">
                                     {charge.value}
                                 </span>
                             </div>
