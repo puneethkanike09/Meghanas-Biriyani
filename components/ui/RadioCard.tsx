@@ -17,8 +17,8 @@ const RadioCard = forwardRef<HTMLInputElement, RadioCardProps>(
     return (
       <label
         className={cn(
-          "inline-flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition hover:border-tango/70",
-          isChecked ? "border-tango bg-brand-100/40 shadow-sm" : "border-gray-300",
+          "inline-flex cursor-pointer items-center gap-3 rounded-xl border px-4 py-3 transition ",
+          isChecked ? "border-tango bg-transparent " : "border-gray-300",
           className
         )}
       >

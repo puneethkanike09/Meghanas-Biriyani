@@ -92,8 +92,8 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
     };
 
     return (
-        <div className="w-full rounded-2xl bg-white shadow-sm">
-            <div className="mx-auto flex w-full max-w-[648px] flex-col gap-6 px-4 py-6 tablet:px-6 desktop:px-10">
+        <div className="w-full  bg-white">
+            <div className=" flex w-full max-w-[648px] flex-col gap-6 py-6 mx-auto">
                 <button
                     type="button"
                     onClick={handleBack}
@@ -228,7 +228,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
 
                         <div className="grid gap-2">
                             <span className="text-sm font-medium text-gray-700">Address type</span>
-                            <div className="flex flex-col flex-wrap gap-3 tablet:flex-row tablet:gap-4">
+                            <div className="flex flex-wrap items-start gap-3 tablet:gap-4">
                                 {ADDRESS_TYPE_OPTIONS.map((option) => (
                                     <RadioCard
                                         key={option.value}
@@ -243,16 +243,8 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                         </div>
                     </section>
 
-                    <div className="flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-end">
-                        <Button
-                            type="button"
-                            variant="neutral"
-                            className="w-full tablet:w-auto"
-                            onClick={handleBack}
-                        >
-                            Cancel
-                        </Button>
-                        <Button type="submit" variant="primary" className="w-full tablet:w-auto">
+                    <div className="flex flex-col">
+                        <Button type="submit" variant="primary" className="w-full">
                             {isEdit ? "Update Address" : "Save Address"}
                         </Button>
                     </div>
