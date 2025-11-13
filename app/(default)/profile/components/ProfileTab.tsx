@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
+import Input from "@/components/ui/Input";
+import { cn } from "@/lib/utils";
 
 export default function ProfileTab() {
     const [isEditing, setIsEditing] = useState(false);
@@ -43,26 +45,27 @@ export default function ProfileTab() {
                     >
                         Name
                     </label>
-                    <div className="relative">
-                        <Image
-                            src="/assets/profile/icons/Person.svg"
-                            alt="User"
-                            width={20}
-                            height={20}
-                            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"
-                        />
-                        <input
-                            id="name"
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            readOnly={!isEditing}
-                            className={`w-full pl-10 px-3.5 py-2.5 rounded-lg border border-gray-300 shadow-sm text-base ${isEditing
+                    <Input
+                        id="name"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        readOnly={!isEditing}
+                        startIcon={
+                            <Image
+                                src="/assets/profile/icons/Person.svg"
+                                alt="User"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5 text-gray-500"
+                            />
+                        }
+                        className={cn(
+                            isEditing
                                 ? "bg-white text-midnight"
                                 : "bg-gray-50 text-gray-500"
-                                } focus:outline-none focus:ring-2 focus:ring-tango focus:border-transparent`}
-                        />
-                    </div>
+                        )}
+                    />
                 </div>
 
                 {/* Phone Field */}
@@ -73,26 +76,27 @@ export default function ProfileTab() {
                     >
                         Phone
                     </label>
-                    <div className="relative">
-                        <Image
-                            src="/assets/profile/icons/Phone.svg"
-                            alt="Phone"
-                            width={20}
-                            height={20}
-                            className="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500"
-                        />
-                        <input
-                            id="phone"
-                            type="text"
-                            value={phone}
-                            onChange={(e) => setPhone(e.target.value)}
-                            readOnly={!isEditing}
-                            className={`w-full pl-10 px-3.5 py-2.5 rounded-lg border border-gray-300 shadow-sm text-base ${isEditing
+                    <Input
+                        id="phone"
+                        type="text"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                        readOnly={!isEditing}
+                        startIcon={
+                            <Image
+                                src="/assets/profile/icons/Phone.svg"
+                                alt="Phone"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5 text-gray-500"
+                            />
+                        }
+                        className={cn(
+                            isEditing
                                 ? "bg-white text-midnight"
                                 : "bg-gray-50 text-gray-500"
-                                } focus:outline-none focus:ring-2 focus:ring-tango focus:border-transparent`}
-                        />
-                    </div>
+                        )}
+                    />
                 </div>
             </div>
 
