@@ -31,8 +31,8 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
             </div>
 
             {/* Desktop: Sidebar */}
-            <aside className="hidden desktop:block w-[316px] border-r border-gray-200">
-                <nav className="flex flex-col">
+            <aside className="hidden desktop:block desktop:w-[316px] desktop:flex-shrink-0 desktop:sticky desktop:top-28">
+                <nav className="flex h-[calc(100vh-7rem)] flex-col overflow-y-auto border-r border-gray-200">
                     {navigationItems.map((item) => (
                         <button
                             key={item.id}
