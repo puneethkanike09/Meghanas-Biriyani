@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import OrderDetailsDrawer from "./OrderDetailsDrawer";
@@ -177,14 +177,9 @@ export default function OrdersTab() {
             {/* Orders List */}
             <div className="flex flex-col gap-4">
                 {ordersData.map((order, index) => {
-                    const itemsSummary = useMemo(
-                        () =>
-                            order.menuItems
-                                .map((item) => `${item.name} x${item.quantity}`)
-                                .join(", "),
-                        [order.menuItems]
-                    );
-                    const totalItems = order.menuItems.reduce((sum, item) => sum + item.quantity, 0);
+                    const itemsSummary = order.menuItems
+                        .map((item) => `${item.name} x${item.quantity}`)
+                        .join(", ");
                     const hasExtraImages = order.images.length > 3;
                     const extraCount = hasExtraImages ? `+${order.images.length - 3}` : undefined;
 
