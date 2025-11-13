@@ -9,6 +9,18 @@ const navigationItems = [
     { id: "profile" as const, label: "Profile" },
     { id: "orders" as const, label: "Orders" },
     { id: "address" as const, label: "Address" },
+    { id: "profile" as const, label: "Profile" },
+    { id: "orders" as const, label: "Orders" },
+    { id: "address" as const, label: "Address" },
+    { id: "profile" as const, label: "Profile" },
+    { id: "orders" as const, label: "Orders" },
+    { id: "address" as const, label: "Address" },
+    { id: "profile" as const, label: "Profile" },
+    { id: "orders" as const, label: "Orders" },
+    { id: "address" as const, label: "Address" },
+    { id: "profile" as const, label: "Profile" },
+    { id: "orders" as const, label: "Orders" },
+    { id: "address" as const, label: "Address" },
 ];
 
 export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNavigationProps) {
@@ -32,7 +44,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
 
             {/* Desktop: Sidebar */}
             <aside className="hidden desktop:block desktop:w-[316px] desktop:flex-shrink-0 desktop:sticky desktop:top-28">
-                <nav className="flex h-[calc(100vh-7rem)] flex-col overflow-y-auto border-r border-gray-200">
+                <nav className="flex h-[calc(100vh-7rem)] flex-col overflow-y-auto border-r border-gray-200 custom-scrollbar">
                     {navigationItems.map((item) => (
                         <button
                             key={item.id}

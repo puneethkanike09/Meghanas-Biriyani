@@ -66,7 +66,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                     </button>
                 </header>
 
-                <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
+                <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 custom-scrollbar">
                     {/* Locations */}
                     <section className="space-y-2.5">
                         {order.destinations.map((destination, index) => {

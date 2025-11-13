@@ -12,9 +12,9 @@ const ICONS = {
 
 export default function Navbar() {
     return (
-        <div className="fixed top-4 tablet:top-4 left-0 right-0 z-50 section">
-            <nav className="mx-auto rounded-2xl bg-white py-3 px-4 shadow-md tablet:rounded-xl tablet:py-3 tablet:px-4 desktop:py-4 desktop:px-6">
-                <div className="flex items-center justify-between gap-3 tablet:gap-4 desktop:gap-10">
+        <div className="fixed top-0 left-0 right-0 z-50 desktop:top-4 desktop:px-16">
+            <nav className="w-full mx-auto desktop:rounded-2xl bg-white py-3 shadow-md  tablet:py-3 desktop:py-4">
+                <div className="px-4 tablet:px-8 desktop:px-8 flex items-center justify-between gap-3 tablet:gap-4 desktop:gap-10">
                     {/* Left Section */}
                     <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-8 desktop:flex-1">
                         {/* Logo */}
