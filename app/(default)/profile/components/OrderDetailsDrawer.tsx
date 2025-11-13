@@ -1,5 +1,34 @@
 import Image from "next/image";
-import type { Order } from "./orderTypes";
+interface OrderDestination {
+    name: string;
+    address: string;
+}
+
+interface OrderItem {
+    name: string;
+    price: string;
+    isVeg: boolean;
+    quantity: number;
+}
+
+interface OrderCharge {
+    label: string;
+    value: string;
+    emphasize?: boolean;
+}
+
+interface Order {
+    id: string;
+    images: string[];
+    status: "delivered" | "cancelled" | "processing";
+    statusText: string;
+    date: string;
+    menuItems: OrderItem[];
+    destinations: OrderDestination[];
+    charges: OrderCharge[];
+    paymentMethod: string;
+    totalAmount: string;
+}
 
 interface OrderDetailsDrawerProps {
     order: Order;
