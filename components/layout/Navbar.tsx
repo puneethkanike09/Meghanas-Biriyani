@@ -18,7 +18,7 @@ export default function Navbar() {
                     {/* Left Section */}
                     <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-8 desktop:flex-1">
                         {/* Logo */}
-                        <Link href="/" className="flex flex-shrink-0 items-center">
+                        <Link href="/home" className="flex flex-shrink-0 items-center">
                             <Image
                                 src="/assets/navbar/images/logo.svg"
                                 alt="Meghana's Foods"

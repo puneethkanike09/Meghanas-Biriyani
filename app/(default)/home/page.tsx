@@ -1,14 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import HeroSection from "./(home)/HeroSection";
-import FeaturesSection from "./(home)/FeaturesSection";
-import VibeSection from "./(home)/VibeSection";
-import CategoriesSection from "./(home)/CategoriesSection";
-import BannerSection from "./(home)/BannerSection";
-import TestimonialsSection from "./(home)/TestimonialsSection";
-import TopDishesSection from "./(home)/TopDishesSection";
-import StartersSection from "./(home)/StartersSection";
+import HeroSection from "../(home)/HeroSection";
+import FeaturesSection from "../(home)/FeaturesSection";
+import VibeSection from "../(home)/VibeSection";
+import CategoriesSection from "../(home)/CategoriesSection";
+import BannerSection from "../(home)/BannerSection";
+import TestimonialsSection from "../(home)/TestimonialsSection";
+import TopDishesSection from "../(home)/TopDishesSection";
+import StartersSection from "../(home)/StartersSection";
 
 export default function HomePage() {
     const [cart, setCart] = useState<Record<number, number>>({});
@@ -64,5 +64,4 @@ export default function HomePage() {
         </>
     );
 }
-
 

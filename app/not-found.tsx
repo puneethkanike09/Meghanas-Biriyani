@@ -18,7 +18,7 @@ export default function NotFound() {
                     </p>
                     <div className="flex flex-col tablet:flex-row items-center desktop:items-start gap-4 tablet:gap-5">
                         <Link
-                            href="/"
+                            href="/home"
                             className={cn(
                                 "inline-flex h-auto items-center justify-center gap-2 px-4 py-2.5 whitespace-nowrap rounded-[8px] font-semibold text-[13px] desktop:text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
                                 "bg-white text-black border border-gray-300 hover:bg-gray-100",
