@@ -73,7 +73,7 @@ export default function ProfileLayoutClient({ children }: ProfileLayoutClientPro
                     {isStandaloneAddressPage ? (
                         <div className="w-full desktop:pt-0">{children}</div>
                     ) : (
-                        <div className="flex flex-col gap-8 desktop:flex-row desktop:items-start">
+                        <div className="flex flex-col gap-4 desktop:flex-row desktop:items-start">
                             <ProfileNavigation
                                 activeTab={activeTab}
                                 onTabChange={handleTabChange}

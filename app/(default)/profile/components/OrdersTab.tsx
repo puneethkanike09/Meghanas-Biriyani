@@ -189,9 +189,9 @@ export default function OrdersTab() {
                             className="bg-white rounded-xl border border-gray-200 p-4 flex flex-col gap-4"
                         >
                             {/* Order Content */}
-                            <div className="flex flex-col desktop:flex-row items-start justify-between gap-4">
+                            <div className="flex flex-wrap items-start justify-between gap-4">
                                 {/* Left Section */}
-                                <div className="flex flex-col gap-6 flex-1 w-full">
+                                <div className="flex flex-col gap-6 flex-1 min-w-[220px]">
                                     {/* Images */}
                                     <div className="flex items-start gap-3">
                                         {order.images.slice(0, 3).map((image, imgIndex) => (
@@ -250,7 +250,7 @@ export default function OrdersTab() {
                                 </div>
 
                                 {/* Right Section */}
-                                <div className="flex desktop:flex-col items-center desktop:items-end justify-between desktop:justify-start gap-3 w-full desktop:w-auto">
+                                <div className="flex flex-col items-end gap-2 shrink-0">
                                     <button
                                         className="text-sm font-semibold text-tango hover:underline"
                                         onClick={() => handleViewDetails(order)}
