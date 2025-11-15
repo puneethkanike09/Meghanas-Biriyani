@@ -15,7 +15,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
     return (
         <>
             {/* Mobile/Tablet: Top tabs */}
-            <div className="flex border-b border-gray-200 desktop:hidden">
+            <div className="desktop:hidden sticky top-[96px] tablet:top-[96px] z-40 bg-white border-b border-gray-200 flex before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-160px] before:h-[200px] before:bg-white before:-z-10 tablet:before:top-[-160px] tablet:before:h-[220px]">
                 {navigationItems.map((item) => (
                     <button
                         key={item.id}
