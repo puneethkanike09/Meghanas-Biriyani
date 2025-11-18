@@ -39,8 +39,8 @@ export default function PaymentPage() {
     };
 
     const handleProceedToPay = () => {
-        // Handle payment processing
-        console.log("Processing payment...");
+        // Navigate to confirmation page after payment
+        router.push("/cart/confirmation");
     };
 
     const totalPayable = COST_BREAKDOWN.reduce((sum, item) => sum + item.value, 0);
