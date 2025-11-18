@@ -146,7 +146,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/terms"
+                                    href="/terms-and-conditions"
                                     className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Terms & Conditions
@@ -154,7 +154,7 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/privacy"
+                                    href="/privacy-policy"
                                     className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     Privacy Policy
