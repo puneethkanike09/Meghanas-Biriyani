@@ -58,7 +58,6 @@ const SUGGESTED_ADDONS: MenuAddonItem[] = [
         reviews: 58,
         isVeg: false,
         image: "/assets/homepage/images/top10.jpg",
-        category: "Add-ons",
     },
     {
         id: 102,
@@ -69,7 +68,6 @@ const SUGGESTED_ADDONS: MenuAddonItem[] = [
         reviews: 58,
         isVeg: true,
         image: "/assets/homepage/images/top10.jpg",
-        category: "Add-ons",
     },
     {
         id: 103,
@@ -80,7 +78,6 @@ const SUGGESTED_ADDONS: MenuAddonItem[] = [
         reviews: 58,
         isVeg: false,
         image: "/assets/homepage/images/top10.jpg",
-        category: "Add-ons",
     },
 ];
 

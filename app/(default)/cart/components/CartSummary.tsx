@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 
 export interface ChargeLine {
@@ -14,6 +17,8 @@ interface CartSummaryProps {
 }
 
 export default function CartSummary({ charges, totalPayable }: CartSummaryProps) {
+    const router = useRouter();
+
     return (
         <section className="flex flex-col w-full items-start gap-6  relative">
             <div className="flex flex-col items-start gap-2 relative self-stretch w-full flex-[0_0_auto]">
@@ -69,6 +74,7 @@ export default function CartSummary({ charges, totalPayable }: CartSummaryProps)
             <div className="flex items-start self-stretch w-full relative flex-[0_0_auto] rounded-lg">
                 <Button
                     variant="primary"
+                    onClick={() => router.push("/cart/delivery")}
                     className="flex-1 bg-tango hover:bg-tango/90 items-center justify-center gap-2 px-3.5 py-2 rounded-lg border border-solid border-tango shadow-sm h-auto"
                 >
                     <span className="w-fit font-semibold text-white text-sm whitespace-nowrap">

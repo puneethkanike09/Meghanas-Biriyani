@@ -4,7 +4,7 @@ import type { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactNode } from "reac
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
-type ButtonVariant = "neutral" | "dark" | "primary" | "primaryOutlined";
+type ButtonVariant = "neutral" | "dark" | "primary" | "primaryOutlined" | "selected";
 
 type CommonButtonProps = {
   variant?: ButtonVariant;
@@ -33,6 +33,7 @@ const variants: Record<ButtonVariant, string> = {
   dark: "bg-gray-900 text-white border border-gray-900 focus-visible:ring-gray-300",
   primary: "bg-tango text-white border border-tango focus-visible:ring-brand-200",
   primaryOutlined: "bg-white text-tango border border-tango  focus-visible:ring-brand-200",
+  selected: "bg-tropicalGreen text-white border border-tropicalGreen focus-visible:ring-tropicalGreen/40",
 };
 
 export default function Button(props: ButtonProps) {
