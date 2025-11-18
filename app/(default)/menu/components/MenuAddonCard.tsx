@@ -4,11 +4,21 @@ import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
 import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
 import AddDefaultIcon from "@/components/ui/assets/icons/AddOrange.svg";
 import { cn } from "@/lib/utils";
-import { MenuItem } from "../page";
+
+export interface MenuAddonItem {
+    id: number;
+    name: string;
+    price: number;
+    rating: number;
+    reviews: number;
+    isVeg: boolean;
+    image: string;
+    description?: string;
+}
 
 interface MenuAddonCardProps {
-    addon: MenuItem;
-    onAdd: (addon: MenuItem) => void;
+    addon: MenuAddonItem;
+    onAdd: (addon: MenuAddonItem) => void;
     className?: string;
 }
 

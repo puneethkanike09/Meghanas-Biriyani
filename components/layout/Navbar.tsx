@@ -92,7 +92,7 @@ export default function Navbar() {
                             </Link>
 
                             {/* Cart Icon */}
-                            <button className="relative rounded-full p-2 transition-colors tablet:p-2.5">
+                            <Link href="/cart" className="relative rounded-full p-2 transition-colors tablet:p-2.5">
                                 <Image
                                     src={ICONS.cart}
                                     alt="View cart"
@@ -100,7 +100,7 @@ export default function Navbar() {
                                     height={28}
                                     className="h-6 w-6 tablet:h-6 tablet:w-6"
                                 />
-                            </button>
+                            </Link>
 
                         </div>
                     </div>
