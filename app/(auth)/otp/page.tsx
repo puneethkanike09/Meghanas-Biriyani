@@ -1,11 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 
 export default function OTPPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const isSignup = searchParams.get("signup") === "true";
     const [otp, setOtp] = useState<string[]>(["", "", "", ""]);
     const [timeLeft, setTimeLeft] = useState(30);
     const [canResend, setCanResend] = useState(false);
@@ -70,8 +73,16 @@ export default function OTPPage() {
         const otpValue = otp.join("");
         if (otpValue.length === 4) {
             // Here you would typically verify the OTP with your backend
-            // For now, just navigate to home
-            router.push("/home");
+            // Show success toast
+            toast.success("Sign in successful", {
+                description: "Welcome to Meghana Foods!",
+            });
+            // Navigate to select delivery if signup, otherwise home
+            if (isSignup) {
+                router.push("/select-delivery");
+            } else {
+                router.push("/home");
+            }
         }
     };
 
@@ -154,9 +165,7 @@ export default function OTPPage() {
                     {/* Skip for Now Button */}
                     <Button
                         href="/home"
-                        variant="neutral"
-                        className="w-full h-auto py-2.5 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
-                    >
+                        variant="neutral"                    >
                         Skip for Now
                     </Button>
                 </div>

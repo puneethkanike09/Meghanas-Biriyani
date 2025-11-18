@@ -20,8 +20,9 @@ export default function SignInForm() {
 
     const handleSendOTP = () => {
         // Here you would typically validate and send OTP to the phone number
-        // For now, just navigate to OTP page
-        router.push("/otp");
+        // For now, just navigate to OTP page with signup state
+        const isSignup = activeTab === "signup";
+        router.push(`/otp${isSignup ? "?signup=true" : ""}`);
     };
 
     return (
@@ -121,7 +122,6 @@ export default function SignInForm() {
             <Button
                 href="/home"
                 variant="neutral"
-                className="w-full h-auto py-2.5 border border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
             >
                 Skip for Now
             </Button>
