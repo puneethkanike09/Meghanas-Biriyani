@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
@@ -13,8 +14,15 @@ const tabOptions: Array<{ id: AuthTab; label: string }> = [
 ];
 
 export default function SignInForm() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<AuthTab>("login");
     const isLogin = activeTab === "login";
+
+    const handleSendOTP = () => {
+        // Here you would typically validate and send OTP to the phone number
+        // For now, just navigate to OTP page
+        router.push("/otp");
+    };
 
     return (
         <div className="mx-auto flex w-full max-w-[648px] flex-col gap-8 px-4 tablet:px-0">
@@ -99,7 +107,7 @@ export default function SignInForm() {
                     />
                 </div>
 
-                <Button type="button" variant="primary" className="w-full h-auto py-2.5">
+                <Button type="button" variant="primary" className="w-full h-auto py-2.5" onClick={handleSendOTP}>
                     Send OTP
                 </Button>
             </form>
