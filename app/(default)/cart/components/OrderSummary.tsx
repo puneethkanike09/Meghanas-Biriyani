@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import Button from "@/components/ui/Button";
 import VegSymbol from "@/components/ui/assets/icons/vegSymbol.svg";
@@ -53,7 +54,9 @@ export default function OrderSummary({
     totalPayable,
     onProceed,
 }: OrderSummaryProps) {
+    const pathname = usePathname();
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+    const isPaymentPage = pathname?.includes("/payment");
 
     return (
         <section className="flex flex-col w-full items-start gap-6">
@@ -133,7 +136,7 @@ export default function OrderSummary({
                 onClick={onProceed}
                 className="w-full h-auto px-3.5 py-2"
             >
-                Proceed to Pay
+                {isPaymentPage ? "Pay Now" : "Proceed to Pay"}
             </Button>
         </section>
     );
