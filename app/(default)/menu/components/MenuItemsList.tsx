@@ -115,7 +115,7 @@ export default function MenuItemsList({
                                                                 <MenuAddonCard
                                                                     key={addOn.id}
                                                                     addon={addOn}
-                                                                    onAdd={(addon) => onAddToCart(addon)}
+                                                                    onAdd={() => onAddToCart({ ...addOn, category: addOn.category || "Add-ons", description: addOn.description || "" })}
                                                                 />
                                                             ))}
                                                         </div>
@@ -155,7 +155,7 @@ export default function MenuItemsList({
                                                                 <MenuAddonCard
                                                                     key={addOn.id}
                                                                     addon={addOn}
-                                                                    onAdd={(addon) => onAddToCart(addon)}
+                                                                    onAdd={() => onAddToCart({ ...addOn, category: addOn.category || "Add-ons", description: addOn.description || "" })}
                                                                 />
                                                             ))}
                                                         </div>
