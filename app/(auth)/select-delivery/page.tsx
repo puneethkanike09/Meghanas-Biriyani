@@ -234,38 +234,65 @@ export default function SelectDeliveryPage() {
                         </div>
                     </div>
                 ) : (
-                    <div className="flex flex-col items-start gap-3 w-full">
-                        <p className="text-base font-normal text-gray-500">Search results</p>
-                        <div className="flex flex-col items-start gap-1 w-full">
-                            {searchResults.length > 0 ? (
-                                searchResults.map((result, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex items-start gap-2 w-full p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
-                                        onClick={handleSelectLocation}
-                                    >
-                                        <Image
-                                            src="/assets/profile/icons/Location.svg"
-                                            alt="Location"
-                                            width={20}
-                                            height={20}
-                                            className="w-5 h-5 flex-shrink-0 mt-0.5"
-                                        />
-                                        <div className="flex flex-col items-start gap-1 flex-1">
-                                            <h3 className="w-full text-base font-semibold text-midnight tracking-normal overflow-hidden text-ellipsis line-clamp-1">
-                                                {result.name}
-                                            </h3>
-                                            <p className="w-full text-sm font-normal text-gray-600 tracking-normal">
-                                                {result.address}
-                                            </p>
+                    <>
+                        {searchResults.length > 0 ? (
+                            <div className="flex flex-col items-start gap-3 w-full">
+                                <p className="text-base font-normal text-gray-500">Search results</p>
+                                <div className="flex flex-col items-start gap-1 w-full">
+                                    {searchResults.map((result, index) => (
+                                        <div
+                                            key={index}
+                                            className="flex items-start gap-2 w-full p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                                            onClick={handleSelectLocation}
+                                        >
+                                            <Image
+                                                src="/assets/profile/icons/Location.svg"
+                                                alt="Location"
+                                                width={20}
+                                                height={20}
+                                                className="w-5 h-5 flex-shrink-0 mt-0.5"
+                                            />
+                                            <div className="flex flex-col items-start gap-1 flex-1">
+                                                <h3 className="w-full text-base font-semibold text-midnight tracking-normal overflow-hidden text-ellipsis line-clamp-1">
+                                                    {result.name}
+                                                </h3>
+                                                <p className="w-full text-sm font-normal text-gray-600 tracking-normal">
+                                                    {result.address}
+                                                </p>
+                                            </div>
                                         </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col items-center justify-center gap-6 w-full py-12">
+                                <Image
+                                    src="/assets/menu/icons/sentiment_dissatisfied.svg"
+                                    alt="Sad face icon"
+                                    width={48}
+                                    height={48}
+                                    className="w-12 h-12"
+                                />
+
+                                <div className="flex flex-col items-center gap-4 w-full">
+                                    <div className="flex flex-col items-center gap-2 w-full">
+                                        <p className="font-normal text-gray-900 text-lg text-center tracking-[0] leading-[normal]">
+                                            Our aroma can travel miles... sadly, our delivery can&apos;t
+                                            (yet)!
+                                        </p>
+                                        <p className="w-full max-w-[410px] font-normal text-gray-500 text-base text-center tracking-[0] leading-[normal]">
+                                            We don&apos;t deliver to this location yet, but never say never,
+                                            we&apos;re expanding our reach!
+                                        </p>
                                     </div>
-                                ))
-                            ) : (
-                                <p className="text-sm text-gray-500">No results found</p>
-                            )}
-                        </div>
-                    </div>
+                                    <p className="font-normal text-gray-500 text-xs text-center tracking-[0] leading-[normal]">
+                                        *We are currently able to spread smiles upto 5 kms from your
+                                        nearest Meghana Outlet.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 <div className="w-full h-px bg-gray-200" />

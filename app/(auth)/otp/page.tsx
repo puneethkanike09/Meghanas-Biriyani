@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 
-export default function OTPPage() {
+function OTPContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const isSignup = searchParams.get("signup") === "true";
@@ -174,3 +174,16 @@ export default function OTPPage() {
     );
 }
 
+export default function OTPPage() {
+    return (
+        <Suspense fallback={
+            <div className="section-container flex min-h-screen items-center justify-center py-12 tablet:py-16">
+                <div className="mx-auto flex w-full max-w-[648px] flex-col gap-8 px-4 tablet:px-0">
+                    <div className="text-center text-gray-500">Loading...</div>
+                </div>
+            </div>
+        }>
+            <OTPContent />
+        </Suspense>
+    );
+}
