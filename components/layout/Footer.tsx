@@ -97,22 +97,6 @@ export default function Footer() {
                             </li>
                             <li>
                                 <Link
-                                    href="/offers"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
-                                >
-                                    Offers
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/catering"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
-                                >
-                                    Catering Services
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
                                     href="/franchise"
                                     className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
@@ -122,28 +106,12 @@ export default function Footer() {
                         </ul>
                     </div>
 
-                    {/* Customer Service */}
+                    {/* Support */}
                     <div className="space-y-4 tablet:space-y-5 desktop:space-y-4">
                         <h3 className="text-lg tablet:text-xl desktop:text-base font-bold tablet:font-bold desktop:font-semibold text-white leading-[1.4] tablet:leading-[1.3] desktop:leading-[1.2]">
-                            Customer Service
+                            Support
                         </h3>
                         <ul className="space-y-3">
-                            <li>
-                                <Link
-                                    href="/help"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
-                                >
-                                    Help & Support
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/track-order"
-                                    className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
-                                >
-                                    Track Order
-                                </Link>
-                            </li>
                             <li>
                                 <Link
                                     href="/terms-and-conditions"
