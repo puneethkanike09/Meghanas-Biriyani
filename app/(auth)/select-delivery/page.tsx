@@ -303,7 +303,7 @@ export default function SelectDeliveryPage() {
                         alt="Info"
                         width={16}
                         height={16}
-                        className="w-4 h-4 flex-shrink-0"
+                        className="w-4 h-4 flex-shrink-0 mt-0.5"
                     />
                     <AlertDescription className="flex-1 text-base font-normal text-midnight tracking-normal">
                         <span className="text-base font-normal text-midnight">
