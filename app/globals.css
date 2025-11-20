@@ -139,7 +139,7 @@
 
   /* Custom Breakpoints */
   --breakpoint-tablet: 768px;
-  --breakpoint-desktop: 1280px;
+  --breakpoint-desktop: 1250px;
 
   /* Fonts */
   --font-sans: var(--font-geist-sans);

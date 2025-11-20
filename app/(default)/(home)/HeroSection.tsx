@@ -48,7 +48,7 @@ export default function HeroSection() {
           </div>
 
           {/* Right Image */}
-          <div className="hidden desktop:block relative h-[589px] z-10">
+          <div className="relative h-[320px] tablet:h-[420px] desktop:mt-0 desktop:h-[589px] z-10">
             <Image
               src="/assets/homepage/images/hero.png"
               alt="Delicious South Indian Cuisine"

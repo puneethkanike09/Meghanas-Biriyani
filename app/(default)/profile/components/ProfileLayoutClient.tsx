@@ -62,7 +62,7 @@ export default function ProfileLayoutClient({ children }: ProfileLayoutClientPro
     );
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-[calc(100vh-300px)] bg-white">
             <div className="pt-24 tablet:pt-24 desktop:pt-28">
                 <div
                     className={cn(
