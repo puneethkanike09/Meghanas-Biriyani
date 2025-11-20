@@ -56,7 +56,7 @@ export default function PaymentPage() {
                     <div className="flex flex-col gap-6 desktop:flex-row desktop:items-start">
                         {/* Payment Method Section */}
                         <div className="flex-1 space-y-6">
-                            <header className="sticky top-[168px] tablet:top-[209px] z-30 bg-white py-3 border-b border-gray-200 before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-72px] before:h-[72px] before:bg-white before:-z-10">
+                            <header className="sticky top-[190px] tablet:top-[209px] z-30 bg-white py-3 border-b border-gray-200 before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-72px] before:h-[72px] before:bg-white before:-z-10">
                                 <h1 className="text-xl font-semibold text-midnight">
                                     Choose Payment Method
                                 </h1>
