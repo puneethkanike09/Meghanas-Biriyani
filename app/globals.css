@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* Sonner Toast Custom Styles */
 [data-sonner-toast][data-type="success"] {
@@ -43,11 +41,40 @@
 
 @layer components {
   .section {
-    @apply px-4 tablet:px-8 desktop:px-16;
+    @apply px-4;
+  }
+  
+  @media (width >= 768px) {
+    .section {
+      @apply px-8;
+    }
+  }
+  
+  @media (width >= 1280px) {
+    .section {
+      @apply px-16;
+    }
   }
   
   .section-container {
-    @apply section mx-auto ;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  @media (width >= 768px) {
+    .section-container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+  
+  @media (width >= 1280px) {
+    .section-container {
+      padding-left: 4rem;
+      padding-right: 4rem;
+    }
   }
 
   .custom-scrollbar::-webkit-scrollbar {
@@ -68,4 +95,54 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #d66520;
   }
+}
+
+@theme {
+  /* Brand Colors */
+  --color-brand-25: #FEFCFB;
+  --color-brand-50: #FFF6F1;
+  --color-brand-100: #FFEBDF;
+  --color-brand-200: #FFD8BE;
+  --color-brand-300: #FFCAA9;
+  --color-brand-400: #FFBD99;
+  --color-brand-500: #F5AC86;
+  --color-brand-600: #E99468;
+  --color-brand-700: #F47729;
+  --color-brand-800: #E86A0F;
+  --color-brand-900: #CA5300;
+
+  /* Gray Colors */
+  --color-gray-25: #FCFCFD;
+  --color-gray-50: #FAFAFA;
+  --color-gray-100: #F5F5F5;
+  --color-gray-200: #E9EAEB;
+  --color-gray-300: #D5D7DA;
+  --color-gray-400: #A4A7AE;
+  --color-gray-500: #717680;
+  --color-gray-600: #535862;
+  --color-gray-700: #414651;
+  --color-gray-800: #252B37;
+  --color-gray-900: #101828;
+
+  /* Semantic Colors */
+  --color-tango: #F47729;
+  --color-light-orange: #F2E7D4;
+  --color-hot-jazz: #BF3030;
+  --color-tropical-green: #00804D;
+  --color-midnight: #101828;
+  --color-mint: #4EB57E;
+  --color-parchment: #F2E7D4;
+  --color-sun-ray: #FBB21C;
+  --color-cream: #F5E6D3;
+  --color-peach-light: #FFF6F1;
+  --color-black-main: #1A1A1A;
+
+  /* Custom Breakpoints */
+  --breakpoint-tablet: 768px;
+  --breakpoint-desktop: 1280px;
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-proxima-nova: var(--font-proxima-nova);
 }

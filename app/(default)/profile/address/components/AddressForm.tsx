@@ -97,7 +97,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                 <button
                     type="button"
                     onClick={handleBack}
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 transition-colors hover:text-midnight"
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 transition-colors hover:text-midnight cursor-pointer"
                 >
                     <Image
                         src="/assets/profile/icons/ArrowLeft.svg"

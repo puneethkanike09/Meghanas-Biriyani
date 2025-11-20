@@ -70,14 +70,14 @@ export default function AddressTab() {
                                 <button
                                     type="button"
                                     onClick={() => handleEdit(address.id)}
-                                    className="text-sm font-semibold text-tango hover:underline"
+                                    className="text-sm font-semibold text-tango hover:underline cursor-pointer"
                                 >
                                     Edit
                                 </button>
                                 <button
                                     type="button"
                                     onClick={() => handleDelete(address.id)}
-                                    className="text-sm font-semibold text-tango hover:underline"
+                                    className="text-sm font-semibold text-tango hover:underline cursor-pointer"
                                 >
                                     Delete
                                 </button>

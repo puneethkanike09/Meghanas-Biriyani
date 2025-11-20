@@ -46,7 +46,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                 {items.length > 0 && (
                     <button
                         onClick={onClearCart}
-                        className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors"
+                        className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                     >
                         Clear All
                     </button>
@@ -99,7 +99,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                                                 <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[114px]">
                                                     <button
                                                         onClick={() => onUpdateQuantity(item.id, -1)}
-                                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors"
+                                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
                                                     >
                                                         <Image
                                                             src={SubtractIcon}
@@ -114,7 +114,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                                                     </span>
                                                     <button
                                                         onClick={() => onUpdateQuantity(item.id, 1)}
-                                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors"
+                                                        className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
                                                     >
                                                         <Image
                                                             src={AddIcon}

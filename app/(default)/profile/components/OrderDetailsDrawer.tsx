@@ -54,7 +54,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                     <button
                         type="button"
                         onClick={onClose}
-                        className="flex h-8 w-8 items-center justify-center"
+                        className="flex h-8 w-8 items-center justify-center cursor-pointer"
                         aria-label="Close order details"
                     >
                         <Image

@@ -84,7 +84,7 @@ export default function MenuAddonCard({ addon, onAdd, className = "" }: MenuAddo
                     {formattedPrice}
                 </span>
                 <button
-                    className="inline-flex h-9 min-w-[114px] items-center justify-center gap-2 px-[14px] rounded-[8px] font-semibold text-sm transition-colors border border-tango text-tango bg-white"
+                    className="inline-flex h-9 min-w-[114px] items-center justify-center gap-2 px-[14px] rounded-[8px] font-semibold text-sm transition-colors border border-tango text-tango bg-white cursor-pointer"
                     onClick={() => onAdd(addon)}
                 >
                     <Image

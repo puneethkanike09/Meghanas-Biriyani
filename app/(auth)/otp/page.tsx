@@ -133,7 +133,7 @@ function OTPContent() {
                             <button
                                 type="button"
                                 onClick={handleResend}
-                                className="text-tango font-semibold text-base hover:underline"
+                                className="text-tango font-semibold text-base hover:underline cursor-pointer"
                             >
                                 Resend OTP
                             </button>

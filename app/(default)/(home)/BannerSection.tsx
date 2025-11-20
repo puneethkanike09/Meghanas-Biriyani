@@ -110,7 +110,7 @@ export default function BannerSection() {
                             <button
                                 key={index}
                                 onClick={() => scrollTo(index)}
-                                className={`transition-all duration-300 ${index === selectedIndex
+                                className={`transition-all duration-300 cursor-pointer ${index === selectedIndex
                                     ? "w-4 h-2 bg-midnight rounded-[100px]"
                                     : "w-2 h-2 bg-gray-300 rounded hover:bg-gray-400"
                                     }`}
@@ -124,7 +124,7 @@ export default function BannerSection() {
                     <div className="inline-flex items-center gap-4">
                         <button
                             onClick={scrollPrev}
-                            className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200"
+                            className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200 cursor-pointer"
                             aria-label="Previous slide"
                         >
                             <Image
@@ -137,7 +137,7 @@ export default function BannerSection() {
                         </button>
                         <button
                             onClick={scrollNext}
-                            className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200"
+                            className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200 cursor-pointer"
                             aria-label="Next slide"
                         >
                             <Image

@@ -20,7 +20,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
                     <button
                         key={item.id}
                         onClick={() => onTabChange(item.id)}
-                        className={`flex-1 px-4 py-3 text-base font-semibold transition-colors relative ${activeTab === item.id
+                        className={`flex-1 px-4 py-3 text-base font-semibold transition-colors relative cursor-pointer ${activeTab === item.id
                             ? "text-midnight border-b-2 border-tango"
                             : "text-gray-700"
                             }`}
@@ -37,7 +37,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
                         <button
                             key={item.id}
                             onClick={() => onTabChange(item.id)}
-                            className={`flex items-center p-3 text-left text-base transition-colors ${activeTab === item.id
+                            className={`flex items-center p-3 text-left text-base transition-colors cursor-pointer ${activeTab === item.id
                                 ? "border-l-2 border-tango font-semibold text-midnight"
                                 : "border-l-2 border-transparent font-normal text-gray-700 hover:bg-gray-50"
                                 }`}

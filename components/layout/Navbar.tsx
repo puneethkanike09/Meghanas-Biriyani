@@ -70,7 +70,7 @@ export default function Navbar() {
                         {/* Icons Section */}
                         <div className="flex items-center gap-2 tablet:gap-3 desktop:gap-4">
                             {/* Search Icon (Mobile/Tablet only) */}
-                            <button className="rounded-full p-2 transition-colors tablet:p-2.5 desktop:hidden">
+                            <button className="rounded-full p-2 transition-colors tablet:p-2.5 desktop:hidden cursor-pointer">
                                 <Image
                                     src={ICONS.search}
                                     alt="Open search"

@@ -86,7 +86,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                         <button
                         type="button"
                             onClick={() => onQuantityChange(item.id, -1)}
-                            className="flex h-5 w-5 items-center justify-center"
+                            className="flex h-5 w-5 items-center justify-center cursor-pointer"
                         >
                             <Image src={SubtractIcon} alt="Decrease quantity" width={18} height={18} className="h-4 w-4" />
                         </button>
@@ -96,7 +96,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                         <button
                         type="button"
                             onClick={() => onQuantityChange(item.id, 1)}
-                            className="flex h-5 w-5 items-center justify-center"
+                            className="flex h-5 w-5 items-center justify-center cursor-pointer"
                         >
                             <Image src={AddIcon} alt="Increase quantity" width={18} height={18} className="h-4 w-4" />
                         </button>

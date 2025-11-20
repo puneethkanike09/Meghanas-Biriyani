@@ -100,7 +100,7 @@ export default function VibeSection() {
                             onClick={scrollPrev}
                             disabled={!canScrollPrev}
                             className={`inline-flex items-center p-2 bg-gray-100 rounded-[100px] transition-all duration-200 ${canScrollPrev
-                                ? "hover:bg-gray-300"
+                                ? "hover:bg-gray-300 cursor-pointer"
                                 : "opacity-50 cursor-not-allowed"
                                 }`}
                             aria-label="Previous"
@@ -127,7 +127,7 @@ export default function VibeSection() {
                             onClick={scrollNext}
                             disabled={!canScrollNext}
                             className={`inline-flex items-center p-2 bg-gray-100 rounded-[100px] transition-all duration-200 ${canScrollNext
-                                ? "hover:bg-gray-300"
+                                ? "hover:bg-gray-300 cursor-pointer"
                                 : "opacity-50 cursor-not-allowed"
                                 }`}
                             aria-label="Next"

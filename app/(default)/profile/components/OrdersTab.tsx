@@ -252,7 +252,7 @@ export default function OrdersTab() {
                                 {/* Right Section */}
                                 <div className="flex flex-col items-end gap-2 shrink-0">
                                     <button
-                                        className="text-sm font-semibold text-tango hover:underline"
+                                        className="text-sm font-semibold text-tango hover:underline cursor-pointer"
                                         onClick={() => handleViewDetails(order)}
                                     >
                                         View Details
@@ -268,10 +268,10 @@ export default function OrdersTab() {
 
                             {/* Actions */}
                             <div className="flex items-center gap-4">
-                                <button className="flex-1 text-sm font-semibold text-tango hover:underline text-center">
+                                <button className="flex-1 text-sm font-semibold text-tango hover:underline text-center cursor-pointer">
                                     Reorder
                                 </button>
-                                <button className="flex-1 text-sm font-semibold text-gray-600 hover:underline text-center">
+                                <button className="flex-1 text-sm font-semibold text-gray-600 hover:underline text-center cursor-pointer">
                                     Help
                                 </button>
                             </div>
