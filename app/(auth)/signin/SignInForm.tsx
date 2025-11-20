@@ -42,7 +42,7 @@ export default function SignInForm() {
                 <div className="relative grid grid-cols-2">
                     <span
                         aria-hidden
-                        className={`absolute inset-y-0 left-0 w-1/2 rounded-full bg-white shadow-sm transition-transform duration-300 ease-out ${isLogin ? "translate-x-0" : "translate-x-full"}`}
+                        className={`absolute inset-y-0 left-0 w-1/2 rounded-full bg-white transition-transform duration-300 ease-out ${isLogin ? "translate-x-0" : "translate-x-full"}`}
                     />
                     {tabOptions.map((tab) => (
                         <button

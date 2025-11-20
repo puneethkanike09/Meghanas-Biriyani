@@ -75,7 +75,7 @@ export default function CartSummary({ charges, totalPayable }: CartSummaryProps)
                 <Button
                     variant="primary"
                     onClick={() => router.push("/cart/delivery")}
-                    className="flex-1 bg-tango hover:bg-tango/90 items-center justify-center gap-2 px-3.5 py-2 rounded-lg border border-solid border-tango shadow-sm h-auto"
+                    className="flex-1 bg-tango hover:bg-tango/90 items-center justify-center gap-2 px-3.5 py-2 rounded-lg border border-solid border-tango h-auto"
                 >
                     <span className="w-fit font-semibold text-white text-sm whitespace-nowrap">
                         Yes! Let&apos;s Continue

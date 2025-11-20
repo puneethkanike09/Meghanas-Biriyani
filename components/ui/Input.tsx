@@ -5,7 +5,7 @@ import type { InputHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 const baseInputClasses =
-    "w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-base text-midnight shadow-sm transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20 placeholder:text-gray-500";
+    "w-full rounded-lg border border-gray-300 px-3.5 py-2.5 text-base text-midnight  transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20 placeholder:text-gray-500";
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     startIcon?: ReactNode;

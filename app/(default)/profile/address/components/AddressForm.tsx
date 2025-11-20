@@ -186,7 +186,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                         value={formValues.city}
                                         onChange={handleFieldChange("city")}
                                         required
-                                        className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-base text-midnight shadow-sm transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20"
+                                        className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-base text-midnight transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20"
                                     >
                                         {CITY_OPTIONS.map((option) => (
                                             <option

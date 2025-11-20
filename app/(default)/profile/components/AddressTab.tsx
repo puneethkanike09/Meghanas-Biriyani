@@ -43,7 +43,7 @@ export default function AddressTab() {
                 {addresses.map((address) => (
                     <div
                         key={address.id}
-                        className="rounded-xl border border-gray-200 bg-white shadow-sm"
+                        className="rounded-xl border border-gray-200 bg-white"
                     >
                         <div className="flex flex-col gap-4 p-4">
                             {/* Address Content */}

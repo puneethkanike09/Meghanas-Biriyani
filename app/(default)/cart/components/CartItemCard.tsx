@@ -49,7 +49,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
     const formattedPrice = `₹${item.price}`;
 
     return (
-        <div className="flex w-full flex-col rounded-2xl border border-gray-200 bg-white shadow-sm tablet:flex-row">
+        <div className="flex w-full flex-col rounded-2xl border border-gray-200 bg-white tablet:flex-row">
             <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl tablet:h-auto tablet:w-[220px] tablet:rounded-l-2xl tablet:rounded-tr-none">
                 <Image
                     src={item.image}
@@ -82,9 +82,9 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
 
                 <div className="mt-auto flex flex-col gap-3 tablet:flex-row tablet:items-center tablet:justify-between">
                     <span className="text-xl font-semibold text-midnight">{formattedPrice}</span>
-                    <div className="inline-flex h-10 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3.5 shadow-sm">
+                    <div className="inline-flex h-10 items-center justify-between gap-2 rounded-lg border border-gray-300 bg-white px-3.5">
                         <button
-                        type="button"
+                            type="button"
                             onClick={() => onQuantityChange(item.id, -1)}
                             className="flex h-5 w-5 items-center justify-center cursor-pointer"
                         >
@@ -94,7 +94,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                             {item.quantity}
                         </span>
                         <button
-                        type="button"
+                            type="button"
                             onClick={() => onQuantityChange(item.id, 1)}
                             className="flex h-5 w-5 items-center justify-center cursor-pointer"
                         >

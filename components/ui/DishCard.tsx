@@ -134,7 +134,7 @@ export default function DishCard({
                             </span>
 
                             {quantity && quantity > 0 ? (
-                                <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[114px]">
+                                <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 min-w-[114px]">
                                     <button
                                         onClick={(e) => handleQuantityChange(e, -1)}
                                         className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
@@ -192,7 +192,7 @@ export default function DishCard({
     return (
         <div
             onClick={onClick}
-            className={`bg-white rounded-2xl overflow-hidden h-full flex flex-col shadow-sm hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay select-none ${onClick ? 'cursor-pointer' : ''}`}
+            className={`bg-white rounded-2xl overflow-hidden h-full flex flex-col hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay select-none ${onClick ? 'cursor-pointer' : ''}`}
         >
             {/* Image */}
             <div className={`relative w-full ${imageHeight || defaultImageHeight}`}>
@@ -276,7 +276,7 @@ export default function DishCard({
 
                     {quantity && quantity > 0 ? (
                         <div
-                            className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 shadow-sm min-w-[114px]"
+                            className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 min-w-[114px]"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <button

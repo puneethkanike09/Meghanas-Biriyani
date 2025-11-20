@@ -42,7 +42,7 @@ export default function OrderConfirmationPage() {
                     </div>
                 </div>
 
-                <div className="w-full rounded-xl border border-gray-200 bg-gray-50 shadow-sm">
+                <div className="w-full rounded-xl border border-gray-200 bg-gray-50 ">
                     <div className="p-4 flex flex-col gap-8">
                         <div className="space-y-2.5">
                             {locations.map((location, index) => {

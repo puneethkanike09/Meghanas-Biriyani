@@ -26,7 +26,7 @@ type NativeButtonProps = {
 type ButtonProps = AnchorButtonProps | NativeButtonProps;
 
 const baseStyles =
-  "inline-flex h-10 items-center justify-center gap-2 px-4 py-[10px] whitespace-nowrap rounded-[8px] font-semibold text-sm shadow-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 disabled:cursor-not-allowed";
+  "inline-flex h-10 items-center justify-center gap-2 px-4 py-[10px] whitespace-nowrap rounded-[8px] font-semibold text-sm transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60 disabled:cursor-not-allowed";
 
 const variants: Record<ButtonVariant, string> = {
   neutral: "bg-white text-gray-700 border border-gray-300 focus-visible:ring-gray-200",

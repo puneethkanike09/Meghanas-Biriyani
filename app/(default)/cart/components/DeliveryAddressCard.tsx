@@ -18,7 +18,7 @@ export default function DeliveryAddressCard({
     onSelect,
 }: DeliveryAddressCardProps) {
     return (
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 bg-white">
             <div className="flex flex-col gap-4 p-4">
                 <div className="flex items-start gap-3">
                     <Image
