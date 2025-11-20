@@ -135,7 +135,7 @@ export default function CategoriesSection({ cart, onAddToCart, onUpdateQuantity 
     }, [emblaApi, onSelect]);
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-lightOrange overflow-x-hidden">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-light-orange overflow-x-hidden">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">

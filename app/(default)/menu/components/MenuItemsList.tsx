@@ -104,7 +104,7 @@ export default function MenuItemsList({
                                                 key={`addons-${item.id}`}
                                                 className="col-span-1 tablet:col-span-2 desktop:col-span-3"
                                             >
-                                                <div className="bg-lightOrange rounded-xl border border-gray-200 p-4">
+                                                <div className="bg-light-orange rounded-xl border border-gray-200 p-4">
                                                     <h3 className="text-xl font-semibold text-midnight mb-3">
                                                         Suggested Add-ons
                                                     </h3>
@@ -144,7 +144,7 @@ export default function MenuItemsList({
                                                 key={`addons-${addOnsItem.id}`}
                                                 className="col-span-1 tablet:col-span-2 desktop:col-span-3"
                                             >
-                                                <div className="bg-lightOrange rounded-xl border border-gray-200 p-4">
+                                                <div className="bg-light-orange rounded-xl border border-gray-200 p-4">
                                                     <h3 className="text-xl font-semibold text-midnight mb-3">
                                                         Suggested Add-ons
                                                     </h3>

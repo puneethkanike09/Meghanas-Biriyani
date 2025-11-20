@@ -82,7 +82,7 @@ export default function TestimonialsSection() {
     );
 
     return (
-        <section className="py-12 tablet:py-16 desktop:py-20 bg-peachLight overflow-x-hidden">
+        <section className="py-12 tablet:py-16 desktop:py-20 bg-peach-light overflow-x-hidden">
             <div className="section-container">
                 {/* Header */}
                 <div className="flex flex-col tablet:flex-row tablet:items-center tablet:justify-between gap-4 tablet:gap-6 mb-8 tablet:mb-10 desktop:mb-12">

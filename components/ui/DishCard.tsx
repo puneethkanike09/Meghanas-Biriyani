@@ -192,7 +192,7 @@ export default function DishCard({
     return (
         <div
             onClick={onClick}
-            className={`bg-white rounded-2xl overflow-hidden h-full flex flex-col hover:shadow-md transition duration-300 border border-gray-200 hover:border-sunRay select-none ${onClick ? 'cursor-pointer' : ''}`}
+            className={`bg-white rounded-2xl overflow-hidden h-full flex flex-col hover:shadow-md transition duration-300 border border-gray-200 hover:border-sun-ray select-none ${onClick ? 'cursor-pointer' : ''}`}
         >
             {/* Image */}
             <div className={`relative w-full ${imageHeight || defaultImageHeight}`}>

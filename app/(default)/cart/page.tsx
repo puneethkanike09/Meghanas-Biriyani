@@ -161,7 +161,7 @@ export default function CartPage() {
                                 ))}
                             </div>
 
-                            <section className="w-full rounded-xl border border-gray-200 bg-peachLight p-4">
+                            <section className="w-full rounded-xl border border-gray-200 bg-peach-light p-4">
                                 <div className="mb-3 flex flex-col items-start gap-3 flex-1">
                                     <h2 className="text-xl font-semibold text-midnight">
                                         Suggested Add-ons
