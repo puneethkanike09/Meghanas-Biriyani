@@ -1,9 +1,9 @@
-import SignInForm from "./components/SignInForm";
+import SignInForm from "./SignInForm";
 
 export default function SignInPage() {
     return (
-        <div className="section-container flex min-h-screen items-center justify-center py-12 tablet:py-16">
+        <section className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24  tablet:pt-28  desktop:pt-36">
             <SignInForm />
-        </div>
+        </section>
     );
 }

@@ -9,7 +9,7 @@ export default function AuthLayout({
     return (
         <>
             <Navbar />
-            <main className="min-h-screen bg-white">{children}</main>
+            <main className="bg-white">{children}</main>
             <Footer />
         </>
     );

@@ -26,7 +26,7 @@ export default function SignInForm() {
     };
 
     return (
-        <div className="mx-auto flex w-full max-w-[648px] flex-col gap-8 px-4 tablet:px-0">
+        <div className="mx-auto flex w-full max-w-[648px] flex-col gap-8">
             <header className="flex flex-col gap-3">
                 <h1 className="text-2xl font-semibold text-midnight">
                     Welcome to Meghana Foods
