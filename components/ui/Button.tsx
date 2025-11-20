@@ -33,7 +33,7 @@ const variants: Record<ButtonVariant, string> = {
   dark: "bg-gray-900 text-white border border-gray-900 focus-visible:ring-gray-300",
   primary: "bg-tango text-white border border-tango focus-visible:ring-brand-200",
   primaryOutlined: "bg-white text-tango border border-tango  focus-visible:ring-brand-200",
-  selected: "bg-tropicalGreen text-white border border-tropicalGreen focus-visible:ring-tropicalGreen/40",
+  selected: "bg-tropical-green text-white border border-tropical-green focus-visible:ring-tropical-green/40",
   ghost: "bg-transparent text-gray-600 border-0 shadow-none hover:bg-transparent focus-visible:ring-transparent",
 };
 

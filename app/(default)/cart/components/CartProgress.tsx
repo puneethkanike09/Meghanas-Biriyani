@@ -25,7 +25,7 @@ export default function CartProgress({ steps }: CartProgressProps) {
                         <div key={step.number} className="flex items-center gap-6">
                             <div className="flex items-center gap-2">
                                 {isCompleted ? (
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-tropicalGreen bg-tropicalGreen">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-full border border-tropical-green bg-tropical-green">
                                         <Image
                                             src="/assets/cart/icons/Checkmark.svg"
                                             alt="Completed"
