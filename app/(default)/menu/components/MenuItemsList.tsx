@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ReactElement } from "react";
 import { MenuItem, CartItem } from "../page";
 import DishCard from "@/components/ui/DishCard";
 import MenuAddonCard from "./MenuAddonCard";
@@ -67,7 +67,7 @@ export default function MenuItemsList({
                         {/* Items Grid */}
                         <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
                             {(() => {
-                                const renderedItems: JSX.Element[] = [];
+                                const renderedItems: ReactElement[] = [];
 
                                 categoryItems.forEach((item) => {
                                     const isExpanded = expandedDishId === item.id;

@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 const informationCollectionData = [
     {
         type: "intro",
@@ -108,7 +110,7 @@ export default function PrivacyPolicyPage() {
                     </h2>
                     <div className="flex flex-col items-start gap-2">
                         {(() => {
-                            const elements: JSX.Element[] = [];
+                            const elements: ReactElement[] = [];
                             let currentBulletGroup: typeof informationCollectionData = [];
 
                             informationCollectionData.forEach((item, index) => {
