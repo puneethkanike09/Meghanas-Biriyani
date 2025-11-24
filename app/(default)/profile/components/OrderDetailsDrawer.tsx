@@ -72,7 +72,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                         {order.destinations.map((destination, index) => {
                             const isLast = index === order.destinations.length - 1;
                             return (
-                                <div key={destination.name} className="flex items-stretch gap-3">
+                                <div key={`${destination.name}-${index}`} className="flex items-stretch gap-3">
                                     <div className="flex w-5 flex-col items-center">
                                         <Image
                                             src="/assets/profile/icons/Location.svg"
@@ -140,8 +140,8 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                             {totalItems} {totalItems === 1 ? "Item" : "Items"}
                         </p>
                         <ul className="space-y-3">
-                            {order.menuItems.map((item) => (
-                                <li key={item.name} className="flex items-start justify-between gap-3">
+                            {order.menuItems.map((item, index) => (
+                                <li key={`${item.name}-${index}`} className="flex items-start justify-between gap-3">
                                     <div className="flex items-center gap-2">
                                         <Image
                                             src={

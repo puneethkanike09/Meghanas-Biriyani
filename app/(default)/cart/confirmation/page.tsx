@@ -20,8 +20,8 @@ export default function OrderConfirmationPage() {
     const orderId = "3346524"; // In real app, this would come from route params or state
 
     return (
-        <div className="min-h-screen bg-white flex items-center justify-center p-4">
-            <div className="w-full max-w-[592px] flex flex-col items-center justify-center gap-6">
+        <div className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24  tablet:pt-28  desktop:pt-36">
+            <div className="mx-auto flex w-full max-w-[648px] flex-col items-center justify-center gap-6">
                 <Image
                     src="/assets/cart/icons/confirmed.svg"
                     alt="Order confirmed"

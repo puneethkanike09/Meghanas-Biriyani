@@ -3,13 +3,14 @@ import AddressForm from "../../components/AddressForm";
 import { INITIAL_ADDRESSES } from "../../data";
 
 interface EditAddressPageProps {
-    params: {
+    params: Promise<{
         addressId: string;
-    };
+    }>;
 }
 
-export default function EditAddressPage({ params }: EditAddressPageProps) {
-    const addressId = Number(params.addressId);
+export default async function EditAddressPage({ params }: EditAddressPageProps) {
+    const { addressId: addressIdParam } = await params;
+    const addressId = Number(addressIdParam);
 
     if (Number.isNaN(addressId)) {
         notFound();
