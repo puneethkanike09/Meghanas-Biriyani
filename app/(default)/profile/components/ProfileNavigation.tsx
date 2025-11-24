@@ -15,7 +15,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
     return (
         <>
             {/* Mobile/Tablet: Top tabs */}
-            <div className="desktop:hidden sticky top-[96px] tablet:top-[96px] z-40 bg-white border-b border-gray-200 flex before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-160px] before:h-[200px] before:bg-white before:-z-10 tablet:before:top-[-160px] tablet:before:h-[220px]">
+            <div className="desktop:hidden sticky top-[96px] tablet:top-[112px] z-40 bg-white  flex before:content-[''] before:absolute before:left-0 before:right-0 before:top-[-100px] before:h-[160px] before:bg-white before:-z-10 tablet:before:top-[-150px] tablet:before:h-[220px]">
                 {navigationItems.map((item) => (
                     <button
                         key={item.id}
@@ -31,7 +31,7 @@ export default function ProfileNavigation({ activeTab, onTabChange }: ProfileNav
             </div>
 
             {/* Desktop: Sidebar */}
-            <aside className="hidden desktop:block desktop:w-[316px] desktop:flex-shrink-0 desktop:sticky desktop:top-28">
+            <aside className="hidden desktop:block desktop:w-[316px] desktop:shrink desktop:sticky desktop:top-36">
                 <nav className="flex h-[calc(100vh-7rem)] flex-col overflow-y-auto border-r border-gray-200 custom-scrollbar">
                     {navigationItems.map((item) => (
                         <button

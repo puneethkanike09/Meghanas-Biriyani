@@ -30,7 +30,7 @@ export default function MenuItemsList({
 
     useEffect(() => {
         const updateColumns = () => {
-            if (window.innerWidth >= 1280) {
+            if (window.innerWidth >= 1250) {
                 setColumns(3);
             } else if (window.innerWidth >= 768) {
                 setColumns(2);

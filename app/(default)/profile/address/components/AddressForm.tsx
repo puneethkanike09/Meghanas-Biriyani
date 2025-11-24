@@ -93,7 +93,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
 
     return (
         <div className="w-full  bg-white">
-            <div className=" flex w-full max-w-[648px] flex-col gap-6 py-6 mx-auto">
+            <div className=" flex w-full max-w-[648px] flex-col gap-6 mx-auto">
                 <button
                     type="button"
                     onClick={handleBack}

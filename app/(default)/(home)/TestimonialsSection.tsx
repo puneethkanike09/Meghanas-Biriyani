@@ -54,7 +54,7 @@ export default function TestimonialsSection() {
 
     useEffect(() => {
         const checkDesktop = () => {
-            setIsDesktop(window.innerWidth >= 1280);
+            setIsDesktop(window.innerWidth >= 1250);
         };
 
         checkDesktop();

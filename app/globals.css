@@ -56,6 +56,7 @@
     }
   }
   
+  
   .section-container {
     padding-left: 1rem;
     padding-right: 1rem;
@@ -139,7 +140,7 @@
 
   /* Custom Breakpoints */
   --breakpoint-tablet: 768px;
-  --breakpoint-desktop: 1250px;
+  --breakpoint-desktop: 1280px;
 
   /* Fonts */
   --font-sans: var(--font-geist-sans);

@@ -61,12 +61,16 @@ export default function ProfileLayoutClient({ children }: ProfileLayoutClientPro
         [pathname, router]
     );
 
+    //        <section className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24  tablet:pt-28  desktop:pt-36">
+
+
+
     return (
-        <div className="min-h-[calc(100vh-300px)] bg-white">
-            <div className="pt-24 tablet:pt-24 desktop:pt-28">
+        <div className="section-container min-h-[calc(100vh-300px)] bg-white">
+            <div className="pt-24  tablet:pt-28  desktop:pt-36">
                 <div
                     className={cn(
-                        "section-container pb-10",
+                        "pb-10",
                         isStandaloneAddressPage && "max-w-none"
                     )}
                 >
