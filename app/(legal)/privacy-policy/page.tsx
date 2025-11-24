@@ -91,10 +91,13 @@ const rightsItems = [
     "Withdraw consent for location access",
 ];
 
+//mx-auto flex w-full max-w-[648px] flex-col gap-8
+//section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24  tablet:pt-28  desktop:pt-36
+
 export default function PrivacyPolicyPage() {
     return (
-        <div className="w-full bg-white">
-            <div className="flex flex-col max-w-[1090px] mx-auto items-start gap-12 px-4 py-[130px]">
+        <section className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24  tablet:pt-28  desktop:pt-36">
+            <div className="flex flex-col max-w-[1090px] mx-auto items-start gap-12">
                 <section className="flex flex-col items-start gap-2 w-full">
                     <p className="w-full font-normal text-midnight text-base tracking-[0] leading-normal">
                         Your privacy is important to us. This Privacy Policy explains how
@@ -339,7 +342,7 @@ export default function PrivacyPolicyPage() {
                     </div>
                 </section>
             </div>
-        </div>
+        </section>
     );
 }
 

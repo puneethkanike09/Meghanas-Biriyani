@@ -1,7 +1,7 @@
 export default function TermsAndConditionsPage() {
     return (
-        <div className="w-full bg-white">
-            <div className="flex flex-col max-w-[1090px] mx-auto items-start gap-12 px-4 py-[130px]">
+        <section className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24  tablet:pt-28  desktop:pt-36">
+            <div className="flex flex-col max-w-[1090px] mx-auto items-start gap-12">
                 <section className="flex flex-col items-start gap-2 w-full">
                     <p className="w-full font-normal text-midnight text-base tracking-[0] leading-normal">
                         Welcome to Meghana Foods. By accessing or using our website, mobile application, or any online services (&quot;Platform&quot;), you agree to the following Terms &amp; Conditions. Please read them carefully.
@@ -206,7 +206,7 @@ export default function TermsAndConditionsPage() {
                     </div>
                 </section>
             </div>
-        </div>
+        </section>
     );
 }
 
