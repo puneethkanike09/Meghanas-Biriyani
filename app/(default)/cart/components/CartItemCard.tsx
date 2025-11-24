@@ -49,7 +49,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
     const formattedPrice = `₹${item.price}`;
 
     return (
-        <div className="flex w-full flex-col rounded-2xl border border-gray-200 bg-white tablet:flex-row">
+        <div className="flex w-full max-w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white tablet:flex-row">
             <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl tablet:h-auto tablet:w-[220px] tablet:rounded-l-2xl tablet:rounded-tr-none">
                 <Image
                     src={item.image}
@@ -59,7 +59,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                 />
             </div>
 
-            <div className="flex flex-1 flex-col gap-4 p-4">
+            <div className="flex flex-1 min-w-0 flex-col gap-4 p-4">
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center justify-between">
                         {item.isVeg ? <VegIcon /> : <NonVegIcon />}
@@ -74,7 +74,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                         <h3 className="text-xl font-semibold text-midnight">
                             {item.name}
                         </h3>
-                        <p className="text-sm text-gray-600 leading-relaxed">
+                        <p className="text-sm text-gray-600 leading-relaxed wrap-break-word">
                             {item.description}
                         </p>
                     </div>

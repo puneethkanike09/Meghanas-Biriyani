@@ -149,8 +149,8 @@ export default function CartPage() {
                         <CartProgress steps={CHECKOUT_STEPS} />
                     </div>
 
-                    <div className="flex flex-col gap-6 desktop:flex-row desktop:items-start">
-                        <div className="flex-1 space-y-6">
+                    <div className="flex flex-col gap-6 desktop:flex-row desktop:items-start desktop:gap-8">
+                        <div className="flex-1 space-y-6 desktop:min-w-0">
                             <div className="flex flex-col gap-4">
                                 {cartItems.map((item) => (
                                     <CartItemCard
@@ -180,7 +180,7 @@ export default function CartPage() {
                             </section>
                         </div>
 
-                        <div className="desktop:w-[360px] desktop:flex-shrink-0 desktop:sticky desktop:top-[209px]">
+                        <div className="desktop:w-[360px] desktop:shrink-0 desktop:sticky desktop:top-[209px]">
                             <CartSummary charges={charges} totalPayable={totalPayable} />
                         </div>
                     </div>
