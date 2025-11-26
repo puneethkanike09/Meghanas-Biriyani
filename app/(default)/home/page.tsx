@@ -9,6 +9,7 @@ import BannerSection from "../(home)/BannerSection";
 import TestimonialsSection from "../(home)/TestimonialsSection";
 import TopDishesSection from "../(home)/TopDishesSection";
 import StartersSection from "../(home)/StartersSection";
+import FounderSection from "../about-us/FounderSection";
 
 export default function HomePage() {
     const [cart, setCart] = useState<Record<number, number>>({});

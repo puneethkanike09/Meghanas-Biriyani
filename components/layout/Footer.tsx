@@ -81,7 +81,7 @@ export default function Footer() {
                         <ul className="space-y-3">
                             <li>
                                 <Link
-                                    href="/about"
+                                    href="/about-us"
                                     className="text-sm tablet:text-[15px] desktop:text-[14px] font-normal text-gray-300 hover:text-white transition-colors leading-[1.5] tablet:leading-[1.4] desktop:leading-[1.4]"
                                 >
                                     About Us

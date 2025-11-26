@@ -26,6 +26,8 @@ interface OrderSummaryProps {
     charges: OrderCharge[];
     totalPayable: number;
     onProceed: () => void;
+    ctaLabel?: string;
+    isCtaDisabled?: boolean;
 }
 
 const VegIcon = () => (
@@ -53,6 +55,8 @@ export default function OrderSummary({
     charges,
     totalPayable,
     onProceed,
+    ctaLabel,
+    isCtaDisabled,
 }: OrderSummaryProps) {
     const pathname = usePathname();
     const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -135,8 +139,9 @@ export default function OrderSummary({
                 variant="primary"
                 onClick={onProceed}
                 className="w-full h-auto px-3.5 py-2"
+                disabled={isCtaDisabled}
             >
-                {isPaymentPage ? "Pay Now" : "Proceed to Pay"}
+                {ctaLabel ?? (isPaymentPage ? "Pay Now" : "Proceed to Pay")}
             </Button>
         </section>
     );

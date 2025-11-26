@@ -104,7 +104,7 @@ export default function DeliveryPage() {
                         </div>
 
                         {/* Order Summary Section */}
-                        <div className="desktop:w-[316px] desktop:flex-shrink-0 desktop:sticky desktop:top-[209px]">
+                        <div className="desktop:w-[316px] desktop:shrink-0 desktop:sticky desktop:top-[209px]">
                             <OrderSummary
                                 items={ORDER_ITEMS}
                                 charges={COST_BREAKDOWN}

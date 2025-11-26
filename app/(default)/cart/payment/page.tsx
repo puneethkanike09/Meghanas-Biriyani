@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import CartProgress, { type CartProgressStep } from "../components/CartProgress";
@@ -29,21 +29,159 @@ const COST_BREAKDOWN = [
     { label: "Taxes", value: 10.47, isBold: false, hasInfo: true },
 ];
 
+const RAZORPAY_KEY =
+    process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ??
+    process.env.NEXT_PUBLIC_VITE_RAZORPAY_KEY_ID ??
+    "rzp_test_Z73AQcjFtYY6fJ";
+
+const HOSTED_LOGO_URL = "http://meghana-foods.vercel.app/assets/navbar/images/logo.svg";
+
+declare global {
+    interface Window {
+        Razorpay?: new (options: RazorpayOptions) => RazorpayInstance;
+    }
+}
+
+type RazorpayPrefill = {
+    name?: string;
+    email?: string;
+    contact?: string;
+};
+
+type RazorpayTheme = {
+    color?: string;
+};
+
+type RazorpayOptions = {
+    key: string;
+    amount: number;
+    currency: string;
+    name: string;
+    description?: string;
+    image?: string;
+    order_id?: string;
+    handler: (response: unknown) => void;
+    prefill?: RazorpayPrefill;
+    notes?: Record<string, string>;
+    theme?: RazorpayTheme;
+};
+
+type RazorpayInstance = {
+    open: () => void;
+    on: (event: string, handler: (response: unknown) => void) => void;
+};
+
+let razorpayScriptPromise: Promise<boolean> | null = null;
+
+function loadRazorpayScript() {
+    if (typeof window === "undefined") {
+        return Promise.resolve(false);
+    }
+
+    if (window.Razorpay) {
+        return Promise.resolve(true);
+    }
+
+    if (!razorpayScriptPromise) {
+        razorpayScriptPromise = new Promise<boolean>((resolve) => {
+            const existingScript = document.querySelector<HTMLScriptElement>(
+                "script[src='https://checkout.razorpay.com/v1/checkout.js']"
+            );
+
+            if (existingScript) {
+                existingScript.addEventListener("load", () => resolve(true));
+                existingScript.addEventListener("error", () => resolve(false));
+                return;
+            }
+
+            const script = document.createElement("script");
+            script.src = "https://checkout.razorpay.com/v1/checkout.js";
+            script.async = true;
+            script.onload = () => {
+                script.setAttribute("data-loaded", "true");
+                resolve(true);
+            };
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    }
+
+    return razorpayScriptPromise;
+}
+
 export default function PaymentPage() {
     const router = useRouter();
     const [addresses] = useState<AddressItem[]>(() => INITIAL_ADDRESSES);
     const [selectedAddressId] = useState<number | null>(1);
+    const [isCheckoutReady, setIsCheckoutReady] = useState(false);
 
     const handleSelectAddress = () => {
         // Placeholder for payment method selection
     };
 
-    const handleProceedToPay = () => {
-        // Navigate to confirmation page after payment
-        router.push("/cart/confirmation");
-    };
-
     const totalPayable = COST_BREAKDOWN.reduce((sum, item) => sum + item.value, 0);
+    const totalPayableInPaise = Math.round(totalPayable * 100);
+
+    const openRazorpayCheckout = useCallback(async () => {
+        if (!RAZORPAY_KEY) {
+            console.warn("Razorpay key missing");
+            return;
+        }
+
+        const scriptLoaded = await loadRazorpayScript();
+        const isReady = scriptLoaded && !!window.Razorpay;
+        setIsCheckoutReady(isReady);
+
+        if (!isReady) {
+            console.error("Failed to load Razorpay checkout script");
+            return;
+        }
+
+        const paymentLogo = HOSTED_LOGO_URL;
+
+        const options: RazorpayOptions = {
+            key: RAZORPAY_KEY,
+            amount: totalPayableInPaise,
+            currency: "INR",
+            name: "Meghana Foods",
+            description: "Order Payment",
+            image: paymentLogo ?? undefined,
+            handler: () => {
+                router.push("/cart/confirmation");
+            },
+            prefill: {
+                name: "Meghana Foods Patron",
+                email: "patron@meghanafoods.com",
+                contact: "+911234567890",
+            },
+            notes: {
+                address: "Meghana Foods Koramangala",
+            },
+            theme: {
+                color: "#f47729",
+            },
+        };
+
+        const RazorpayConstructor = window.Razorpay;
+        if (!RazorpayConstructor) {
+            console.error("Razorpay constructor unavailable after script load");
+            return;
+        }
+
+        const razorpayInstance = new RazorpayConstructor(options);
+        razorpayInstance.open();
+        razorpayInstance.on("payment.failed", () => {
+            alert("Payment failed, please try again.");
+        });
+    }, [router, totalPayableInPaise]);
+
+    useEffect(() => {
+        void openRazorpayCheckout();
+    }, [openRazorpayCheckout]);
+
+    const handleProceedToPay = () => {
+        void openRazorpayCheckout();
+    };
 
     return (
         <div className="min-h-screen bg-white">
@@ -62,50 +200,18 @@ export default function PaymentPage() {
                                 </h1>
                             </header>
 
-                            <div className="grid grid-cols-1 tablet:grid-cols-2 gap-4">
-                                {addresses.map((address) => (
-                                    <DeliveryAddressCard
-                                        key={address.id}
-                                        address={address}
-                                        isSelected={selectedAddressId === address.id}
-                                        isDeliverable={address.id !== 2} // Office not deliverable for demo
-                                        onSelect={handleSelectAddress}
-                                    />
-                                ))}
 
-                                {/* Add New Address Card */}
-                                <div className="flex min-h-[145px] items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-white">
-                                    <div className="flex flex-col items-center justify-center gap-4 p-4">
-                                        <div className="text-base font-semibold text-midnight">
-                                            Add New Address
-                                        </div>
-                                        <Button
-                                            onClick={() => router.push("/profile/address/new")}
-                                            variant="primaryOutlined"
-                                            icon={
-                                                <Image
-                                                    src="/assets/profile/icons/Add.svg"
-                                                    alt="Add"
-                                                    width={20}
-                                                    height={20}
-                                                    className="h-5 w-5"
-                                                />
-                                            }
-                                        >
-                                            Add
-                                        </Button>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
 
                         {/* Order Summary Section */}
-                        <div className="desktop:w-[316px] desktop:flex-shrink-0 desktop:sticky desktop:top-[209px]">
+                        <div className="desktop:w-[316px] desktop:shrink-0 desktop:sticky desktop:top-[209px]">
                             <OrderSummary
                                 items={ORDER_ITEMS}
                                 charges={COST_BREAKDOWN}
                                 totalPayable={totalPayable}
                                 onProceed={handleProceedToPay}
+                                ctaLabel={isCheckoutReady ? "Reopen Payment" : "Initializing"}
+                                isCtaDisabled={!isCheckoutReady}
                             />
                         </div>
                     </div>
