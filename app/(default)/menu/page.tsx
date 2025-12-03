@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import FilterBar from "./components/FilterBar";
 import FilterBarSkeleton from "./components/FilterBarSkeleton";
 import MenuItemsList from "./components/MenuItemsList";
@@ -11,6 +12,9 @@ import DishCardSkeleton from "@/components/ui/DishCardSkeleton";
 import CategoryHeadingSkeleton from "@/components/ui/CategoryHeadingSkeleton";
 
 export default function MenuPage() {
+    const searchParams = useSearchParams();
+    const filterParam = searchParams.get('filter');
+
     const [selectedCategoryId, setSelectedCategoryId] = useState("all");
     const [expandedDishId, setExpandedDishId] = useState<string | null>(null);
     const [showAddOnsForId, setShowAddOnsForId] = useState<string | null>(null);
@@ -33,6 +37,11 @@ export default function MenuPage() {
                     ...categoriesResponse.categories.map((c: any) => ({ id: c.categoryId, name: c.name }))
                 ];
                 setCategories(categoryList);
+
+                // If there's a filter param, select that category
+                if (filterParam) {
+                    setSelectedCategoryId(filterParam);
+                }
             } catch (error) {
                 console.error("Failed to fetch categories:", error);
             } finally {
@@ -41,7 +50,7 @@ export default function MenuPage() {
         };
 
         fetchCategories();
-    }, []);
+    }, [filterParam]);
 
     // Fetch Items when Category Changes
     useEffect(() => {

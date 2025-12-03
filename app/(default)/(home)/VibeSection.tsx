@@ -2,55 +2,25 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
+import { MenuService } from "@/services/menu.service";
 
 const ARROW_ENABLED = "/assets/homepage/icons/Arrow Right.svg";
 const ARROW_DISABLED = "/assets/homepage/icons/Arrow Left.svg";
 
-const CATEGORIES = [
-    {
-        id: 1,
-        name: "Box Biriyani - New Launch",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 2,
-        name: "Day Special",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 3,
-        name: "Extra",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 4,
-        name: "Veg Starter",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 5,
-        name: "Veg Biryani",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 6,
-        name: "Non-Veg Starter",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 7,
-        name: "Chicken Biryani",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-    {
-        id: 8,
-        name: "Mutton Biryani",
-        image: "/assets/homepage/images/top10.jpg",
-    },
-];
+interface Category {
+    id: string;
+    categoryId: string;
+    name: string;
+    displayOrder: number;
+    imageURL: string | null;
+}
 
 export default function VibeSection() {
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [loading, setLoading] = useState(true);
+
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,
         align: "start",
@@ -58,6 +28,22 @@ export default function VibeSection() {
     });
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
+
+    // Fetch categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await MenuService.getCategories();
+                setCategories(response.categories);
+            } catch (error) {
+                console.error("Failed to fetch categories:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCategories();
+    }, []);
 
     const scrollPrev = useCallback(() => {
         if (emblaApi) emblaApi.scrollPrev();
@@ -84,6 +70,35 @@ export default function VibeSection() {
             emblaApi.off("reInit", onSelect);
         };
     }, [emblaApi, onSelect]);
+
+    if (loading) {
+        return (
+            <section className="py-12 tablet:py-16 desktop:py-20 bg-white overflow-x-hidden">
+                <div className="section-container">
+                    <div className="flex items-center justify-between mb-8 tablet:mb-10 desktop:mb-12">
+                        <h2 className="text-2xl tablet:text-3xl desktop:text-[32px] font-semibold text-midnight leading-[1.3] tablet:leading-[1.2] desktop:leading-[1.2]">
+                            Choose your vibe, we&apos;ll bring the bite
+                        </h2>
+                    </div>
+                    <div className="flex gap-4">
+                        {[...Array(17)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_316px] min-w-0"
+                            >
+                                <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[380px] rounded-3xl overflow-hidden bg-gray-200 animate-pulse">
+                                    {/* Text skeleton at bottom */}
+                                    <div className="absolute left-4 bottom-4 tablet:left-6 tablet:bottom-6 desktop:left-8 desktop:bottom-8">
+                                        <div className="h-5 tablet:h-6 desktop:h-7 w-32 tablet:w-40 desktop:w-48 bg-gray-100 rounded"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section className="py-12 tablet:py-16 desktop:py-20 bg-white overflow-x-hidden">
@@ -156,36 +171,45 @@ export default function VibeSection() {
                 {/* Carousel */}
                 <div className="select-none rounded-2xl" ref={emblaRef}>
                     <div className="flex items-start -mx-2 tablet:-mx-3">
-                        {CATEGORIES.map((category) => (
-                            <div
-                                key={category.id}
-                                className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_316px] min-w-0 px-2 tablet:px-3"
-                            >
-                                <div className="group cursor-pointer">
-                                    <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[380px] rounded-3xl overflow-hidden">
-                                        <Image
-                                            src={category.image}
-                                            alt={category.name}
-                                            fill
-                                            className="object-cover"
-                                        />
-                                        {/* Overlay */}
-                                        <div className="absolute inset-0 bg-[#00000066]"></div>
+                        {categories.map((category) => {
+                            const imageUrl = category.imageURL || "/assets/homepage/images/top10.jpg";
 
-                                        {/* Category Name */}
-                                        <div className="absolute left-4 bottom-4 tablet:left-6 tablet:bottom-6 desktop:left-8 desktop:bottom-8 flex items-end justify-center">
-                                            <h3 className="text-base tablet:text-lg desktop:text-2xl font-semibold text-white leading-normal tracking-[0]">
-                                                {category.name}
-                                            </h3>
+                            return (
+                                <div
+                                    key={category.id}
+                                    className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_316px] min-w-0 px-2 tablet:px-3"
+                                >
+                                    <Link
+                                        href={{
+                                            pathname: '/menu',
+                                            query: { filter: category.categoryId }
+                                        }}
+                                        className="group cursor-pointer block"
+                                    >
+                                        <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[380px] rounded-3xl overflow-hidden">
+                                            <Image
+                                                src={imageUrl}
+                                                alt={category.name}
+                                                fill
+                                                className="object-cover"
+                                            />
+                                            {/* Overlay */}
+                                            <div className="absolute inset-0 bg-[#00000066]"></div>
+
+                                            {/* Category Name */}
+                                            <div className="absolute left-4 bottom-4 tablet:left-6 tablet:bottom-6 desktop:left-8 desktop:bottom-8 flex items-end justify-center">
+                                                <h3 className="text-base tablet:text-lg desktop:text-2xl font-semibold text-white leading-normal tracking-[0]">
+                                                    {category.name}
+                                                </h3>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </Link>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </div>
             </div>
         </section>
     );
 }
-

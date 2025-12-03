@@ -32,7 +32,7 @@ export default function FilterBarSkeleton() {
                             key={i}
                             className="inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal flex-shrink-0 border bg-gray-100 border-gray-200 animate-pulse"
                         >
-                            <div className="h-4 w-20 bg-gray-300 rounded"></div>
+                            <div className="h-4 w-20 bg-gray-200 rounded"></div>
                         </div>
                     ))}
                 </div>
