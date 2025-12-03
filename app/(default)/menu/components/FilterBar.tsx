@@ -1,7 +1,8 @@
 "use client";
 
-import { useRef } from "react";
+import { useCallback, useEffect } from "react";
 import Image from "next/image";
+import useEmblaCarousel from "embla-carousel-react";
 
 interface Category {
     id: string;
@@ -19,7 +20,12 @@ export default function FilterBar({
     selectedCategoryId,
     onSelectCategory,
 }: FilterBarProps) {
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const [emblaRef, emblaApi] = useEmblaCarousel({
+        loop: false,
+        align: "start",
+        dragFree: true,
+        containScroll: "trimSnaps",
+    });
 
     return (
         <div className="section-container py-4">
@@ -43,26 +49,25 @@ export default function FilterBar({
                     <div className="h-9 w-px bg-gray-300" />
                 </div>
 
-                {/* Scrollable Categories */}
-                <div
-                    ref={scrollContainerRef}
-                    className="flex items-center gap-2 overflow-x-auto custom-scrollbar flex-1 pb-2"
-                >
-                    {categories.map((category) => {
-                        const isSelected = selectedCategoryId === category.id;
-                        return (
-                            <button
-                                key={category.id}
-                                onClick={() => onSelectCategory(category.id)}
-                                className={`inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal transition-all duration-200 flex-shrink-0 border cursor-pointer ${isSelected
-                                    ? "bg-tango text-white border-transparent"
-                                    : "bg-white text-gray-700 border-gray-200"
-                                    }`}
-                            >
-                                {category.name}
-                            </button>
-                        );
-                    })}
+                {/* Scrollable Categories with Embla */}
+                <div className="flex-1 overflow-hidden" ref={emblaRef}>
+                    <div className="flex items-center gap-2">
+                        {categories.map((category) => {
+                            const isSelected = selectedCategoryId === category.id;
+                            return (
+                                <button
+                                    key={category.id}
+                                    onClick={() => onSelectCategory(category.id)}
+                                    className={`inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal transition-all duration-200 flex-shrink-0 border cursor-pointer ${isSelected
+                                        ? "bg-tango text-white border-transparent"
+                                        : "bg-white text-gray-700 border-gray-200"
+                                        }`}
+                                >
+                                    {category.name}
+                                </button>
+                            );
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

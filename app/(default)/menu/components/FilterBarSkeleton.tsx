@@ -25,16 +25,18 @@ export default function FilterBarSkeleton() {
                     <div className="h-9 w-px bg-gray-300" />
                 </div>
 
-                {/* Skeleton Categories */}
-                <div className="flex items-center gap-2 overflow-x-auto custom-scrollbar flex-1 pb-2">
-                    {[...Array(17)].map((_, i) => (
-                        <div
-                            key={i}
-                            className="inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal flex-shrink-0 border bg-gray-100 border-gray-200 animate-pulse"
-                        >
-                            <div className="h-4 w-20 bg-gray-200 rounded"></div>
-                        </div>
-                    ))}
+                {/* Skeleton Categories with Embla structure */}
+                <div className="flex-1 overflow-hidden">
+                    <div className="flex items-center gap-2">
+                        {[...Array(17)].map((_, i) => (
+                            <div
+                                key={i}
+                                className="inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal flex-shrink-0 border bg-gray-100 border-gray-200 animate-pulse"
+                            >
+                                <div className="h-4 w-20 bg-gray-200 rounded"></div>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

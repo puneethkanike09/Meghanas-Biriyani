@@ -2,7 +2,7 @@ import apiClient from '@/lib/api-client';
 
 export interface MenuItem {
     itemId: string;
-    itemName: string;
+    name: string;
     price: number;
     status: string;
     categoryId: string;
@@ -26,7 +26,13 @@ export interface MenuResponse {
 
 export const MenuService = {
     getMenuItems: async (params?: any): Promise<MenuResponse> => {
-        const response = await apiClient.get('/menu/items', { params });
+        const defaultParams = {
+            branchCode: 'HO',
+            channel: 'Meghana Web sale',
+            limit: params?.categoryId ? 100 : 100, // 10000 for "All", 100 for specific category
+            ...params
+        };
+        const response = await apiClient.get('/menu/items', { params: defaultParams });
         return response.data;
     },
 

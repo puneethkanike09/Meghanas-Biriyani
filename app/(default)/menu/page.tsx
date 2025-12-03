@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import FilterBar from "./components/FilterBar";
 import FilterBarSkeleton from "./components/FilterBarSkeleton";
@@ -11,7 +11,7 @@ import { useCartStore } from "@/store/useCartStore";
 import DishCardSkeleton from "@/components/ui/DishCardSkeleton";
 import CategoryHeadingSkeleton from "@/components/ui/CategoryHeadingSkeleton";
 
-export default function MenuPage() {
+function MenuPageContent() {
     const searchParams = useSearchParams();
     const filterParam = searchParams.get('filter');
 
@@ -85,7 +85,7 @@ export default function MenuPage() {
         addItem({
             id: item.itemId,
             itemId: item.itemId,
-            name: item.itemName,
+            name: item.name,
             price: item.price,
             isVegetarian: isVeg
         });
@@ -145,5 +145,33 @@ export default function MenuPage() {
                 </div>
             </div>
         </div>
+    );
+}
+
+export default function MenuPage() {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-white">
+                <div className="sticky top-[88px] tablet:top-[88px] desktop:top-[96px] z-40 bg-white">
+                    <FilterBarSkeleton />
+                </div>
+                <div className="section-container pt-24 tablet:pt-[104px] desktop:pt-[100px] pb-16">
+                    <div className="flex flex-col gap-8">
+                        {[...Array(2)].map((_, sectionIndex) => (
+                            <section key={sectionIndex} className="flex flex-col gap-4">
+                                <CategoryHeadingSkeleton />
+                                <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
+                                    {[...Array(6)].map((_, i) => (
+                                        <DishCardSkeleton key={i} />
+                                    ))}
+                                </div>
+                            </section>
+                        ))}
+                    </div>
+                </div>
+            </div>
+        }>
+            <MenuPageContent />
+        </Suspense>
     );
 }

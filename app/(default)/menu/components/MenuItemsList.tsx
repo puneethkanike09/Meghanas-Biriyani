@@ -70,7 +70,7 @@ export default function MenuItemsList({
                                     >
                                         <DishCard
                                             id={item.itemId}
-                                            name={item.itemName}
+                                            name={item.name}
                                             description={item.extraInfo?.protein ? `Protein: ${item.extraInfo.protein}g, Calories: ${item.calorieCount || 0}` : ""}
                                             price={item.price}
                                             rating={4.5}
