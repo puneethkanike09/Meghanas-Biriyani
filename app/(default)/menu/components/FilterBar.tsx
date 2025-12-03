@@ -3,15 +3,20 @@
 import { useRef } from "react";
 import Image from "next/image";
 
+interface Category {
+    id: string;
+    name: string;
+}
+
 interface FilterBarProps {
-    categories: string[];
-    selectedCategory: string;
-    onSelectCategory: (category: string) => void;
+    categories: Category[];
+    selectedCategoryId: string;
+    onSelectCategory: (categoryId: string) => void;
 }
 
 export default function FilterBar({
     categories,
-    selectedCategory,
+    selectedCategoryId,
     onSelectCategory,
 }: FilterBarProps) {
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -41,23 +46,20 @@ export default function FilterBar({
                 {/* Scrollable Categories */}
                 <div
                     ref={scrollContainerRef}
-                    className="flex items-center gap-2 overflow-x-auto custom-scrollbar flex-1"
-                    style={{
-                        scrollbarWidth: 'thin',
-                    }}
+                    className="flex items-center gap-2 overflow-x-auto custom-scrollbar flex-1 pb-2"
                 >
                     {categories.map((category) => {
-                        const isSelected = selectedCategory === category;
+                        const isSelected = selectedCategoryId === category.id;
                         return (
                             <button
-                                key={category}
-                                onClick={() => onSelectCategory(category)}
+                                key={category.id}
+                                onClick={() => onSelectCategory(category.id)}
                                 className={`inline-flex h-9 items-center justify-center gap-2 px-[12px] py-2 rounded-[12px] whitespace-nowrap text-base font-normal transition-all duration-200 flex-shrink-0 border cursor-pointer ${isSelected
                                     ? "bg-tango text-white border-transparent"
                                     : "bg-white text-gray-700 border-gray-200"
                                     }`}
                             >
-                                {category}
+                                {category.name}
                             </button>
                         );
                     })}

@@ -6,13 +6,7 @@ import NonVegSymbol from "@/components/ui/assets/icons/nonvegSymbol.svg";
 import AddIcon from "@/components/ui/assets/icons/Add.svg";
 import SubtractIcon from "@/components/ui/assets/icons/Subtract.svg";
 import Button from "@/components/ui/Button";
-import { CartItem } from "../page";
-
-interface ShoppingCartProps {
-    items: CartItem[];
-    onUpdateQuantity: (itemId: number, change: number) => void;
-    onClearCart: () => void;
-}
+import { useCartStore } from "@/store/useCartStore";
 
 const VegIcon = () => (
     <Image
@@ -34,7 +28,8 @@ const NonVegIcon = () => (
     />
 );
 
-export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: ShoppingCartProps) {
+export default function ShoppingCart() {
+    const { items, updateQuantity, clearCart } = useCartStore();
 
     return (
         <div className="flex flex-col gap-4 h-full">
@@ -45,7 +40,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                 </h2>
                 {items.length > 0 && (
                     <button
-                        onClick={onClearCart}
+                        onClick={clearCart}
                         className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                     >
                         Clear All
@@ -83,7 +78,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                                         <div className="flex flex-col gap-3">
                                             {/* Item Name with Veg/NonVeg Icon */}
                                             <div className="flex items-center gap-2">
-                                                {item.isVeg ? <VegIcon /> : <NonVegIcon />}
+                                                {item.isVegetarian ? <VegIcon /> : <NonVegIcon />}
                                                 <h3 className="text-base font-semibold text-midnight">
                                                     {item.name}
                                                 </h3>
@@ -98,7 +93,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                                                 {/* Quantity Controls */}
                                                 <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 min-w-[114px]">
                                                     <button
-                                                        onClick={() => onUpdateQuantity(item.id, -1)}
+                                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
                                                         className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
                                                     >
                                                         <Image
@@ -113,7 +108,7 @@ export default function ShoppingCart({ items, onUpdateQuantity, onClearCart }: S
                                                         {item.quantity}
                                                     </span>
                                                     <button
-                                                        onClick={() => onUpdateQuantity(item.id, 1)}
+                                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
                                                         className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
                                                     >
                                                         <Image

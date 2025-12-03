@@ -7,11 +7,11 @@ import AddIcon from "./assets/icons/Add.svg";
 import SubtractIcon from "./assets/icons/Subtract.svg";
 
 export interface DishCardProps {
-    id: number;
+    id: string | number;
     name: string;
     description: string;
     price: string | number;
-    rating: number;
+    rating?: number;
     reviews?: number;
     isVeg: boolean;
     image: string;
@@ -107,7 +107,7 @@ export default function DishCard({
                         <div className="flex items-center justify-between">
                             {isVeg ? <VegIcon /> : <NonVegIcon />}
                             <div className="flex items-center gap-1">
-                                <StarRating rating={rating} variant="single" size="md" />
+                                <StarRating rating={rating || 0} variant="single" size="md" />
                                 <span className="text-sm font-normal text-midnight">
                                     ({reviews})
                                 </span>
@@ -229,7 +229,7 @@ export default function DishCard({
                     <div className="flex items-center justify-between">
                         {isVeg ? <VegIcon /> : <NonVegIcon />}
                         <div className="flex items-center gap-1">
-                            <StarRating rating={rating} variant="single" size="sm" />
+                            <StarRating rating={rating || 0} variant="single" size="sm" />
                             {reviews && (
                                 <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-midnight leading-5">
                                     ({reviews})
@@ -261,7 +261,7 @@ export default function DishCard({
                 {/* Rating for compact variant */}
                 {variant === "compact" && (
                     <div>
-                        <StarRating rating={rating} variant="single" size="sm" />
+                        <StarRating rating={rating || 0} variant="single" size="sm" />
                     </div>
                 )}
 

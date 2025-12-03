@@ -8,7 +8,7 @@ import AddIcon from "@/components/ui/assets/icons/Add.svg";
 import SubtractIcon from "@/components/ui/assets/icons/Subtract.svg";
 
 export interface CartItem {
-    id: number;
+    id: string | number;
     name: string;
     description: string;
     price: number;
@@ -22,7 +22,7 @@ export interface CartItem {
 
 interface CartItemCardProps {
     item: CartItem;
-    onQuantityChange: (itemId: number, delta: number) => void;
+    onQuantityChange: (itemId: string | number, delta: number) => void;
 }
 
 const VegIcon = () => (

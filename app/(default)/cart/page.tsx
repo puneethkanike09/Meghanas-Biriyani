@@ -1,51 +1,16 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import CartProgress, { type CartProgressStep } from "./components/CartProgress";
-import CartItemCard, { type CartItem } from "./components/CartItemCard";
+import CartItemCard from "./components/CartItemCard";
 import CartSummary, { type ChargeLine } from "./components/CartSummary";
 import MenuAddonCard, { type MenuAddonItem } from "../menu/components/MenuAddonCard";
+import { useCartStore } from "@/store/useCartStore";
 
 const CHECKOUT_STEPS: CartProgressStep[] = [
     { number: 1, label: "Cart Confirmation", status: "current" as const },
     { number: 2, label: "Delivery", status: "upcoming" as const },
     { number: 3, label: "Payment", status: "upcoming" as const },
-];
-
-const INITIAL_CART_ITEMS: CartItem[] = [
-    {
-        id: 1,
-        name: "Chicken Biriyani",
-        description: "Fresh pieces of chicken are cooked in our signature Andhra spice mix and layered with fragrant basmati rice.",
-        price: 349,
-        rating: 4.5,
-        reviews: 58,
-        isVeg: false,
-        image: "/assets/homepage/images/top10.jpg",
-        quantity: 1,
-    },
-    {
-        id: 2,
-        name: "Chicken Kabab",
-        description: "Juicy chicken kababs pan-fried with curry leaves, garlic, and our in-house masala.",
-        price: 349,
-        rating: 4.5,
-        reviews: 58,
-        isVeg: false,
-        image: "/assets/homepage/images/top10.jpg",
-        quantity: 1,
-    },
-    {
-        id: 3,
-        name: "Paneer Butter Masala",
-        description: "Soft paneer coated in buttery tomato gravy enriched with Meghana's spice blend.",
-        price: 349,
-        rating: 4.5,
-        reviews: 59,
-        isVeg: true,
-        image: "/assets/homepage/images/top10.jpg",
-        quantity: 1,
-    },
 ];
 
 const SUGGESTED_ADDONS: MenuAddonItem[] = [
@@ -88,7 +53,7 @@ const ADDITIONAL_CHARGES: Omit<ChargeLine, "emphasize">[] = [
 ];
 
 export default function CartPage() {
-    const [cartItems, setCartItems] = useState<CartItem[]>(INITIAL_CART_ITEMS);
+    const { items: cartItems, updateQuantity, addItem } = useCartStore();
 
     const itemTotal = useMemo(
         () => cartItems.reduce((total, item) => total + item.price * item.quantity, 0),
@@ -103,42 +68,32 @@ export default function CartPage() {
     const totalPayable = charges.reduce((total, charge) => total + charge.value, 0);
 
     const handleQuantityChange = (itemId: number, delta: number) => {
-        setCartItems((prev) =>
-            prev
-                .map((item) =>
-                    item.id === itemId
-                        ? { ...item, quantity: Math.max(0, item.quantity + delta) }
-                        : item
-                )
-                .filter((item) => item.quantity > 0)
-        );
+        // Convert itemId to string if needed, or ensure store handles number
+        // Store expects string, so we cast to string if it's a number
+        updateQuantity(String(itemId), delta + (cartItems.find(i => i.id === String(itemId))?.quantity || 0));
+    };
+
+    // Wrapper for CartItemCard which might expect different props
+    // We need to check CartItemCard props.
+    // Assuming CartItemCard expects `onQuantityChange(id, delta)`
+    // But wait, `updateQuantity` in store takes absolute quantity.
+    // So I need to calculate new quantity.
+
+    const onQuantityChangeWrapper = (itemId: number | string, delta: number) => {
+        const item = cartItems.find(i => i.id === String(itemId));
+        if (item) {
+            updateQuantity(String(itemId), item.quantity + delta);
+        }
     };
 
     const handleAddAddon = (addon: MenuAddonItem) => {
-        setCartItems((prev) => {
-            const existing = prev.find((item) => item.id === addon.id);
-            if (existing) {
-                return prev.map((item) =>
-                    item.id === addon.id ? { ...item, quantity: item.quantity + 1 } : item
-                );
-            }
-
-            return [
-                ...prev,
-                {
-                    id: addon.id,
-                    name: addon.name,
-                    description: addon.description ?? "",
-                    price: addon.price,
-                    rating: addon.rating,
-                    reviews: addon.reviews,
-                    isVeg: addon.isVeg,
-                    image: addon.image,
-                    quantity: 1,
-                },
-            ];
+        addItem({
+            id: String(addon.id),
+            itemId: String(addon.id), // Mock itemId
+            name: addon.name,
+            price: addon.price,
+            isVegetarian: addon.isVeg
         });
-
     };
 
     return (
@@ -152,13 +107,27 @@ export default function CartPage() {
                     <div className="flex flex-col gap-6 desktop:flex-row desktop:items-start desktop:gap-8">
                         <div className="flex-1 space-y-6 desktop:min-w-0">
                             <div className="flex flex-col gap-4">
-                                {cartItems.map((item) => (
-                                    <CartItemCard
-                                        key={item.id}
-                                        item={item}
-                                        onQuantityChange={handleQuantityChange}
-                                    />
-                                ))}
+                                {cartItems.length === 0 ? (
+                                    <div className="text-center py-12 bg-gray-50 rounded-xl">
+                                        <p className="text-gray-500 text-lg">Your cart is empty</p>
+                                    </div>
+                                ) : (
+                                    cartItems.map((item) => (
+                                        <CartItemCard
+                                            key={item.id}
+                                            item={{
+                                                ...item,
+                                                id: item.id,
+                                                description: "", // Store doesn't keep description
+                                                rating: 4.5, // Mock
+                                                reviews: 0, // Mock
+                                                isVeg: item.isVegetarian,
+                                                image: "/assets/homepage/images/top10.jpg" // Mock image
+                                            }}
+                                            onQuantityChange={onQuantityChangeWrapper}
+                                        />
+                                    ))
+                                )}
                             </div>
 
                             <section className="w-full rounded-xl border border-gray-200 bg-peach-light p-4">
@@ -189,4 +158,3 @@ export default function CartPage() {
         </div>
     );
 }
-

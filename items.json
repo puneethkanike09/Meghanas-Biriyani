@@ -1,0 +1,367 @@
+{
+  "items": [
+    {
+      "id": "ea3af3f9-bdbf-4e18-9f63-c4cabc90ccf3",
+      "itemId": "5dc90537f3c211076d3fdb46",
+      "name": "Prawns Biryani",
+      "price": 460,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb10",
+      "categoryName": "Non-Veg Biriyani",
+      "tags": [
+        "Biriyani",
+        "Chef Recommended",
+        "Restaurant Recommended",
+        "Non-vegetarian",
+        "Medium Spicy"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "b0df2c1c-e08c-456e-8779-41b84081f000",
+      "itemId": "5dc90537f3c211076d3fdb47",
+      "name": "Egg Biryani",
+      "price": 320,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb10",
+      "categoryName": "Non-Veg Biriyani",
+      "tags": [
+        "Medium Spicy",
+        "Non-vegetarian",
+        "Biriyani"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "44587b7a-1225-4d1e-ab81-a95ba4c5363b",
+      "itemId": "5dc90537f3c211076d3fdb31",
+      "name": "Apollo Fish",
+      "price": 385,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0e",
+      "categoryName": "Sea Food Starter",
+      "tags": [
+        "Non-vegetarian",
+        "North Indian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "727a159b-68a6-460c-9cab-41f410eced2c",
+      "itemId": "5dc90536f3c211076d3fdb2a",
+      "name": "Nati Chicken Fry",
+      "price": 410,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0d",
+      "categoryName": "Non-Veg Starter",
+      "tags": [
+        "Spicy",
+        "Non-vegetarian",
+        "North Indian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "e923ad7f-46de-40ae-8deb-be96bb72a5d0",
+      "itemId": "5dd1648245d36f204eb76bbb",
+      "name": "Spl Veg Biryani",
+      "price": 330,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb12",
+      "categoryName": "Veg Biriyani",
+      "tags": [
+        "Restaurant Recommended",
+        "Biriyani",
+        "Chef Recommended",
+        "Vegetarian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "9f0fe208-2a9a-4f7a-b06a-dd36d838b41e",
+      "itemId": "5dfb38a15ef2bd5cf4933fb8",
+      "name": "Mushroom Manchurian",
+      "price": 335,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0c",
+      "categoryName": "Veg Starter",
+      "tags": [
+        "Vegetarian",
+        "Chinese"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "aeb88afe-9f18-4cd4-bf4c-62afdf0d67b2",
+      "itemId": "5dc90537f3c211076d3fdb35",
+      "name": "Prawns Fry",
+      "price": 435,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0e",
+      "categoryName": "Sea Food Starter",
+      "tags": [
+        "Non-vegetarian",
+        "North Indian",
+        "Spicy"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "91705ee4-faaa-4e84-aac6-67cbea608894",
+      "itemId": "5dfb3bd87ed240597f3644c4",
+      "name": "Paneer Tikka",
+      "price": 345,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dfb3b797ed240597f3644a4",
+      "categoryName": "Veg Tandoor",
+      "tags": [
+        "North Indian",
+        "Vegetarian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "e4b4bc61-6c14-4169-80c2-5f297e5dbb66",
+      "itemId": "5dc90537f3c211076d3fdb44",
+      "name": "Mutton Keema Biryani",
+      "price": 470,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb10",
+      "categoryName": "Non-Veg Biriyani",
+      "tags": [
+        "Restaurant Recommended",
+        "Biriyani",
+        "Medium Spicy",
+        "Chef Recommended",
+        "Non-vegetarian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "2b8ee04c-5ad7-4e80-af55-dbad226e1c2e",
+      "itemId": "5dfb38235ef2bd5cf4933f89",
+      "name": "Paneer Manchurian",
+      "price": 350,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0c",
+      "categoryName": "Veg Starter",
+      "tags": [
+        "Chinese",
+        "Vegetarian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "e0877579-5145-48f4-bd12-6d546ca454c2",
+      "itemId": "5df9ee3b921e9b4acbf58ad0",
+      "name": "Garlic Naan",
+      "price": 60,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb13",
+      "categoryName": "Indian Breads",
+      "tags": [
+        "Vegetarian",
+        "North Indian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "4b87ae64-2d6d-4100-a583-9ca1de150975",
+      "itemId": "5dc90537f3c211076d3fdb4a",
+      "name": "Veg Biryani Rice",
+      "price": 260,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb12",
+      "categoryName": "Veg Biriyani",
+      "tags": [
+        "Vegetarian",
+        "Biriyani"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "1252661c-642d-4fc4-8e1b-61d12625459b",
+      "itemId": "5dc90537f3c211076d3fdb3a",
+      "name": "Fish Curry",
+      "price": 425,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0f",
+      "categoryName": "Non-Veg Curries",
+      "tags": [
+        "Non-vegetarian",
+        "North Indian",
+        "Medium Spicy"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "cc3dfb98-6d98-4695-93b2-d973a18d8909",
+      "itemId": "5dc90537f3c211076d3fdb2e",
+      "name": "Today's Andhra Spl",
+      "price": 390,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0d",
+      "categoryName": "Non-Veg Starter",
+      "tags": [
+        "Non-vegetarian",
+        "Spicy",
+        "North Indian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "9a977750-0f26-4688-93ab-97d164b68efc",
+      "itemId": "5dc90537f3c211076d3fdb33",
+      "name": "Single Fish Fry",
+      "price": 350,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0e",
+      "categoryName": "Sea Food Starter",
+      "tags": [
+        "North Indian",
+        "Non-vegetarian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "9293a265-bf06-4f42-9650-bd5305b43f97",
+      "itemId": "5ddb7a363c222a6b05262278",
+      "name": "Chilly Babycorn",
+      "price": 325,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0c",
+      "categoryName": "Veg Starter",
+      "tags": [
+        "Vegetarian",
+        "Spicy",
+        "Chinese"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "9ffaa942-2ba3-4b4a-b032-8376ab384b53",
+      "itemId": "5dc90537f3c211076d3fdb3f",
+      "name": "Chicken Boneless Biryani",
+      "price": 360,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb10",
+      "categoryName": "Non-Veg Biriyani",
+      "tags": [
+        "Medium Spicy",
+        "Non-vegetarian",
+        "Restaurant Recommended",
+        "Chef Recommended",
+        "Biriyani"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "33bb8366-01e1-4ee9-ada5-8cbc66aff53d",
+      "itemId": "5dc90537f3c211076d3fdb45",
+      "name": "Fish Biriyani",
+      "price": 445,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb10",
+      "categoryName": "Non-Veg Biriyani",
+      "tags": [
+        "Non-vegetarian",
+        "Medium Spicy",
+        "North Indian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "ac89d999-2528-46e5-8e3d-cbcd993320cf",
+      "itemId": "5dc90537f3c211076d3fdb53",
+      "name": "Palak Paneer Curry",
+      "price": 340,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb15",
+      "categoryName": "Veg Curries",
+      "tags": [
+        "North Indian",
+        "Vegetarian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    },
+    {
+      "id": "53d4e978-008f-4591-a3bf-30cdec9b4306",
+      "itemId": "5dc90537f3c211076d3fdb38",
+      "name": "Chicken Curry",
+      "price": 360,
+      "isVegetarian": true,
+      "isNonVegetarian": false,
+      "categoryId": "5dc90536f3c211076d3fdb0f",
+      "categoryName": "Non-Veg Curries",
+      "tags": [
+        "Non-vegetarian",
+        "Medium Spicy",
+        "North Indian"
+      ],
+      "itemNature": "Service",
+      "status": "Active",
+      "displayOrder": 0
+    }
+  ],
+  "nextCursor": "53d4e978-008f-4591-a3bf-30cdec9b4306",
+  "hasMore": true
+}
+
+

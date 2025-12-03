@@ -1,0 +1,851 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/health": {
+      "get": {
+        "operationId": "AppController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Service is healthy"
+          }
+        },
+        "summary": "Health check endpoint",
+        "tags": [
+          "Health"
+        ]
+      }
+    },
+    "/api/v1/admin/menu/sync": {
+      "post": {
+        "description": "Triggers a menu synchronization from Rista external API. Only syncs if data has changed (unless force=true). This endpoint can be used for manual sync or by cron jobs.",
+        "operationId": "AdminMenuController_syncMenu",
+        "parameters": [],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncMenuDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Menu synchronization result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "synced": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "reason": {
+                      "type": "string",
+                      "example": "Data synced successfully"
+                    },
+                    "itemsCount": {
+                      "type": "number",
+                      "example": 150
+                    },
+                    "branchCode": {
+                      "type": "string",
+                      "example": "BEN"
+                    },
+                    "channel": {
+                      "type": "string",
+                      "example": "Delivery"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden - Admin role required"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "security": [
+          {
+            "access-token": []
+          }
+        ],
+        "summary": "Manually trigger menu synchronization",
+        "tags": [
+          "Menu Sync"
+        ]
+      }
+    },
+    "/api/v1/menu/items": {
+      "get": {
+        "description": "Retrieve menu items with advanced search, filtering, and pagination. Supports searching by name/description, filtering by category/subcategory/tags, and cursor-based pagination for optimal performance.",
+        "operationId": "MenuItemController_getMenuItems",
+        "parameters": [
+          {
+            "name": "search",
+            "required": false,
+            "in": "query",
+            "description": "Search query for item name or description",
+            "schema": {
+              "example": "biryani",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by category ID",
+            "schema": {
+              "example": "67ca8b2bc88e80f4020628d3",
+              "type": "string"
+            }
+          },
+          {
+            "name": "subCategoryId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by subcategory ID",
+            "schema": {
+              "example": "67ca8b2bc88e80f4020628d4",
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemNature",
+            "required": false,
+            "in": "query",
+            "description": "Filter by item nature (Goods, Service)",
+            "schema": {
+              "example": "Goods",
+              "type": "string"
+            }
+          },
+          {
+            "name": "status",
+            "required": false,
+            "in": "query",
+            "description": "Filter by status (Active, Inactive)",
+            "schema": {
+              "example": "Active",
+              "type": "string"
+            }
+          },
+          {
+            "name": "branchCode",
+            "required": false,
+            "in": "query",
+            "description": "Branch code",
+            "schema": {
+              "example": "HO",
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "required": false,
+            "in": "query",
+            "description": "Channel name",
+            "schema": {
+              "example": "Meghana Web sale",
+              "type": "string"
+            }
+          },
+          {
+            "name": "cursor",
+            "required": false,
+            "in": "query",
+            "description": "Pagination cursor",
+            "schema": {
+              "example": "uuid-here",
+              "type": "string"
+            }
+          },
+          {
+            "name": "limit",
+            "required": false,
+            "in": "query",
+            "description": "Items per page (1-100)",
+            "schema": {
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20,
+              "example": 20,
+              "type": "number"
+            }
+          },
+          {
+            "name": "sortBy",
+            "required": false,
+            "in": "query",
+            "description": "Sort field",
+            "schema": {
+              "enum": [
+                "name",
+                "price",
+                "displayOrder"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "sortOrder",
+            "required": false,
+            "in": "query",
+            "description": "Sort order",
+            "schema": {
+              "enum": [
+                "asc",
+                "desc"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "name": "startTime",
+            "required": false,
+            "in": "query",
+            "description": "Filter by schedule start time (HH:mm format, e.g., \"09:00\" for 9am, or \"9am\")",
+            "schema": {
+              "example": "09:00",
+              "type": "string"
+            }
+          },
+          {
+            "name": "endTime",
+            "required": false,
+            "in": "query",
+            "description": "Filter by schedule end time (HH:mm format, e.g., \"10:00\" for 10am, or \"10am\")",
+            "schema": {
+              "example": "10:00",
+              "type": "string"
+            }
+          },
+          {
+            "name": "dayOfWeek",
+            "required": false,
+            "in": "query",
+            "description": "Filter by day of week (Mon, Tue, Wed, Thu, Fri, Sat, Sun). Defaults to current day.",
+            "schema": {
+              "example": "Mon",
+              "type": "string"
+            }
+          },
+          {
+            "name": "tagIds",
+            "required": false,
+            "in": "query",
+            "description": "Filter by tag IDs (comma-separated string, e.g., \"tag1,tag2,tag3\"). Items matching ANY tag will be returned.",
+            "schema": {
+              "example": "tag123,tag456",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of menu items",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MenuItemsListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        },
+        "summary": "Get menu items with search and filters",
+        "tags": [
+          "Menu Items"
+        ]
+      }
+    },
+    "/api/v1/menu/catalog/categories": {
+      "get": {
+        "description": "Retrieve all menu categories for a branch and channel",
+        "operationId": "MenuCatalogController_getCategories",
+        "parameters": [
+          {
+            "name": "branchCode",
+            "required": true,
+            "in": "query",
+            "description": "Branch code",
+            "schema": {
+              "example": "BR001",
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "required": true,
+            "in": "query",
+            "description": "Channel name",
+            "schema": {
+              "example": "DINE_IN",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "description": "Category ID for filtering subcategories",
+            "schema": {
+              "example": "cat123",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of menu categories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoriesListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters"
+          }
+        },
+        "summary": "Get menu categories",
+        "tags": [
+          "Menu Catalog"
+        ]
+      }
+    },
+    "/api/v1/menu/catalog/subcategories": {
+      "get": {
+        "description": "Retrieve all menu subcategories for a branch and channel, optionally filtered by category",
+        "operationId": "MenuCatalogController_getSubCategories",
+        "parameters": [
+          {
+            "name": "branchCode",
+            "required": true,
+            "in": "query",
+            "description": "Branch code",
+            "schema": {
+              "example": "BR001",
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "required": true,
+            "in": "query",
+            "description": "Channel name",
+            "schema": {
+              "example": "DINE_IN",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "description": "Filter by category ID",
+            "schema": {
+              "example": "cat123",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of menu subcategories",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubCategoriesListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters"
+          }
+        },
+        "summary": "Get menu subcategories",
+        "tags": [
+          "Menu Catalog"
+        ]
+      }
+    },
+    "/api/v1/menu/catalog/tags": {
+      "get": {
+        "description": "Retrieve all menu item tags for a branch and channel",
+        "operationId": "MenuCatalogController_getTags",
+        "parameters": [
+          {
+            "name": "branchCode",
+            "required": true,
+            "in": "query",
+            "description": "Branch code",
+            "schema": {
+              "example": "BR001",
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "required": true,
+            "in": "query",
+            "description": "Channel name",
+            "schema": {
+              "example": "DINE_IN",
+              "type": "string"
+            }
+          },
+          {
+            "name": "categoryId",
+            "required": false,
+            "in": "query",
+            "description": "Category ID for filtering subcategories",
+            "schema": {
+              "example": "cat123",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of menu item tags",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagsListResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - invalid parameters"
+          }
+        },
+        "summary": "Get menu item tags",
+        "tags": [
+          "Menu Catalog"
+        ]
+      }
+    },
+    "/api/v1/menu/tax-rate": {
+      "get": {
+        "operationId": "MenuTaxController_getTaxRate",
+        "parameters": [
+          {
+            "name": "taxTypeIds",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "branchCode",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "channel",
+            "required": true,
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "MenuTax"
+        ]
+      }
+    },
+    "/api/v1/metrics": {
+      "get": {
+        "operationId": "PrometheusController_index",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "Prometheus"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "RISTA Menu Service API",
+    "description": "Menu synchronization service that syncs catalog data from Rista external API.\n\n",
+    "version": "1.0.0",
+    "contact": {
+
+    }
+  },
+  "tags": [
+    {
+      "name": "Menu Sync",
+      "description": "Menu synchronization endpoints"
+    }
+  ],
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Kong Gateway (Development)"
+    },
+    {
+      "url": "http://localhost:3004",
+      "description": "Direct Service (Development)"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "access-token": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http",
+        "description": "Enter JWT access token"
+      }
+    },
+    "schemas": {
+      "SyncMenuDto": {
+        "type": "object",
+        "properties": {
+          "branchCode": {
+            "type": "string",
+            "description": "Branch code (e.g., BEN)",
+            "example": "BEN"
+          },
+          "channel": {
+            "type": "string",
+            "description": "Channel name (e.g., Delivery, Takeaway, Dine-in)",
+            "example": "Delivery"
+          },
+          "force": {
+            "type": "boolean",
+            "description": "Force sync even if data has not changed. Default: false (smart sync - only syncs if data changed)",
+            "example": false,
+            "default": false
+          }
+        }
+      },
+      "MenuItemResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Item ID",
+            "example": "uuid-here"
+          },
+          "itemId": {
+            "type": "string",
+            "description": "Rista item ID",
+            "example": "item123"
+          },
+          "name": {
+            "type": "string",
+            "description": "Item name",
+            "example": "Chicken Biryani"
+          },
+          "description": {
+            "type": "string",
+            "description": "Item description",
+            "example": "Delicious biryani..."
+          },
+          "price": {
+            "type": "number",
+            "description": "Price",
+            "example": 250
+          },
+          "imageUrl": {
+            "type": "string",
+            "description": "Image URL"
+          },
+          "isVegetarian": {
+            "type": "boolean",
+            "description": "Is vegetarian",
+            "example": false
+          },
+          "isNonVegetarian": {
+            "type": "boolean",
+            "description": "Is non-vegetarian",
+            "example": true
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "Category ID"
+          },
+          "categoryName": {
+            "type": "string",
+            "description": "Category name"
+          },
+          "subCategoryId": {
+            "type": "string",
+            "description": "Subcategory ID"
+          },
+          "subCategoryName": {
+            "type": "string",
+            "description": "Subcategory name"
+          },
+          "tags": {
+            "description": "Item tags",
+            "example": [
+              "Spicy",
+              "Popular"
+            ],
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "itemNature": {
+            "type": "string",
+            "description": "Item nature",
+            "example": "Goods"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status",
+            "example": "Active"
+          },
+          "displayOrder": {
+            "type": "number",
+            "description": "Display order",
+            "example": 1
+          }
+        },
+        "required": [
+          "id",
+          "itemId",
+          "name",
+          "price",
+          "isVegetarian",
+          "isNonVegetarian",
+          "status",
+          "displayOrder"
+        ]
+      },
+      "MenuItemsListResponseDto": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "description": "List of menu items",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/MenuItemResponseDto"
+            }
+          },
+          "nextCursor": {
+            "type": "string",
+            "description": "Next cursor for pagination"
+          },
+          "total": {
+            "type": "number",
+            "description": "Total count (if available)"
+          },
+          "hasMore": {
+            "type": "boolean",
+            "description": "Has more items",
+            "example": true
+          }
+        },
+        "required": [
+          "items",
+          "hasMore"
+        ]
+      },
+      "CategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Category ID",
+            "example": "cat123"
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "Rista category ID",
+            "example": "rista_cat_001"
+          },
+          "name": {
+            "type": "string",
+            "description": "Category name",
+            "example": "Beverages"
+          },
+          "displayOrder": {
+            "type": "number",
+            "description": "Display order",
+            "example": 1
+          },
+          "imageURL": {
+            "type": "string",
+            "description": "Category image URL",
+            "example": "https://example.com/image.jpg"
+          }
+        },
+        "required": [
+          "id",
+          "categoryId",
+          "name",
+          "displayOrder"
+        ]
+      },
+      "CategoriesListResponseDto": {
+        "type": "object",
+        "properties": {
+          "categories": {
+            "description": "List of categories",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CategoryDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total count of categories",
+            "example": 10
+          }
+        },
+        "required": [
+          "categories",
+          "total"
+        ]
+      },
+      "SubCategoryDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Subcategory ID",
+            "example": "subcat123"
+          },
+          "subCategoryId": {
+            "type": "string",
+            "description": "Rista subcategory ID",
+            "example": "rista_subcat_001"
+          },
+          "name": {
+            "type": "string",
+            "description": "Subcategory name",
+            "example": "Hot Beverages"
+          },
+          "displayOrder": {
+            "type": "number",
+            "description": "Display order",
+            "example": 1
+          },
+          "imageURL": {
+            "type": "string",
+            "description": "Subcategory image URL",
+            "example": "https://example.com/image.jpg"
+          },
+          "categoryId": {
+            "type": "string",
+            "description": "Parent category ID",
+            "example": "cat123"
+          }
+        },
+        "required": [
+          "id",
+          "subCategoryId",
+          "name",
+          "displayOrder",
+          "categoryId"
+        ]
+      },
+      "SubCategoriesListResponseDto": {
+        "type": "object",
+        "properties": {
+          "subcategories": {
+            "description": "List of subcategories",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SubCategoryDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total count of subcategories",
+            "example": 25
+          }
+        },
+        "required": [
+          "subcategories",
+          "total"
+        ]
+      },
+      "TagDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Tag ID",
+            "example": "tag123"
+          },
+          "itemTagId": {
+            "type": "string",
+            "description": "Rista item tag ID",
+            "example": "rista_tag_001"
+          },
+          "name": {
+            "type": "string",
+            "description": "Tag name",
+            "example": "Spicy"
+          }
+        },
+        "required": [
+          "id",
+          "itemTagId",
+          "name"
+        ]
+      },
+      "TagsListResponseDto": {
+        "type": "object",
+        "properties": {
+          "tags": {
+            "description": "List of tags",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagDto"
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total count of tags",
+            "example": 15
+          }
+        },
+        "required": [
+          "tags",
+          "total"
+        ]
+      }
+    }
+  }
+}
