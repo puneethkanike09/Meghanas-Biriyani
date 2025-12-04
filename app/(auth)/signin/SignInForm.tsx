@@ -9,6 +9,7 @@ import Input from "@/components/ui/Input";
 import { AuthService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
 import Loader from "@/components/ui/Loader";
+import { getErrorMessage, getSuccessMessage } from "@/lib/error-handler";
 
 type AuthTab = "login" | "signup";
 
@@ -107,12 +108,14 @@ export default function SignInForm() {
                 flow: isLogin ? 'LOGIN' : 'REGISTER'
             });
 
-            toast.success("OTP sent successfully");
+            // Use API success message if available, otherwise use default
+            const successMsg = getSuccessMessage({ data: response }, "OTP sent successfully");
+            toast.success(successMsg);
             router.push('/otp');
         } catch (error: any) {
             console.error("Auth error:", error);
-            const msg = error.response?.data?.message || "Failed to send OTP. Please try again.";
-            toast.error(msg);
+            const errorMsg = getErrorMessage(error, "Failed to send OTP. Please try again.");
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }

@@ -6,23 +6,31 @@ import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import { AuthService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/useAuthStore";
+import Loader from "@/components/ui/Loader";
+import { getErrorMessage, getSuccessMessage } from "@/lib/error-handler";
 
 export default function OTPForm() {
     const router = useRouter();
-    const { tempAuthData, setAuth, logout, isAuthenticated } = useAuthStore();
+    const { tempAuthData, setAuth, setTempAuthData, logout, isAuthenticated } = useAuthStore();
 
     const [otp, setOtp] = useState<string[]>(["", "", "", ""]);
     const [timeLeft, setTimeLeft] = useState(30);
     const [canResend, setCanResend] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [resending, setResending] = useState(false);
+    const [isInitialCheck, setIsInitialCheck] = useState(true);
     const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
     useEffect(() => {
         // Redirect if no auth data (user refreshed or came directly) AND not authenticated
-        if (!tempAuthData && !isAuthenticated) {
-            router.replace('/signin');
+        if (isInitialCheck) {
+            setIsInitialCheck(false);
+            if (!tempAuthData && !isAuthenticated) {
+                router.replace('/signin');
+                return;
+            }
         }
-    }, [tempAuthData, isAuthenticated, router]);
+    }, [tempAuthData, isAuthenticated, router, isInitialCheck]);
 
     useEffect(() => {
         if (timeLeft > 0) {
@@ -66,25 +74,42 @@ export default function OTPForm() {
     };
 
     const handleResend = async () => {
-        if (!tempAuthData) return;
+        if (!tempAuthData || resending) return;
 
+        setResending(true);
         try {
+            let response;
             if (tempAuthData.flow === 'LOGIN') {
-                await AuthService.requestLoginOtp({ phone: tempAuthData.phone });
+                response = await AuthService.requestLoginOtp({ phone: tempAuthData.phone });
             } else {
-                // For register resend, we might need to call register again or a specific resend endpoint
-                // Assuming register endpoint works for resend or we use login request for OTP
-                // Usually register endpoint is idempotent or we use requestLoginOtp for resend
-                await AuthService.requestLoginOtp({ phone: tempAuthData.phone });
+                // For register resend, use register endpoint to maintain consistency
+                // The register endpoint should be idempotent
+                response = await AuthService.register({
+                    phone: tempAuthData.phone,
+                    name: tempAuthData.name || ''
+                });
+            }
+
+            // Update request_id in tempAuthData if available
+            if (response.request_id) {
+                setTempAuthData({
+                    ...tempAuthData,
+                    requestId: response.request_id
+                });
             }
 
             setTimeLeft(30);
             setCanResend(false);
             setOtp(["", "", "", ""]);
             inputRefs.current[0]?.focus();
-            toast.success("OTP resent successfully");
-        } catch (error) {
-            toast.error("Failed to resend OTP");
+            
+            const successMsg = getSuccessMessage({ data: response }, "OTP resent successfully");
+            toast.success(successMsg);
+        } catch (error: any) {
+            const errorMsg = getErrorMessage(error, "Failed to resend OTP. Please try again.");
+            toast.error(errorMsg);
+        } finally {
+            setResending(false);
         }
     };
 
@@ -106,7 +131,9 @@ export default function OTPForm() {
                 refreshToken: response.refresh_token
             });
 
-            toast.success("Sign in successful", {
+            // Use API success message if available
+            const successMsg = getSuccessMessage({ data: response }, "Sign in successful");
+            toast.success(successMsg, {
                 description: `Welcome back, ${response.user.name || 'User'}!`,
             });
 
@@ -118,14 +145,21 @@ export default function OTPForm() {
             }
         } catch (error: any) {
             console.error("OTP Error:", error);
-            const msg = error.response?.data?.message || "Invalid OTP. Please try again.";
-            toast.error(msg);
+            const errorMsg = getErrorMessage(error, "Invalid OTP. Please try again.");
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
     };
 
-    if (!tempAuthData) return null;
+    // Show loader during initial check or if no tempAuthData
+    if (isInitialCheck || !tempAuthData) {
+        return (
+            <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+                <Loader message={isInitialCheck ? "Loading..." : "Redirecting..."} />
+            </div>
+        );
+    }
 
     return (
         <div className="mx-auto flex w-full max-w-[648px] flex-col gap-8">
@@ -165,9 +199,10 @@ export default function OTPForm() {
                         <button
                             type="button"
                             onClick={handleResend}
-                            className="text-base font-semibold text-tango hover:underline"
+                            disabled={resending}
+                            className="text-base font-semibold text-tango hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Resend OTP
+                            {resending ? "Resending..." : "Resend OTP"}
                         </button>
                     ) : (
                         <p className="text-base font-semibold text-tango">

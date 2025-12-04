@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { useAuthStore } from '@/store/useAuthStore';
 
+// Note: API base URL can be set via environment variable
+// Default URL is the dev tunnel URL
 const baseURL = process.env.NEXT_PUBLIC_API_URL || 'https://81g9vnjp-3001.inc1.devtunnels.ms/api/v1';
 
 const apiClient = axios.create({
@@ -46,12 +48,16 @@ apiClient.interceptors.response.use(
           // Update header and retry original request
           originalRequest.headers.Authorization = `Bearer ${access_token}`;
           return apiClient(originalRequest);
-        } catch (refreshError) {
+        } catch (refreshError: any) {
           // Refresh failed - logout user
           console.error('Token refresh failed:', refreshError);
           logout();
-          // Optional: Redirect to login page
-          // window.location.href = '/login'; 
+
+          // Reject with a structured error so components can handle it
+          const refreshErrorMsg = refreshError?.response?.data?.message ||
+            refreshError?.message ||
+            'Session expired. Please login again.';
+          return Promise.reject(new Error(refreshErrorMsg));
         }
       } else {
         logout();
