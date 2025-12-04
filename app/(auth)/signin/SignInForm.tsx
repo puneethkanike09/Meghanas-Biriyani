@@ -1,10 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import { AuthService } from "@/services/auth.service";
+import { useAuthStore } from "@/store/useAuthStore";
+import Loader from "@/components/ui/Loader";
 
 type AuthTab = "login" | "signup";
 
@@ -15,14 +19,103 @@ const tabOptions: Array<{ id: AuthTab; label: string }> = [
 
 export default function SignInForm() {
     const router = useRouter();
+    const { setTempAuthData, isAuthenticated, _hasHydrated } = useAuthStore();
+
     const [activeTab, setActiveTab] = useState<AuthTab>("login");
+    const [loading, setLoading] = useState(false);
+
+    // Form State
+    const [formData, setFormData] = useState({
+        name: "",
+        phone: ""
+    });
+
     const isLogin = activeTab === "login";
 
-    const handleSendOTP = () => {
-        // Here you would typically validate and send OTP to the phone number
-        // For now, just navigate to OTP page with signup state
-        const isSignup = activeTab === "signup";
-        router.push(`/otp${isSignup ? "?signup=true" : ""}`);
+    useEffect(() => {
+        if (isAuthenticated && _hasHydrated) {
+            router.replace('/home');
+        }
+    }, [isAuthenticated, _hasHydrated, router]);
+
+    // Show nothing or a loader while rehydrating or if authenticated (to prevent flash)
+    if (!_hasHydrated || isAuthenticated) {
+        return (
+            <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
+                <Loader message="Authenticating..." />
+            </div>
+        );
+    }
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const formatPhone = (phone: string) => {
+        // Remove all non-digit characters
+        const cleaned = phone.replace(/\D/g, '');
+        // If it starts with 91 and is 12 digits, keep it. If 10 digits, add 91.
+        if (cleaned.length === 10) return `+91${cleaned}`;
+        if (cleaned.length === 12 && cleaned.startsWith('91')) return `+${cleaned}`;
+        return `+${cleaned}`; // Fallback, let API validate or return error
+    };
+
+    const validateForm = () => {
+        if (!formData.phone) {
+            toast.error("Please enter your phone number");
+            return false;
+        }
+
+        const phoneRegex = /^(\+91[\-\s]?)?[0]?(91)?[6789]\d{9}$/;
+        // Simple 10 digit check for now, allowing for +91 prefix logic handling
+        const cleanedPhone = formData.phone.replace(/\D/g, '');
+        if (cleanedPhone.length < 10) {
+            toast.error("Please enter a valid phone number");
+            return false;
+        }
+
+        if (!isLogin && !formData.name.trim()) {
+            toast.error("Please enter your name");
+            return false;
+        }
+        return true;
+    };
+
+    const handleSendOTP = async () => {
+        if (!validateForm()) return;
+
+        setLoading(true);
+        const formattedPhone = formatPhone(formData.phone);
+
+        try {
+            let response;
+            if (isLogin) {
+                response = await AuthService.requestLoginOtp({ phone: formattedPhone });
+            } else {
+                response = await AuthService.register({
+                    phone: formattedPhone,
+                    name: formData.name
+                });
+            }
+
+            // Store temp data for OTP step
+            setTempAuthData({
+                phone: formattedPhone,
+                name: isLogin ? undefined : formData.name,
+                requestId: response.request_id,
+                flow: isLogin ? 'LOGIN' : 'REGISTER'
+            });
+
+            toast.success("OTP sent successfully");
+            router.push('/otp');
+        } catch (error: any) {
+            console.error("Auth error:", error);
+            const msg = error.response?.data?.message || "Failed to send OTP. Please try again.";
+            toast.error(msg);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -58,7 +151,7 @@ export default function SignInForm() {
                 </div>
             </div>
 
-            <form className="flex flex-col gap-6">
+            <form className="flex flex-col gap-6" onSubmit={(e) => { e.preventDefault(); handleSendOTP(); }}>
                 {activeTab === "signup" && (
                     <div className="flex flex-col gap-1.5">
                         <label
@@ -69,7 +162,9 @@ export default function SignInForm() {
                         </label>
                         <Input
                             id="full-name"
-                            name="fullName"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
                             placeholder="Enter your name"
                             startIcon={
                                 <Image
@@ -95,6 +190,8 @@ export default function SignInForm() {
                         id="phone-number"
                         name="phone"
                         type="tel"
+                        value={formData.phone}
+                        onChange={handleInputChange}
                         placeholder="Enter phone number"
                         startIcon={
                             <Image
@@ -108,8 +205,13 @@ export default function SignInForm() {
                     />
                 </div>
 
-                <Button type="button" variant="primary" className="w-full h-auto py-2.5" onClick={handleSendOTP}>
-                    Send OTP
+                <Button
+                    type="submit"
+                    variant="primary"
+                    className="w-full h-auto py-2.5"
+                    disabled={loading}
+                >
+                    {loading ? "Sending OTP..." : "Send OTP"}
                 </Button>
             </form>
 
@@ -128,4 +230,5 @@ export default function SignInForm() {
         </div>
     );
 }
+
 

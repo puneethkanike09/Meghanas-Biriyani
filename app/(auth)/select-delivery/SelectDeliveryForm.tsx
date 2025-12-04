@@ -1,12 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { toast } from "sonner";
 import { Alert, AlertDescription } from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import StarRating from "@/components/ui/StarRating";
+import { getPlacePredictions, getCurrentLocation, reverseGeocode } from "@/lib/google-maps";
 
 interface Outlet {
     name: string;
@@ -17,9 +19,9 @@ interface Outlet {
     icon: string;
 }
 
-interface SearchResult {
-    name: string;
-    address: string;
+interface PlacePrediction {
+    description: string;
+    place_id: string;
 }
 
 const outlets: Outlet[] = [
@@ -65,52 +67,119 @@ const outlets: Outlet[] = [
     },
 ];
 
-const mockSearchResults: SearchResult[] = [
-    {
-        name: "Citi Hospital Chord Road",
-        address: "2nd Block, Rajajinagar, Bengaluru, Karnataka 560010",
-    },
-    {
-        name: "City Hospital SVG Nagar",
-        address: "Govindaraja Nagar No 14/1, Priyasarshini Layout, 3rd Cross, Bengaluru, Karnataka",
-    },
-    {
-        name: "City Hospital & Pharmacy",
-        address: "Achutharaya Mudaliar Rd, Frazer Town, Bengaluru, Karnataka",
-    },
-    {
-        name: "South City Hospital",
-        address: "Rashtriya Vidyalaya Rd, near Lalbagh West Gate, Upparpet, Bengaluru, Karnataka",
-    },
-];
-
 export default function SelectDeliveryForm() {
     const router = useRouter();
-    const [searchQuery, setSearchQuery] = useState("");
-    const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-    const [isSearching, setIsSearching] = useState(false);
 
-    const handleSearch = (value: string) => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [predictions, setPredictions] = useState<PlacePrediction[]>([]);
+    const [isSearching, setIsSearching] = useState(false);
+    const [loadingLocation, setLoadingLocation] = useState(false);
+    const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+    const handleSearch = async (value: string) => {
         setSearchQuery(value);
-        if (value.trim()) {
-            setIsSearching(true);
-            const filtered = mockSearchResults.filter(
-                (result) =>
-                    result.name.toLowerCase().includes(value.toLowerCase()) ||
-                    result.address.toLowerCase().includes(value.toLowerCase())
-            );
-            setSearchResults(filtered);
-        } else {
+
+        if (searchTimeoutRef.current) {
+            clearTimeout(searchTimeoutRef.current);
+        }
+
+        if (value.trim().length < 3) {
             setIsSearching(false);
-            setSearchResults([]);
+            setPredictions([]);
+            return;
+        }
+
+        setIsSearching(true);
+
+        searchTimeoutRef.current = setTimeout(async () => {
+            try {
+                const results = await getPlacePredictions(value);
+                setPredictions(results.map(r => ({
+                    description: r.description,
+                    place_id: r.place_id
+                })));
+            } catch (error: any) {
+                console.error("Places API error:", error);
+
+                // Check if it's the API key error
+                if (error.message?.includes('API key')) {
+                    toast.error("Google Maps not configured", {
+                        description: "Please contact support"
+                    });
+                } else {
+                    toast.error("Failed to search locations");
+                }
+                setPredictions([]);
+            }
+        }, 500); // Debounce 500ms
+    };
+
+    const handleUseCurrentLocation = async () => {
+        setLoadingLocation(true);
+
+        try {
+            // Get high-accuracy position from browser
+            const position = await getCurrentLocation();
+            const { latitude, longitude } = position.coords;
+
+            console.log('📍 Location detected:', { latitude, longitude, accuracy: position.coords.accuracy });
+
+            // Reverse geocode to get address with detailed info
+            const locationData = await reverseGeocode(latitude, longitude);
+
+            console.log('🏠 Address found:', locationData.formatted_address);
+            console.log('📌 Place ID:', locationData.place_id);
+
+            toast.success("Location detected successfully!", {
+                description: locationData.formatted_address.substring(0, 60) + (locationData.formatted_address.length > 60 ? "..." : "")
+            });
+
+            // TODO: Store location data (lat, lng, address, place_id) in state/backend
+            // For now, just redirect to home
+            router.push("/home");
+        } catch (error: any) {
+            console.error("Location error:", error);
+
+            // Handle specific error cases
+            if (error.code === 1) {
+                // PERMISSION_DENIED
+                toast.error("Location permission denied", {
+                    description: "Please allow location access in your browser settings"
+                });
+            } else if (error.code === 2) {
+                // POSITION_UNAVAILABLE
+                toast.error("Location unavailable", {
+                    description: "Unable to determine your location. Please check your device settings."
+                });
+            } else if (error.code === 3) {
+                // TIMEOUT
+                toast.error("Location request timeout", {
+                    description: "Taking too long to get your location. Please try again."
+                });
+            } else if (error.message?.includes('API key') || error.message?.includes('Geocoding error')) {
+                toast.error("Location service error", {
+                    description: "Unable to process your location. Please try searching manually."
+                });
+            } else {
+                toast.error("Failed to get location", {
+                    description: error.message || "Please try searching for your location instead"
+                });
+            }
+        } finally {
+            setLoadingLocation(false);
         }
     };
 
-    const handleUseCurrentLocation = () => {
+    const handleSelectLocation = (location: string) => {
+        toast.success("Location selected", {
+            description: location.substring(0, 50) + "..."
+        });
+
+        // TODO: Store location in state/backend
         router.push("/home");
     };
 
-    const handleSelectLocation = () => {
+    const handleSelectOutlet = () => {
         router.push("/home");
     };
 
@@ -146,23 +215,88 @@ export default function SelectDeliveryForm() {
                     <Button
                         variant="ghost"
                         onClick={handleUseCurrentLocation}
+                        disabled={loadingLocation}
                         className="inline-flex h-auto items-center justify-center gap-1 p-0"
                     >
-                        <Image
-                            src="/assets/signin-signup/icons/MyLocation.svg"
-                            alt="My location"
-                            width={20}
-                            height={20}
-                            className="h-5 w-5"
-                        />
-                        <span className="whitespace-nowrap text-xs font-semibold text-gray-600">
-                            Use current location
-                        </span>
+                        {loadingLocation ? (
+                            <>
+                                <div className="h-5 w-5 animate-spin rounded-full border-2 border-gray-300 border-t-tango"></div>
+                                <span className="whitespace-nowrap text-xs font-semibold text-gray-600">
+                                    Detecting location...
+                                </span>
+                            </>
+                        ) : (
+                            <>
+                                <Image
+                                    src="/assets/signin-signup/icons/MyLocation.svg"
+                                    alt="My location"
+                                    width={20}
+                                    height={20}
+                                    className="h-5 w-5"
+                                />
+                                <span className="whitespace-nowrap text-xs font-semibold text-gray-600">
+                                    Use current location
+                                </span>
+                            </>
+                        )}
                     </Button>
                 </div>
             </div>
 
-            {!isSearching ? (
+            {isSearching && predictions.length > 0 ? (
+                <div className="flex w-full flex-col items-start gap-3">
+                    <p className="text-base font-normal text-gray-500">Search results</p>
+                    <div className="flex w-full flex-col items-start gap-1">
+                        {predictions.map((prediction) => (
+                            <div
+                                key={prediction.place_id}
+                                className="flex w-full cursor-pointer items-start gap-2 rounded-lg p-3 transition-colors hover:bg-gray-50"
+                                onClick={() => handleSelectLocation(prediction.description)}
+                            >
+                                <Image
+                                    src="/assets/profile/icons/Location.svg"
+                                    alt="Location"
+                                    width={20}
+                                    height={20}
+                                    className="mt-0.5 h-5 w-5 flex-shrink-0"
+                                />
+                                <div className="flex flex-1 flex-col items-start gap-1">
+                                    <p className="w-full text-base font-medium text-midnight tracking-normal">
+                                        {prediction.description}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            ) : isSearching && searchQuery.length >= 3 && predictions.length === 0 ? (
+                <div className="flex w-full flex-col items-center justify-center gap-6 py-12">
+                    <Image
+                        src="/assets/menu/icons/sentiment_dissatisfied.svg"
+                        alt="Sad face icon"
+                        width={48}
+                        height={48}
+                        className="h-12 w-12"
+                    />
+
+                    <div className="flex w-full flex-col items-center gap-4">
+                        <div className="flex w-full flex-col items-center gap-2">
+                            <p className="text-center text-lg font-normal text-gray-900">
+                                Our aroma can travel miles... sadly, our delivery can&apos;t
+                                (yet)!
+                            </p>
+                            <p className="w-full max-w-[410px] text-center text-base font-normal text-gray-500">
+                                We don&apos;t deliver to this location yet, but never say never,
+                                we&apos;re expanding our reach!
+                            </p>
+                        </div>
+                        <p className="text-center text-xs font-normal text-gray-500">
+                            *We are currently able to spread smiles upto 5 kms from your
+                            nearest Meghana Outlet.
+                        </p>
+                    </div>
+                </div>
+            ) : (
                 <div className="flex w-full flex-col items-start gap-3">
                     <p className="text-base font-normal text-gray-500">
                         Our other outlets around you
@@ -177,7 +311,7 @@ export default function SelectDeliveryForm() {
                                         : "cursor-pointer hover:border-gray-300"
                                         }`}
                                     onClick={() =>
-                                        outlet.available && handleSelectLocation()
+                                        outlet.available && handleSelectOutlet()
                                     }
                                 >
                                     <CardContent className="flex w-full items-start gap-2 p-0">
@@ -226,66 +360,6 @@ export default function SelectDeliveryForm() {
                         </div>
                     </div>
                 </div>
-            ) : (
-                <>
-                    {searchResults.length > 0 ? (
-                        <div className="flex w-full flex-col items-start gap-3">
-                            <p className="text-base font-normal text-gray-500">Search results</p>
-                            <div className="flex w-full flex-col items-start gap-1">
-                                {searchResults.map((result, index) => (
-                                    <div
-                                        key={index}
-                                        className="flex w-full cursor-pointer items-start gap-2 rounded-lg p-3 transition-colors hover:bg-gray-50"
-                                        onClick={handleSelectLocation}
-                                    >
-                                        <Image
-                                            src="/assets/profile/icons/Location.svg"
-                                            alt="Location"
-                                            width={20}
-                                            height={20}
-                                            className="mt-0.5 h-5 w-5 flex-shrink-0"
-                                        />
-                                        <div className="flex flex-1 flex-col items-start gap-1">
-                                            <h3 className="w-full overflow-hidden text-ellipsis text-base font-semibold text-midnight tracking-normal line-clamp-1">
-                                                {result.name}
-                                            </h3>
-                                            <p className="w-full text-sm font-normal text-gray-600 tracking-normal">
-                                                {result.address}
-                                            </p>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    ) : (
-                        <div className="flex w-full flex-col items-center justify-center gap-6 py-12">
-                            <Image
-                                src="/assets/menu/icons/sentiment_dissatisfied.svg"
-                                alt="Sad face icon"
-                                width={48}
-                                height={48}
-                                className="h-12 w-12"
-                            />
-
-                            <div className="flex w-full flex-col items-center gap-4">
-                                <div className="flex w-full flex-col items-center gap-2">
-                                    <p className="text-center text-lg font-normal text-gray-900">
-                                        Our aroma can travel miles... sadly, our delivery can&apos;t
-                                        (yet)!
-                                    </p>
-                                    <p className="w-full max-w-[410px] text-center text-base font-normal text-gray-500">
-                                        We don&apos;t deliver to this location yet, but never say never,
-                                        we&apos;re expanding our reach!
-                                    </p>
-                                </div>
-                                <p className="text-center text-xs font-normal text-gray-500">
-                                    *We are currently able to spread smiles upto 5 kms from your
-                                    nearest Meghana Outlet.
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                </>
             )}
 
             <div className="h-px w-full bg-gray-200" />
@@ -309,5 +383,3 @@ export default function SelectDeliveryForm() {
         </div>
     );
 }
-
-

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function CategoryHeadingSkeleton() {
     return (
         <div className="animate-pulse">
