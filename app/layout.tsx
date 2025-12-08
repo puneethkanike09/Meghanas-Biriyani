@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
+import { FCMProvider } from "@/components/FCMProvider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -60,7 +61,9 @@ export default function RootLayout({
       <body
         className={`${proximaNova.variable} ${geistSans.variable} ${geistMono.variable} font-proxima-nova antialiased`}
       >
-        {children}
+        <FCMProvider>
+          {children}
+        </FCMProvider>
         <Toaster position="bottom-right" richColors />
       </body>
     </html>
