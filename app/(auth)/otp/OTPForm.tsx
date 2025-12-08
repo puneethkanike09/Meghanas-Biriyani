@@ -25,7 +25,8 @@ export default function OTPForm() {
         // Redirect if no auth data (user refreshed or came directly) AND not authenticated
         if (isInitialCheck) {
             setIsInitialCheck(false);
-            if (!tempAuthData && !isAuthenticated) {
+            const authenticated = isAuthenticated(); // Call the function to get actual authentication state
+            if (!tempAuthData && !authenticated) {
                 router.replace('/signin');
                 return;
             }
@@ -102,7 +103,7 @@ export default function OTPForm() {
             setCanResend(false);
             setOtp(["", "", "", ""]);
             inputRefs.current[0]?.focus();
-            
+
             const successMsg = getSuccessMessage({ data: response }, "OTP resent successfully");
             toast.success(successMsg);
         } catch (error: any) {

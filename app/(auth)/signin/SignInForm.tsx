@@ -32,15 +32,16 @@ export default function SignInForm() {
     });
 
     const isLogin = activeTab === "login";
+    const authenticated = isAuthenticated(); // Call the function to get the actual authentication state
 
     useEffect(() => {
-        if (isAuthenticated && _hasHydrated) {
+        if (authenticated && _hasHydrated) {
             router.replace('/home');
         }
-    }, [isAuthenticated, _hasHydrated, router]);
+    }, [authenticated, _hasHydrated, router]);
 
     // Show nothing or a loader while rehydrating or if authenticated (to prevent flash)
-    if (!_hasHydrated || isAuthenticated) {
+    if (!_hasHydrated || authenticated) {
         return (
             <div className="flex min-h-[400px] flex-col items-center justify-center gap-4">
                 <Loader message="Authenticating..." />
