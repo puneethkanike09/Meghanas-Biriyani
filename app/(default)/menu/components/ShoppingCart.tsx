@@ -29,7 +29,7 @@ const NonVegIcon = () => (
 );
 
 export default function ShoppingCart() {
-    const { items, addItem, removeItem } = useCartStore();
+    const { items, addItem, removeItem, clearCart } = useCartStore();
 
     const handleQuantityChange = async (item: any, newQuantity: number) => {
         if (newQuantity < 0) {
@@ -49,6 +49,18 @@ export default function ShoppingCart() {
         }
     };
 
+    const handleClearCart = async () => {
+        if (items.length === 0) {
+            return;
+        }
+        
+        try {
+            await clearCart();
+        } catch (error) {
+            console.error("Failed to clear cart:", error);
+        }
+    };
+
     return (
         <div className="flex flex-col gap-4 h-full">
             {/* Header */}
@@ -58,7 +70,7 @@ export default function ShoppingCart() {
                 </h2>
                 {items.length > 0 && (
                     <button
-                        onClick={() => {/* clearCart functionality can be added later */}}
+                        onClick={handleClearCart}
                         className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                     >
                         Clear All

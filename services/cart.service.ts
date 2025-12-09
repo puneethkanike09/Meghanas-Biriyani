@@ -65,5 +65,10 @@ export const CartService = {
     removeItem: async (cartItemId: string): Promise<any> => {
         const response = await apiClient.delete(`/cart/items/${cartItemId}`);
         return response.data;
+    },
+
+    clearCart: async (): Promise<any> => {
+        const response = await apiClient.post('/cart/clear');
+        return response.data;
     }
 };

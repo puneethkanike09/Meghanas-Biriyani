@@ -14,6 +14,7 @@ interface CartState {
     fetchCart: () => Promise<void>;
     addItem: (itemId: string, quantity: number) => Promise<void>;
     removeItem: (cartItemId: string) => Promise<void>;
+    clearCart: () => Promise<void>;
     // Utility to get quantity of specific item
     getItemQuantity: (itemId: string) => number;
     getCartItemId: (itemId: string) => string | null;
@@ -82,6 +83,17 @@ export const useCartStore = create<CartState>((set, get) => ({
             await get().fetchCart();
         } catch (error) {
             console.error("Failed to remove item from cart:", error);
+            throw error;
+        }
+    },
+
+    clearCart: async () => {
+        try {
+            await CartService.clearCart();
+            // After clearing, re-fetch cart to ensure sync
+            await get().fetchCart();
+        } catch (error) {
+            console.error("Failed to clear cart:", error);
             throw error;
         }
     },
