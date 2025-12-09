@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { toast } from 'sonner';
 import { CartService, CartItem } from '@/services/cart.service';
 
 interface CartState {
@@ -31,6 +32,7 @@ export const useCartStore = create<CartState>((set, get) => ({
     loading: false,
 
     fetchCart: async () => {
+        if (get().loading) return;
         set({ loading: true });
         try {
             const response = await CartService.getCart();
@@ -71,8 +73,18 @@ export const useCartStore = create<CartState>((set, get) => ({
             await CartService.addToCart(itemId, quantity);
             // After update, re-fetch cart to ensure sync
             await get().fetchCart();
-        } catch (error) {
+        } catch (error: any) {
             console.error("Failed to add item to cart:", error);
+            if (error.response && error.response.data && error.response.data.message) {
+                const messages = error.response.data.message;
+                if (Array.isArray(messages)) {
+                    toast.error(messages[0]);
+                } else {
+                    toast.error(messages);
+                }
+            } else {
+                toast.error("Failed to update cart");
+            }
         }
     },
 

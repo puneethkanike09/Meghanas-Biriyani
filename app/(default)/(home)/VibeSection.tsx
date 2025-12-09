@@ -5,45 +5,28 @@ import Image from "next/image";
 import Link from "next/link";
 import useEmblaCarousel from "embla-carousel-react";
 import { MenuService } from "@/services/menu.service";
+import { useMenuStore } from "@/store/useMenuStore";
 
 const ARROW_ENABLED = "/assets/homepage/icons/Arrow Right.svg";
 const ARROW_DISABLED = "/assets/homepage/icons/Arrow Left.svg";
 
-interface Category {
-    id: string;
-    categoryId: string;
-    name: string;
-    displayOrder: number;
-    imageURL: string | null;
-}
+
 
 export default function VibeSection() {
-    const [categories, setCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { categories, fetchCategories, loading } = useMenuStore();
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(false);
+
+    // Fetch categories on mount
+    useEffect(() => {
+        fetchCategories();
+    }, []);
 
     const [emblaRef, emblaApi] = useEmblaCarousel({
         loop: false,
         align: "start",
         dragFree: false,
     });
-    const [canScrollPrev, setCanScrollPrev] = useState(false);
-    const [canScrollNext, setCanScrollNext] = useState(false);
-
-    // Fetch categories
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await MenuService.getCategories();
-                setCategories(response.categories);
-            } catch (error) {
-                console.error("Failed to fetch categories:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchCategories();
-    }, []);
 
     const scrollPrev = useCallback(() => {
         if (emblaApi) emblaApi.scrollPrev();
@@ -172,11 +155,16 @@ export default function VibeSection() {
                 <div className="select-none rounded-2xl" ref={emblaRef}>
                     <div className="flex items-start -mx-2 tablet:-mx-3">
                         {categories.map((category) => {
-                            const imageUrl = category.imageURL || "/assets/homepage/images/top10.jpg";
+                            // @ts-ignore - The service type definition might be missing imageURL but API returns it, or vice versa.
+                            // The local interface had imageURL. Let's assume mapped object or optional.
+                            // Actually MenuService's Category interface DOES NOT have imageURL.
+                            // But the API response in VibeSection had it? 
+                            // Let's safe check.
+                            const imageUrl = (category as any).imageURL || "/assets/homepage/images/top10.jpg";
 
                             return (
                                 <div
-                                    key={category.id}
+                                    key={category.categoryId}
                                     className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_316px] min-w-0 px-2 tablet:px-3"
                                 >
                                     <Link

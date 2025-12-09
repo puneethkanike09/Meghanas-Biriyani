@@ -82,7 +82,7 @@ export default function MenuItemsList({
                                             onClick={isExpanded ? undefined : () => onCardClick(item.itemId)}
                                             onAdd={() => onAddClick(item)}
                                             quantity={cartItem?.quantity || 0}
-                                            onUpdateQuantity={(change) => addItem(item.itemId, (cartItem?.quantity || 0) + change)}
+                                            onUpdateQuantity={() => { }} // DishCard handles store update internally
                                         />
                                     </div>
                                 );

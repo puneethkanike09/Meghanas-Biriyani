@@ -8,6 +8,7 @@ import MenuItemsList from "./components/MenuItemsList";
 import ShoppingCart from "./components/ShoppingCart";
 import { MenuService, MenuItem } from "@/services/menu.service";
 import { useCartStore } from "@/store/useCartStore";
+import { useMenuStore } from "@/store/useMenuStore";
 import DishCardSkeleton from "@/components/ui/DishCardSkeleton";
 import CategoryHeadingSkeleton from "@/components/ui/CategoryHeadingSkeleton";
 
@@ -20,37 +21,33 @@ function MenuPageContent() {
     const [showOptionSetsForId, setShowOptionSetsForId] = useState<string | null>(null);
 
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-    const [categories, setCategories] = useState<{ id: string; name: string }[]>([{ id: "all", name: "All" }]);
     const [loading, setLoading] = useState(true);
-    const [categoriesLoading, setCategoriesLoading] = useState(true);
 
-    const { addItem } = useCartStore();
+    const addItem = useCartStore((state) => state.addItem);
+
+    const { categories: storedCategories, fetchCategories, loading: categoriesLoading } = useMenuStore();
+
+    // Transform stored categories for local usage (adding "All" option)
+    const [categories, setCategories] = useState<{ id: string; name: string }[]>([{ id: "all", name: "All" }]);
+
+    useEffect(() => {
+        if (storedCategories.length > 0) {
+            setCategories([
+                { id: "all", name: "All" },
+                ...storedCategories.map((c) => ({ id: c.categoryId, name: c.name }))
+            ]);
+        }
+    }, [storedCategories]);
 
     // Fetch Categories on Mount
     useEffect(() => {
-        const fetchCategories = async () => {
-            setCategoriesLoading(true);
-            try {
-                const categoriesResponse = await MenuService.getCategories();
-                const categoryList = [
-                    { id: "all", name: "All" },
-                    ...categoriesResponse.categories.map((c: any) => ({ id: c.categoryId, name: c.name }))
-                ];
-                setCategories(categoryList);
-
-                // If there's a filter param, select that category
-                if (filterParam) {
-                    setSelectedCategoryId(filterParam);
-                }
-            } catch (error) {
-                console.error("Failed to fetch categories:", error);
-            } finally {
-                setCategoriesLoading(false);
-            }
-        };
-
         fetchCategories();
-    }, [filterParam]);
+
+        // If there's a filter param, select that category
+        if (filterParam) {
+            setSelectedCategoryId(filterParam);
+        }
+    }, [fetchCategories, filterParam]);
 
     // Fetch Items when Category Changes
     useEffect(() => {
