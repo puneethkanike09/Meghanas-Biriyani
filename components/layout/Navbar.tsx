@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect } from "react";
+import { useCartStore } from "@/store/useCartStore";
 
 const ICONS = {
     location: "/assets/navbar/icons/Location.svg",
@@ -11,6 +13,13 @@ const ICONS = {
 };
 
 export default function Navbar() {
+    const { cartCount, fetchCart } = useCartStore();
+    const count = cartCount();
+
+    useEffect(() => {
+        fetchCart();
+    }, []);
+
     return (
         <div className="fixed top-0 left-0 right-0 z-50 desktop:top-4 desktop:px-16">
             <nav className="w-full mx-auto desktop:rounded-2xl bg-white py-3 shadow-md  tablet:py-3 desktop:py-4">
@@ -100,6 +109,11 @@ export default function Navbar() {
                                     height={28}
                                     className="h-6 w-6 tablet:h-6 tablet:w-6"
                                 />
+                                {count > 0 && (
+                                    <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-sm">
+                                        {count}
+                                    </span>
+                                )}
                             </Link>
 
                         </div>

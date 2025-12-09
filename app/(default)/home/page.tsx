@@ -1,5 +1,8 @@
 "use client";
 
+import { useEffect } from "react";
+import { getTokenExpiration } from "@/lib/jwt-utils";
+import { useAuthStore } from "@/store/useAuthStore";
 import { useState } from "react";
 import HeroSection from "../(home)/HeroSection";
 import FeaturesSection from "../(home)/FeaturesSection";
@@ -12,54 +15,29 @@ import StartersSection from "../(home)/StartersSection";
 import FounderSection from "../about-us/FounderSection";
 
 export default function HomePage() {
-    const [cart, setCart] = useState<Record<number, number>>({});
+    const { accessToken } = useAuthStore();
 
-    const handleAddToCart = (itemId: number) => {
-        setCart(prev => ({
-            ...prev,
-            [itemId]: (prev[itemId] || 0) + 1
-        }));
-    };
-
-    const handleUpdateQuantity = (itemId: number, change: number) => {
-        setCart(prev => {
-            const newQuantity = (prev[itemId] || 0) + change;
-            if (newQuantity <= 0) {
-                if (!(itemId in prev)) {
-                    return prev;
-                }
-                const updatedCart = { ...prev };
-                delete updatedCart[itemId];
-                return updatedCart;
-            }
-            return {
-                ...prev,
-                [itemId]: newQuantity
-            };
-        });
-    };
+    useEffect(() => {
+        if (accessToken) {
+            const expirationDate = getTokenExpiration(accessToken);
+            console.log('🔑 Access Token Info:');
+            console.log('  Token:', accessToken.substring(0, 20) + '...');
+            console.log('  Expires at:', expirationDate?.toLocaleString() || 'Unknown');
+            console.log('  Time remaining:', expirationDate ? Math.floor((expirationDate.getTime() - Date.now()) / 1000 / 60) + ' minutes' : 'Unknown');
+        } else {
+            console.log('🔑 No access token found');
+        }
+    }, [accessToken]);
 
     return (
         <>
             <HeroSection />
             <FeaturesSection />
             <VibeSection />
-            <CategoriesSection
-                cart={cart}
-                onAddToCart={handleAddToCart}
-                onUpdateQuantity={handleUpdateQuantity}
-            />
+            <CategoriesSection />
             <BannerSection />
-            <TopDishesSection
-                cart={cart}
-                onAddToCart={handleAddToCart}
-                onUpdateQuantity={handleUpdateQuantity}
-            />
-            <StartersSection
-                cart={cart}
-                onAddToCart={handleAddToCart}
-                onUpdateQuantity={handleUpdateQuantity}
-            />
+            <TopDishesSection />
+            <StartersSection />
             <BannerSection />
             <TestimonialsSection />
         </>

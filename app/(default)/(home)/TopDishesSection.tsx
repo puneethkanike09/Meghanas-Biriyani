@@ -108,13 +108,7 @@ const DISHES_DATA = [
     },
 ];
 
-interface TopDishesSectionProps {
-    cart: Record<number, number>;
-    onAddToCart: (itemId: number) => void;
-    onUpdateQuantity: (itemId: number, change: number) => void;
-}
-
-export default function TopDishesSection({ cart, onAddToCart, onUpdateQuantity }: TopDishesSectionProps) {
+export default function TopDishesSection() {
     return (
         <section className="py-12 tablet:py-16 desktop:py-20 bg-white">
             <div className="section-container">
@@ -166,9 +160,6 @@ export default function TopDishesSection({ cart, onAddToCart, onUpdateQuantity }
                                     key={dish.id}
                                     {...dish}
                                     variant="default"
-                                    quantity={cart[dish.id]}
-                                    onAdd={() => onAddToCart(dish.id)}
-                                    onUpdateQuantity={(change) => onUpdateQuantity(dish.id, change)}
                                 />
                             ))}
                         </div>

@@ -19,7 +19,8 @@ export interface TempAuthData {
 interface AuthState {
     user: User | null;
     accessToken: string | null;
-    refreshToken: string | null;
+    // refreshToken removed - now stored in httpOnly cookies
+    isRefreshing: boolean;
 
     // Temporary data for OTP flow (not persisted)
     tempAuthData: TempAuthData | null;
@@ -27,9 +28,11 @@ interface AuthState {
     // Computed property - checks if token is valid
     isAuthenticated: () => boolean;
 
-    setAuth: (data: { user: User; accessToken: string; refreshToken: string }) => void;
+    setAuth: (data: { user: User; accessToken: string }) => void;
     setTempAuthData: (data: TempAuthData | null) => void;
     updateAccessToken: (token: string) => void;
+    startRefresh: () => void;
+    finishRefresh: (accessToken: string) => void;
     logout: () => void;
     _hasHydrated: boolean;
     setHasHydrated: (state: boolean) => void;
@@ -40,7 +43,7 @@ export const useAuthStore = create<AuthState>()(
         (set, get) => ({
             user: null,
             accessToken: null,
-            refreshToken: null,
+            isRefreshing: false,
             tempAuthData: null,
             _hasHydrated: false,
 
@@ -51,11 +54,11 @@ export const useAuthStore = create<AuthState>()(
                 return isTokenValid(state.accessToken);
             },
 
-            setAuth: ({ user, accessToken, refreshToken }) => {
-                // Validate tokens before storing
-                if (!accessToken || !refreshToken) {
+            setAuth: ({ user, accessToken }) => {
+                // Validate access token before storing
+                if (!accessToken) {
                     if (process.env.NODE_ENV === 'development') {
-                        console.warn('setAuth: Missing tokens in auth data');
+                        console.warn('setAuth: Missing access token in auth data');
                     }
                     return;
                 }
@@ -63,8 +66,8 @@ export const useAuthStore = create<AuthState>()(
                 set({
                     user,
                     accessToken,
-                    refreshToken,
                     tempAuthData: null, // Clear temp data on success
+                    isRefreshing: false,
                 });
             },
 
@@ -80,11 +83,28 @@ export const useAuthStore = create<AuthState>()(
                 set({ accessToken: token });
             },
 
+            startRefresh: () => {
+                set({ isRefreshing: true });
+            },
+
+            finishRefresh: (accessToken) => {
+                if (!accessToken) {
+                    if (process.env.NODE_ENV === 'development') {
+                        console.warn('finishRefresh: Token is empty');
+                    }
+                    return;
+                }
+                set({
+                    accessToken,
+                    isRefreshing: false
+                });
+            },
+
             logout: () => {
                 set({
                     user: null,
                     accessToken: null,
-                    refreshToken: null,
+                    isRefreshing: false,
                     tempAuthData: null,
                 });
             },
@@ -93,12 +113,12 @@ export const useAuthStore = create<AuthState>()(
         }),
         {
             name: 'auth-storage',
-            // Only persist tokens and user data, NOT isAuthenticated or tempAuthData
+            // Only persist user and access token, NOT refreshToken (httpOnly cookies), isAuthenticated, or tempAuthData
             // This ensures authentication state is always computed, not stored
             partialize: (state) => ({
                 user: state.user,
                 accessToken: state.accessToken,
-                refreshToken: state.refreshToken,
+                // refreshToken excluded - now in httpOnly cookies
             }),
             onRehydrateStorage: () => (state, error) => {
                 if (error) {

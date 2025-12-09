@@ -1,64 +1,84 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-
-export interface CartItem {
-    id: string;
-    itemId: string;
-    name: string;
-    price: number;
-    quantity: number;
-    isVegetarian: boolean;
-}
+import { CartService, CartItem } from '@/services/cart.service';
 
 interface CartState {
     items: CartItem[];
-    addItem: (item: Omit<CartItem, 'quantity'>) => void;
-    removeItem: (itemId: string) => void;
-    updateQuantity: (itemId: string, quantity: number) => void;
-    clearCart: () => void;
-    totalItems: () => number;
-    totalPrice: () => number;
+    subtotal: number;
+    tax: number;
+    discount: number;
+    deliveryFee: number;
+    total: number;
+    loading: boolean;
+
+    // Actions
+    fetchCart: () => Promise<void>;
+    addItem: (itemId: string, quantity: number) => Promise<void>;
+    // Utility to get quantity of specific item
+    getItemQuantity: (itemId: string) => number;
+    cartCount: () => number;
 }
 
-export const useCartStore = create<CartState>()(
-    persist(
-        (set, get) => ({
-            items: [],
-            addItem: (item) => {
-                const currentItems = get().items;
-                const existingItem = currentItems.find((i) => i.id === item.id);
+export const useCartStore = create<CartState>((set, get) => ({
+    items: [],
+    subtotal: 0,
+    tax: 0,
+    discount: 0,
+    deliveryFee: 0,
+    total: 0,
+    loading: false,
 
-                if (existingItem) {
-                    set({
-                        items: currentItems.map((i) =>
-                            i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-                        ),
-                    });
-                } else {
-                    set({ items: [...currentItems, { ...item, quantity: 1 }] });
-                }
-            },
-            removeItem: (itemId) => {
-                set({ items: get().items.filter((i) => i.id !== itemId) });
-            },
-            updateQuantity: (itemId, quantity) => {
-                if (quantity <= 0) {
-                    get().removeItem(itemId);
-                    return;
-                }
+    fetchCart: async () => {
+        set({ loading: true });
+        try {
+            const response = await CartService.getCart();
+            if (response && response.cart) {
+                // We need to map response items to our internal structure if needed
+                // For now assuming response.cart.items aligns or we use it directly
+                // The API response image shows "items": [] (empty), so we will need to see real data.
+                // Assuming items have item_id, quantity, etc.
+                const mappedItems = response.cart.items.map((i: any) => ({
+                    ...i,
+                    // Ensure we have standard fields if backend differs
+                }));
+
                 set({
-                    items: get().items.map((i) =>
-                        i.id === itemId ? { ...i, quantity } : i
-                    ),
+                    items: mappedItems,
+                    subtotal: response.cart.subtotal,
+                    tax: response.cart.tax,
+                    discount: response.cart.discount,
+                    deliveryFee: response.cart.delivery_fee,
+                    total: response.cart.total
                 });
-            },
-            clearCart: () => set({ items: [] }),
-            totalItems: () => get().items.reduce((acc, item) => acc + item.quantity, 0),
-            totalPrice: () =>
-                get().items.reduce((acc, item) => acc + item.price * item.quantity, 0),
-        }),
-        {
-            name: 'cart-storage',
+            }
+        } catch (error) {
+            console.error("Failed to fetch cart:", error);
+        } finally {
+            set({ loading: false });
         }
-    )
-);
+    },
+
+    addItem: async (itemId: string, quantity: number) => {
+        // Optimistic update could go here, but let's stick to server source of truth for now or simple optimistic
+        // "this also updates the existing items quantity as we increase or decrese" - user
+        // So we just post strict quantity? Or +/- 1? 
+        // User said: "increase the quality we alawsy post with the itemid ok... updates the exisitng items qualititty"
+        // This implies we send the NEW TOTAL quantity.
+
+        try {
+            await CartService.addToCart(itemId, quantity);
+            // After update, re-fetch cart to ensure sync
+            await get().fetchCart();
+        } catch (error) {
+            console.error("Failed to add item to cart:", error);
+        }
+    },
+
+    getItemQuantity: (itemId: string) => {
+        const item = get().items.find(i => i.item_id === itemId); // Assuming item_id is key
+        return item ? item.quantity : 0;
+    },
+
+    cartCount: () => {
+        return get().items.reduce((acc, item) => acc + item.quantity, 0);
+    }
+}));

@@ -21,7 +21,7 @@ export default function MenuItemsList({
     onCardClick,
     onAddClick,
 }: MenuItemsListProps) {
-    const { items: cartItems, updateQuantity } = useCartStore();
+    const { items: cartItems, addItem } = useCartStore();
 
     // Helper to check if item is vegetarian based on tags
     const isVegetarian = (item: MenuItem) => {
@@ -61,7 +61,7 @@ export default function MenuItemsList({
                         <div className="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-3 gap-4">
                             {categoryItems.map((item) => {
                                 const isExpanded = expandedDishId === item.itemId;
-                                const cartItem = cartItems.find(c => c.id === item.itemId);
+                                const cartItem = cartItems.find(c => c.item_id === item.itemId);
 
                                 return (
                                     <div
@@ -82,7 +82,7 @@ export default function MenuItemsList({
                                             onClick={isExpanded ? undefined : () => onCardClick(item.itemId)}
                                             onAdd={() => onAddClick(item)}
                                             quantity={cartItem?.quantity}
-                                            onUpdateQuantity={(change) => updateQuantity(item.itemId, (cartItem?.quantity || 0) + change)}
+                                            onUpdateQuantity={(change) => addItem(item.itemId, (cartItem?.quantity || 0) + change)}
                                         />
                                     </div>
                                 );

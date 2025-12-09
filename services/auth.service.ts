@@ -1,4 +1,5 @@
 import apiClient from '@/lib/api-client';
+import axios from 'axios';
 
 export interface RegisterRequest {
     name: string;
@@ -48,9 +49,18 @@ export const AuthService = {
         return response.data;
     },
 
-    refreshToken: async (refreshToken: string): Promise<{ access_token: string; expires_in: number }> => {
-        const response = await apiClient.post('/auth/refresh', { refresh_token: refreshToken });
-        return response.data;
+    // Persist session in httpOnly cookies via Next.js API route
+    // Uses axios directly (not apiClient) because this is an internal Next.js route, not backend API
+    persistSession: async (tokens: { accessToken: string; refreshToken: string }): Promise<void> => {
+        await axios.post('/api/auth/session', tokens, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+    },
+
+    // Clear session httpOnly cookies via Next.js API route
+    // Uses axios directly (not apiClient) because this is an internal Next.js route, not backend API
+    clearSession: async (): Promise<void> => {
+        await axios.delete('/api/auth/session');
     },
 
     updateFcmToken: async (token: string): Promise<void> => {
@@ -59,7 +69,9 @@ export const AuthService = {
 
     logout: async (): Promise<void> => {
         try {
-            // Access token is automatically sent in Authorization header via apiClient interceptor
+            // Clear httpOnly cookies first
+            await AuthService.clearSession();
+            // Then call backend logout (access token is automatically sent via apiClient interceptor)
             await apiClient.post('/auth/logout');
         } catch (error) {
             console.error('Logout failed:', error);

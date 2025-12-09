@@ -126,10 +126,16 @@ export default function OTPForm() {
                 name: tempAuthData.name // Optional for login, required for register if backend needs it
             });
 
+            // Persist session in httpOnly cookies via Next.js API route
+            await AuthService.persistSession({
+                accessToken: response.access_token,
+                refreshToken: response.refresh_token
+            });
+
+            // Update Zustand store with access token and user (refresh token now in httpOnly cookies)
             setAuth({
                 user: response.user,
                 accessToken: response.access_token,
-                refreshToken: response.refresh_token
             });
 
             // Use API success message if available

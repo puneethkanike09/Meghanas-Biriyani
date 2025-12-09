@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 import CartProgress, { type CartProgressStep } from "./components/CartProgress";
 import CartItemCard from "./components/CartItemCard";
 import CartSummary, { type ChargeLine } from "./components/CartSummary";
@@ -54,10 +54,15 @@ const ADDITIONAL_CHARGES: Omit<ChargeLine, "emphasize">[] = [
 ];
 
 export default function CartPage() {
-    const { items: cartItems, updateQuantity, addItem } = useCartStore();
+    const { items: cartItems, addItem, fetchCart } = useCartStore();
+
+    // Re-fetch cart on mount to ensure freshness
+    useEffect(() => {
+        fetchCart();
+    }, []);
 
     const itemTotal = useMemo(
-        () => cartItems.reduce((total, item) => total + item.price * item.quantity, 0),
+        () => cartItems.reduce((total, item) => total + (item.price || 0) * item.quantity, 0),
         [cartItems]
     );
 
@@ -71,7 +76,7 @@ export default function CartPage() {
     const handleQuantityChange = (itemId: number, delta: number) => {
         // Convert itemId to string if needed, or ensure store handles number
         // Store expects string, so we cast to string if it's a number
-        updateQuantity(String(itemId), delta + (cartItems.find(i => i.id === String(itemId))?.quantity || 0));
+        // updateQuantity(String(itemId), delta + (cartItems.find(i => i.id === String(itemId))?.quantity || 0));
     };
 
     // Wrapper for CartItemCard which might expect different props
@@ -80,37 +85,25 @@ export default function CartPage() {
     // But wait, `updateQuantity` in store takes absolute quantity.
     // So I need to calculate new quantity.
 
-    const onQuantityChangeWrapper = (itemId: number | string, delta: number) => {
-        const item = cartItems.find(i => i.id === String(itemId));
+    const onQuantityChangeWrapper = async (itemId: number | string, delta: number) => {
+        const item = cartItems.find(i => i.item_id === String(itemId));
         if (item) {
-            updateQuantity(String(itemId), item.quantity + delta);
+            await addItem(String(itemId), item.quantity + delta);
         }
     };
 
     const handleAddAddon = (addon: Option | MenuAddonItem) => {
         // Check if it's an Option type (has optionId) or legacy MenuAddonItem (has id as number)
         const isOption = 'optionId' in addon;
-        
+
         if (isOption) {
             // Handle Option type
             const option = addon as Option;
-            addItem({
-                id: option.optionId,
-                itemId: option.itemId,
-                name: option.optionName,
-                price: option.price,
-                isVegetarian: false // Options don't have veg info, default to false
-            });
+            addItem(option.optionId, 1);
         } else {
             // Handle legacy MenuAddonItem type
             const menuAddon = addon as MenuAddonItem;
-            addItem({
-                id: String(menuAddon.id),
-                itemId: String(menuAddon.id), // Mock itemId
-                name: menuAddon.name,
-                price: menuAddon.price,
-                isVegetarian: menuAddon.isVeg
-            });
+            addItem(String(menuAddon.id), 1);
         }
     };
 
@@ -132,15 +125,17 @@ export default function CartPage() {
                                 ) : (
                                     cartItems.map((item) => (
                                         <CartItemCard
-                                            key={item.id}
+                                            key={item.item_id}
                                             item={{
-                                                ...item,
-                                                id: item.id,
+                                                id: Number(item.item_id) || item.item_id, // Best effort cast or pass string if component allows
+                                                name: item.name || "Unknown Item",
+                                                price: item.price || 0,
+                                                quantity: item.quantity,
                                                 description: "", // Store doesn't keep description
                                                 rating: 4.5, // Mock
                                                 reviews: 0, // Mock
-                                                isVeg: item.isVegetarian,
-                                                image: "/assets/homepage/images/top10.jpg" // Mock image
+                                                isVeg: item.is_veg || false,
+                                                image: item.image || "/assets/homepage/images/top10.jpg"
                                             }}
                                             onQuantityChange={onQuantityChangeWrapper}
                                         />

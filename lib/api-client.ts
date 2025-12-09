@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { useAuthStore } from '@/store/useAuthStore';
 
 // Note: API base URL must be set via NEXT_PUBLIC_API_URL environment variable
@@ -17,6 +17,105 @@ const apiClient = axios.create({
   },
 });
 
+// Shared refresh promise to serialize concurrent refresh attempts
+let refreshPromise: Promise<string | null> | null = null;
+let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
+const REFRESH_TIMEOUT_MS = 10000; // 10 seconds max for refresh
+const MAX_REFRESH_RETRIES = 1;
+
+// Failed request queue
+interface QueueItem {
+  resolve: (token: string | null) => void;
+  reject: (error: unknown) => void;
+}
+
+let failedQueue: QueueItem[] = [];
+
+const processQueue = (error: unknown | null, token: string | null = null) => {
+  failedQueue.forEach((prom) => {
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(token);
+    }
+  });
+  failedQueue = [];
+};
+
+// Refresh token function
+async function refreshToken(): Promise<string | null> {
+  const store = useAuthStore.getState();
+
+  // If already refreshing, return existing promise
+  if (refreshPromise) {
+    return refreshPromise;
+  }
+
+  // Start refresh
+  store.startRefresh();
+
+  refreshPromise = (async () => {
+    try {
+      // Set timeout to prevent infinite loops
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        refreshTimeout = setTimeout(() => {
+          reject(new Error('Token refresh timeout'));
+        }, REFRESH_TIMEOUT_MS);
+      });
+
+      // Call internal Next.js API route which handles httpOnly cookies
+      const refreshRequest = axios.post<{ accessToken: string }>(
+        '/api/auth/refresh',
+        {},
+        {
+          withCredentials: true, // Important: send httpOnly cookies
+        }
+      );
+
+      const response = await Promise.race([refreshRequest, timeoutPromise]);
+
+      if (refreshTimeout) {
+        clearTimeout(refreshTimeout);
+        refreshTimeout = null;
+      }
+
+      const { accessToken } = response.data;
+
+      if (!accessToken) {
+        throw new Error('No access token in refresh response');
+      }
+
+      // Update store with new token
+      store.finishRefresh(accessToken);
+
+      return accessToken;
+    } catch (error) {
+      // Refresh failed - reset store and clear cookies
+      store.logout();
+
+      // Clear refresh promise
+      refreshPromise = null;
+      if (refreshTimeout) {
+        clearTimeout(refreshTimeout);
+        refreshTimeout = null;
+      }
+
+      // Process queue with error
+      processQueue(error, null);
+
+      throw error;
+    }
+  })();
+
+  try {
+    const token = await refreshPromise;
+    return token;
+  } finally {
+    // Clear promise after completion
+    refreshPromise = null;
+  }
+}
+
 // Request Interceptor
 apiClient.interceptors.request.use(
   (config) => {
@@ -32,55 +131,82 @@ apiClient.interceptors.request.use(
 // Response Interceptor
 apiClient.interceptors.response.use(
   (response) => response,
-  async (error) => {
-    const originalRequest = error.config;
+  async (error: AxiosError) => {
+    const originalRequest = error.config as (InternalAxiosRequestConfig & {
+      _retry?: boolean;
+      _retryCount?: number;
+    }) | undefined;
+
+    if (!originalRequest) {
+      return Promise.reject(error);
+    }
+
+    const requestUrl = originalRequest.url ?? '';
+    const isRefreshRequest = requestUrl.includes('/api/auth/refresh');
 
     // Handle 401 Unauthorized - attempt token refresh
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (error.response?.status === 401) {
+      // If refresh request failed, reset and logout
+      if (isRefreshRequest) {
+        useAuthStore.getState().logout();
+        processQueue(error, null);
+        return Promise.reject(new Error('Session expired. Please login again.'));
+      }
+
+      // Prevent infinite retry loops
+      const retryCount = originalRequest._retryCount ?? 0;
+      if (retryCount >= MAX_REFRESH_RETRIES) {
+        useAuthStore.getState().logout();
+        return Promise.reject(new Error('Max refresh retries exceeded'));
+      }
+
+      // If already refreshing, queue this request
+      if (refreshPromise) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({
+            resolve: (token: string | null) => {
+              if (token && originalRequest.headers) {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+              }
+              originalRequest._retryCount = (originalRequest._retryCount ?? 0) + 1;
+              resolve(apiClient(originalRequest));
+            },
+            reject,
+          });
+        });
+      }
+
+      // Mark request as retried
       originalRequest._retry = true;
-      const { refreshToken, updateAccessToken, logout } = useAuthStore.getState();
+      originalRequest._retryCount = retryCount + 1;
 
-      if (refreshToken) {
-        try {
-          // Use a fresh axios instance to avoid interceptors
-          const response = await axios.post(
-            `${baseURL}/auth/refresh`,
-            { refresh_token: refreshToken },
-            {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            }
-          );
+      try {
+        // Refresh token
+        const newToken = await refreshToken();
 
-          const { access_token } = response.data;
-
-          if (!access_token) {
-            throw new Error('No access token received from refresh endpoint');
-          }
-
-          updateAccessToken(access_token);
-
-          // Update header and retry original request
-          originalRequest.headers.Authorization = `Bearer ${access_token}`;
-          return apiClient(originalRequest);
-        } catch (refreshError: any) {
-          // Refresh failed - logout user
-          if (process.env.NODE_ENV === 'development') {
-            console.error('Token refresh failed:', refreshError);
-          }
-          logout();
-
-          // Reject with a structured error so components can handle it
-          const refreshErrorMsg = refreshError?.response?.data?.message ||
-            refreshError?.message ||
-            'Session expired. Please login again.';
-          return Promise.reject(new Error(refreshErrorMsg));
+        if (!newToken) {
+          throw new Error('Failed to refresh token');
         }
-      } else {
-        // No refresh token available - logout
-        logout();
-        return Promise.reject(new Error('Authentication required. Please login again.'));
+
+        // Update authorization header
+        if (originalRequest.headers) {
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        }
+
+        // Process queue with new token
+        processQueue(null, newToken);
+
+        // Retry original request
+        return apiClient(originalRequest);
+      } catch (refreshError: any) {
+        // Refresh failed - process queue with error
+        processQueue(refreshError, null);
+        useAuthStore.getState().logout();
+
+        const refreshErrorMsg = refreshError?.response?.data?.message ||
+          refreshError?.message ||
+          'Session expired. Please login again.';
+        return Promise.reject(new Error(refreshErrorMsg));
       }
     }
 
@@ -89,4 +215,3 @@ apiClient.interceptors.response.use(
 );
 
 export default apiClient;
-

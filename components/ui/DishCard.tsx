@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useCartStore } from "@/store/useCartStore";
 import StarRating from "./StarRating";
 import VegSymbol from "./assets/icons/vegSymbol.svg";
 import NonVegSymbol from "./assets/icons/nonvegSymbol.svg";
@@ -59,20 +60,33 @@ export default function DishCard({
     onClick,
     quantity,
     onUpdateQuantity,
+    id,
 }: DishCardProps) {
+    const { getItemQuantity, addItem } = useCartStore();
+    const cartQuantity = getItemQuantity(id.toString());
+    const displayQuantity = quantity !== undefined ? quantity : cartQuantity;
+
     // Default image heights based on variant
     const defaultImageHeight = variant === "compact"
         ? "h-[180px] tablet:h-[200px] desktop:h-[180px]"
         : "h-[180px] tablet:h-[200px] desktop:h-[220px]";
 
-    const handleAddClick = (e: React.MouseEvent) => {
+    const handleAddClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
         onAdd?.();
+        // Add to cart store
+        await addItem(id.toString(), 1);
     };
 
-    const handleQuantityChange = (e: React.MouseEvent, change: number) => {
+    const handleQuantityChange = async (e: React.MouseEvent, change: number) => {
         e.stopPropagation();
         onUpdateQuantity?.(change);
+        // Update cart store
+        // Calculate new quantity based on current display quantity
+        const newQuantity = (displayQuantity || 0) + change;
+        if (newQuantity >= 0) {
+            await addItem(id.toString(), newQuantity);
+        }
     };
 
     const formattedPrice = typeof price === 'number' ? `₹${price}` : price;
@@ -137,7 +151,7 @@ export default function DishCard({
                                 {formattedPrice}
                             </span>
 
-                            {quantity && quantity > 0 ? (
+                            {displayQuantity && displayQuantity > 0 ? (
                                 <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 min-w-[114px]">
                                     <button
                                         onClick={(e) => handleQuantityChange(e, -1)}
@@ -152,7 +166,7 @@ export default function DishCard({
                                         />
                                     </button>
                                     <span className="w-[30px] text-center text-sm font-semibold text-midnight">
-                                        {quantity}
+                                        {displayQuantity}
                                     </span>
                                     <button
                                         onClick={(e) => handleQuantityChange(e, 1)}
@@ -279,7 +293,7 @@ export default function DishCard({
                         {formattedPrice}
                     </span>
 
-                    {quantity && quantity > 0 ? (
+                    {displayQuantity && displayQuantity > 0 ? (
                         <div
                             className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 min-w-[114px]"
                             onClick={(e) => e.stopPropagation()}
@@ -297,7 +311,7 @@ export default function DishCard({
                                 />
                             </button>
                             <span className="w-[30px] text-center text-sm font-semibold text-midnight">
-                                {quantity}
+                                {displayQuantity}
                             </span>
                             <button
                                 onClick={(e) => handleQuantityChange(e, 1)}

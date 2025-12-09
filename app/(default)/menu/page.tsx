@@ -78,17 +78,9 @@ function MenuPageContent() {
     };
 
     const handleAddClick = (item: MenuItem) => {
-        // Check if item is vegetarian based on tags
-        const isVeg = item.itemTagIds?.includes("Vegetarian") || false;
-
-        // Always add to cart first
-        addItem({
-            id: item.itemId,
-            itemId: item.itemId,
-            name: item.itemName,
-            price: item.price,
-            isVegetarian: isVeg
-        });
+        // DishCard handles cart addition internally.
+        // This callback is kept for logging or future analytics.
+        console.log("Item added from MenuItemsList:", item.itemId);
     };
 
     return (
