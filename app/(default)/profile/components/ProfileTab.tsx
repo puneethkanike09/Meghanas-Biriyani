@@ -5,11 +5,24 @@ import Image from "next/image";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { cn } from "@/lib/utils";
+import { AuthService } from "@/services/auth.service";
+import { deleteFcmToken } from "@/lib/firebase";
 
 export default function ProfileTab() {
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState("Abhijith R");
     const [phone, setPhone] = useState("00000 00000");
+
+    const handleLogout = async () => {
+        try {
+            await deleteFcmToken(); // Delete client-side FCM token
+            await AuthService.logout();
+            window.location.href = '/signin';
+        } catch (error) {
+            console.error("Logout failed", error);
+            window.location.href = '/signin';
+        }
+    };
 
     return (
         <div className="flex flex-col gap-6 py-6 tablet:py-6 desktop:py-0">
@@ -117,7 +130,16 @@ export default function ProfileTab() {
                     </Button>
                 </div>
             )}
+
+            <div className="mt-8 pt-6 border-t border-gray-200">
+                <Button
+                    variant="neutral"
+                    className="w-full tablet:w-auto text-red-600 hover:text-red-700 hover:bg-red-50 border-red-200"
+                    onClick={handleLogout}
+                >
+                    Log Out
+                </Button>
+            </div>
         </div>
     );
 }
-

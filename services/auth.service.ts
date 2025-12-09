@@ -51,5 +51,18 @@ export const AuthService = {
     refreshToken: async (refreshToken: string): Promise<{ access_token: string; expires_in: number }> => {
         const response = await apiClient.post('/auth/refresh', { refresh_token: refreshToken });
         return response.data;
+    },
+
+    updateFcmToken: async (token: string): Promise<void> => {
+        await apiClient.patch('/users/customers/fcm-token', { fcmToken: token });
+    },
+
+    logout: async (): Promise<void> => {
+        try {
+            // Access token is automatically sent in Authorization header via apiClient interceptor
+            await apiClient.post('/auth/logout');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
     }
 };

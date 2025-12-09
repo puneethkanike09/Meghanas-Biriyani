@@ -16,7 +16,10 @@ const firebaseConfig = {
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  // measurementId is optional - only needed if using Firebase Analytics
+  ...(process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID && {
+    measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID,
+  }),
 };
 
 // Initialize Firebase app (only once)
@@ -39,6 +42,18 @@ if (typeof window !== "undefined") {
 }
 
 export { app, messaging };
+
+export const deleteFcmToken = async () => {
+  if (messaging) {
+    try {
+      const { deleteToken } = await import('firebase/messaging');
+      await deleteToken(messaging);
+      console.log('FCM Token deleted.');
+    } catch (error) {
+      console.error('Error deleting FCM token:', error);
+    }
+  }
+};
 
 
 

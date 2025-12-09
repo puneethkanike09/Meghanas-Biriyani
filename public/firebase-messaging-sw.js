@@ -17,8 +17,7 @@ firebase.initializeApp({
     projectId: "meghana-dev",
     storageBucket: "meghana-dev.firebasestorage.app",
     messagingSenderId: "299471620750",
-    appId: "1:299471620750:web:8f28c39ee974a09717d7df",
-    measurementId: "G-0Z2CF26D34"
+    appId: "1:299471620750:web:8f28c39ee974a09717d7df"
 });
 
 // Retrieve Firebase Messaging instance

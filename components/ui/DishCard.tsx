@@ -111,10 +111,10 @@ export default function DishCard({
                         <div className="flex items-center justify-between">
                             {isVeg ? <VegIcon /> : <NonVegIcon />}
                             <div className="flex items-center gap-1">
-                                <StarRating rating={rating || 0} variant="single" size="md" />
+                                {/* <StarRating rating={rating || 0} variant="single" size="md" />
                                 <span className="text-sm font-normal text-midnight">
                                     ({reviews})
-                                </span>
+                                </span> */}
                             </div>
                         </div>
 
@@ -234,12 +234,12 @@ export default function DishCard({
                     <div className="flex items-center justify-between">
                         {isVeg ? <VegIcon /> : <NonVegIcon />}
                         <div className="flex items-center gap-1">
-                            <StarRating rating={rating || 0} variant="single" size="sm" />
+                            {/* <StarRating rating={rating || 0} variant="single" size="sm" />
                             {reviews && (
                                 <span className="text-xs tablet:text-sm desktop:text-sm font-normal text-midnight leading-5">
                                     ({reviews})
                                 </span>
-                            )}
+                            )} */}
                         </div>
                     </div>
                 )}
@@ -264,11 +264,11 @@ export default function DishCard({
                 )}
 
                 {/* Rating for compact variant */}
-                {variant === "compact" && (
+                {/* {variant === "compact" && (
                     <div>
                         <StarRating rating={rating || 0} variant="single" size="sm" />
                     </div>
-                )}
+                )} */}
 
                 {/* Price & Add Button / Quantity Controls */}
                 <div className="flex items-center justify-between mt-auto">
