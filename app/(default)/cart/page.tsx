@@ -125,7 +125,7 @@ export default function CartPage() {
                                         <CartItemCard
                                             key={item.cart_item_id}
                                             item={{
-                                                id: item.cart_item_id,
+                                                id: item.item_id,
                                                 name: item.item_name,
                                                 price: item.item_total,
                                                 quantity: item.quantity,
