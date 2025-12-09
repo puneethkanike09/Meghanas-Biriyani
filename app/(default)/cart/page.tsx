@@ -47,48 +47,46 @@ const SUGGESTED_ADDONS: MenuAddonItem[] = [
     },
 ];
 
-const ADDITIONAL_CHARGES: Omit<ChargeLine, "emphasize">[] = [
-    { label: "Restaurant Packaging Charges", value: 10 },
-    { label: "Delivery Fee", value: 35, hasInfo: true },
-    { label: "Taxes", value: 10.47, hasInfo: true },
-];
-
 export default function CartPage() {
-    const { items: cartItems, addItem, fetchCart } = useCartStore();
+    const { items: cartItems, addItem, removeItem, fetchCart, subtotal, tax, deliveryFee, total } = useCartStore();
 
     // Re-fetch cart on mount to ensure freshness
     useEffect(() => {
         fetchCart();
     }, []);
 
-    const itemTotal = useMemo(
-        () => cartItems.reduce((total, item) => total + (item.price || 0) * item.quantity, 0),
-        [cartItems]
-    );
-
     const charges: ChargeLine[] = [
-        { label: "Item Total", value: itemTotal, emphasize: true },
-        ...ADDITIONAL_CHARGES,
+        { label: "Item Total", value: subtotal, emphasize: true },
+        { label: "Restaurant Packaging Charges", value: 10 },
+        { label: "Delivery Fee", value: deliveryFee, hasInfo: true },
+        { label: "Taxes", value: tax, hasInfo: true },
     ];
 
-    const totalPayable = charges.reduce((total, charge) => total + charge.value, 0);
-
-    const handleQuantityChange = (itemId: number, delta: number) => {
-        // Convert itemId to string if needed, or ensure store handles number
-        // Store expects string, so we cast to string if it's a number
-        // updateQuantity(String(itemId), delta + (cartItems.find(i => i.id === String(itemId))?.quantity || 0));
-    };
-
-    // Wrapper for CartItemCard which might expect different props
-    // We need to check CartItemCard props.
-    // Assuming CartItemCard expects `onQuantityChange(id, delta)`
-    // But wait, `updateQuantity` in store takes absolute quantity.
-    // So I need to calculate new quantity.
+    const totalPayable = total;
 
     const onQuantityChangeWrapper = async (itemId: number | string, delta: number) => {
         const item = cartItems.find(i => i.item_id === String(itemId));
-        if (item) {
-            await addItem(String(itemId), item.quantity + delta);
+        if (!item) {
+            return;
+        }
+
+        const newQuantity = item.quantity + delta;
+        
+        if (newQuantity < 0) {
+            // Don't allow negative quantities
+            return;
+        }
+        
+        if (newQuantity === 0) {
+            // If quantity becomes 0, remove the item from cart
+            try {
+                await removeItem(item.cart_item_id);
+            } catch (error) {
+                console.error("Failed to remove item from cart:", error);
+            }
+        } else {
+            // Otherwise, update the quantity
+            await addItem(String(itemId), newQuantity);
         }
     };
 
@@ -125,17 +123,17 @@ export default function CartPage() {
                                 ) : (
                                     cartItems.map((item) => (
                                         <CartItemCard
-                                            key={item.item_id}
+                                            key={item.cart_item_id}
                                             item={{
-                                                id: Number(item.item_id) || item.item_id, // Best effort cast or pass string if component allows
-                                                name: item.name || "Unknown Item",
-                                                price: item.price || 0,
+                                                id: item.cart_item_id,
+                                                name: item.item_name,
+                                                price: item.item_total,
                                                 quantity: item.quantity,
-                                                description: "", // Store doesn't keep description
+                                                description: "", // Description not in cart structure
                                                 rating: 4.5, // Mock
                                                 reviews: 0, // Mock
-                                                isVeg: item.is_veg || false,
-                                                image: item.image || "/assets/homepage/images/top10.jpg"
+                                                isVeg: true, // Note: is_veg field not in new structure, defaulting to true
+                                                image: item.image_url || "/assets/homepage/images/top10.jpg"
                                             }}
                                             onQuantityChange={onQuantityChangeWrapper}
                                         />

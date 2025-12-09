@@ -29,7 +29,25 @@ const NonVegIcon = () => (
 );
 
 export default function ShoppingCart() {
-    const { items, updateQuantity, clearCart } = useCartStore();
+    const { items, addItem, removeItem } = useCartStore();
+
+    const handleQuantityChange = async (item: any, newQuantity: number) => {
+        if (newQuantity < 0) {
+            return;
+        }
+        
+        if (newQuantity === 0) {
+            // If quantity becomes 0, remove the item from cart
+            try {
+                await removeItem(item.cart_item_id);
+            } catch (error) {
+                console.error("Failed to remove item from cart:", error);
+            }
+        } else {
+            // Otherwise, update the quantity
+            await addItem(item.item_id, newQuantity);
+        }
+    };
 
     return (
         <div className="flex flex-col gap-4 h-full">
@@ -40,7 +58,7 @@ export default function ShoppingCart() {
                 </h2>
                 {items.length > 0 && (
                     <button
-                        onClick={clearCart}
+                        onClick={() => {/* clearCart functionality can be added later */}}
                         className="text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors cursor-pointer"
                     >
                         Clear All
@@ -74,26 +92,27 @@ export default function ShoppingCart() {
                         ) : (
                             <div className="flex flex-col gap-4">
                                 {items.map((item, index) => (
-                                    <div key={item.id}>
+                                    <div key={item.cart_item_id}>
                                         <div className="flex flex-col gap-3">
                                             {/* Item Name with Veg/NonVeg Icon */}
                                             <div className="flex items-center gap-2">
-                                                {item.isVegetarian ? <VegIcon /> : <NonVegIcon />}
+                                                {/* Note: is_veg field not in new structure, defaulting to veg icon */}
+                                                <VegIcon />
                                                 <h3 className="text-base font-semibold text-midnight">
-                                                    {item.name}
+                                                    {item.item_name}
                                                 </h3>
                                             </div>
 
                                             {/* Price and Quantity Controls */}
                                             <div className="flex items-center justify-between">
                                                 <span className="text-base font-semibold text-midnight">
-                                                    ₹{item.price}
+                                                    ₹{item.item_total}
                                                 </span>
 
                                                 {/* Quantity Controls */}
                                                 <div className="inline-flex h-9 items-center justify-between gap-2 px-3.5 bg-white rounded-lg border border-gray-300 min-w-[114px]">
                                                     <button
-                                                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                                                        onClick={() => handleQuantityChange(item, item.quantity - 1)}
                                                         className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
                                                     >
                                                         <Image
@@ -108,7 +127,7 @@ export default function ShoppingCart() {
                                                         {item.quantity}
                                                     </span>
                                                     <button
-                                                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                                                        onClick={() => handleQuantityChange(item, item.quantity + 1)}
                                                         className="w-5 h-5 flex items-center justify-center rounded transition-colors cursor-pointer"
                                                     >
                                                         <Image

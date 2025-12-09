@@ -81,7 +81,7 @@ export default function MenuItemsList({
                                             variant={isExpanded ? "expanded" : "default"}
                                             onClick={isExpanded ? undefined : () => onCardClick(item.itemId)}
                                             onAdd={() => onAddClick(item)}
-                                            quantity={cartItem?.quantity}
+                                            quantity={cartItem?.quantity || 0}
                                             onUpdateQuantity={(change) => addItem(item.itemId, (cartItem?.quantity || 0) + change)}
                                         />
                                     </div>

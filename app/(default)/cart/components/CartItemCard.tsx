@@ -48,6 +48,9 @@ const NonVegIcon = () => (
 export default function CartItemCard({ item, onQuantityChange }: CartItemCardProps) {
     const formattedPrice = `₹${item.price}`;
 
+    // Check if image is external URL (starts with http:// or https://)
+    const isExternalImage = item.image.startsWith('http://') || item.image.startsWith('https://');
+
     return (
         <div className="flex w-full max-w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white tablet:flex-row">
             <div className="relative h-[220px] w-full overflow-hidden rounded-t-2xl tablet:h-auto tablet:w-[220px] tablet:rounded-l-2xl tablet:rounded-tr-none">
@@ -55,6 +58,7 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                     src={item.image}
                     alt={item.name}
                     fill
+                    unoptimized={isExternalImage}
                     className={`object-cover ${item.outOfStock ? "grayscale" : ""}`}
                 />
             </div>
@@ -64,10 +68,10 @@ export default function CartItemCard({ item, onQuantityChange }: CartItemCardPro
                     <div className="flex items-center justify-between">
                         {item.isVeg ? <VegIcon /> : <NonVegIcon />}
                         <div className="inline-flex items-center gap-1">
-                            <StarRating rating={item.rating} variant="single" size="sm" />
+                            {/* <StarRating rating={item.rating} variant="single" size="sm" />
                             <span className="text-sm font-normal text-midnight">
                                 ({item.reviews})
-                            </span>
+                            </span> */}
                         </div>
                     </div>
                     <div className="flex flex-col gap-2">

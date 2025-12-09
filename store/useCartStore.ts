@@ -13,8 +13,10 @@ interface CartState {
     // Actions
     fetchCart: () => Promise<void>;
     addItem: (itemId: string, quantity: number) => Promise<void>;
+    removeItem: (cartItemId: string) => Promise<void>;
     // Utility to get quantity of specific item
     getItemQuantity: (itemId: string) => number;
+    getCartItemId: (itemId: string) => string | null;
     cartCount: () => number;
 }
 
@@ -58,11 +60,11 @@ export const useCartStore = create<CartState>((set, get) => ({
     },
 
     addItem: async (itemId: string, quantity: number) => {
-        // Optimistic update could go here, but let's stick to server source of truth for now or simple optimistic
-        // "this also updates the existing items quantity as we increase or decrese" - user
-        // So we just post strict quantity? Or +/- 1? 
-        // User said: "increase the quality we alawsy post with the itemid ok... updates the exisitng items qualititty"
-        // This implies we send the NEW TOTAL quantity.
+        // Don't allow quantity 0 - use removeItem instead
+        if (quantity <= 0) {
+            console.warn("Cannot add item with quantity 0. Use removeItem instead.");
+            return;
+        }
 
         try {
             await CartService.addToCart(itemId, quantity);
@@ -73,9 +75,25 @@ export const useCartStore = create<CartState>((set, get) => ({
         }
     },
 
+    removeItem: async (cartItemId: string) => {
+        try {
+            await CartService.removeItem(cartItemId);
+            // After removal, re-fetch cart to ensure sync
+            await get().fetchCart();
+        } catch (error) {
+            console.error("Failed to remove item from cart:", error);
+            throw error;
+        }
+    },
+
     getItemQuantity: (itemId: string) => {
         const item = get().items.find(i => i.item_id === itemId); // Assuming item_id is key
         return item ? item.quantity : 0;
+    },
+
+    getCartItemId: (itemId: string) => {
+        const item = get().items.find(i => i.item_id === itemId);
+        return item ? item.cart_item_id : null;
     },
 
     cartCount: () => {

@@ -1,12 +1,18 @@
 import apiClient from "@/lib/api-client";
 
 export interface CartItem {
+    cart_item_id: string;
     item_id: string;
+    item_name: string;
+    image_url: string;
     quantity: number;
-    price?: number;
-    name?: string;
-    is_veg?: boolean;
-    image?: string;
+    options: any[];
+    base_price: number;
+    options_price: number;
+    item_total: number;
+    is_price_includes_tax: boolean;
+    tax_rate: number;
+    stock_reservation_id: string;
 }
 
 export interface AddTimeRequest {
@@ -53,6 +59,11 @@ export const CartService = {
                 channel: "Meghana Web sale"
             }
         });
+        return response.data;
+    },
+
+    removeItem: async (cartItemId: string): Promise<any> => {
+        const response = await apiClient.delete(`/cart/items/${cartItemId}`);
         return response.data;
     }
 };

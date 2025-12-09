@@ -62,7 +62,7 @@ export default function DishCard({
     onUpdateQuantity,
     id,
 }: DishCardProps) {
-    const { getItemQuantity, addItem } = useCartStore();
+    const { getItemQuantity, addItem, removeItem, getCartItemId } = useCartStore();
     const cartQuantity = getItemQuantity(id.toString());
     const displayQuantity = quantity !== undefined ? quantity : cartQuantity;
 
@@ -84,7 +84,24 @@ export default function DishCard({
         // Update cart store
         // Calculate new quantity based on current display quantity
         const newQuantity = (displayQuantity || 0) + change;
-        if (newQuantity >= 0) {
+        
+        if (newQuantity < 0) {
+            // Don't allow negative quantities
+            return;
+        }
+        
+        if (newQuantity === 0) {
+            // If quantity becomes 0, remove the item from cart
+            const cartItemId = getCartItemId(id.toString());
+            if (cartItemId) {
+                try {
+                    await removeItem(cartItemId);
+                } catch (error) {
+                    console.error("Failed to remove item from cart:", error);
+                }
+            }
+        } else {
+            // Otherwise, update the quantity
             await addItem(id.toString(), newQuantity);
         }
     };
