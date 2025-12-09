@@ -1,21 +1,66 @@
 import apiClient from '@/lib/api-client';
 
+export interface Option {
+    optionId: string;
+    itemId: string;
+    optionName: string;
+    isDefault: boolean;
+    displayOrder: number;
+    price: number;
+    isOutOfStock: boolean;
+}
+
+export interface OptionSet {
+    optionSetId: string;
+    name: string;
+    displayName: string;
+    description: string;
+    min: number;
+    max: number;
+    options: Option[];
+}
+
+export interface Category {
+    categoryId: string;
+    name: string;
+    displayOrder: number;
+}
+
+export interface ExtraInfo {
+    calorieCount: number;
+    portionSizeUnit: string;
+    serveSizeUnit: string;
+    carbohydrates: number;
+    totalFat: number;
+    protein: number;
+    vitamins: any[];
+    minerals: any[];
+}
+
 export interface MenuItem {
     itemId: string;
-    name: string;
-    price: number;
-    status: string;
-    categoryId: string;
-    itemTagIds: string[];
     type: string;
     skuCode: string;
+    price: number;
+    itemName: string;
+    imageURL?: string;
+    status: string;
+    isOutOfStock: boolean;
     measuringUnit: string;
+    chargeIds: string[];
+    taxTypeIds: string[];
+    categoryId: string;
+    category: Category;
+    itemTagIds: string[];
+    scheduleIds: string[];
     itemNature: string;
     isPriceIncludesTax: boolean;
     denyDiscount: boolean;
+    optionSetIds: string[];
+    optionSets: OptionSet[];
+    calorieCount: number;
+    extraInfo: ExtraInfo;
     barCode?: string;
-    calorieCount?: number;
-    extraInfo?: any;
 }
 
 export interface MenuResponse {

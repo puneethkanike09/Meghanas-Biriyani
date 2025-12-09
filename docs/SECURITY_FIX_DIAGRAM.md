@@ -357,3 +357,6 @@ if (authenticated) {  // ✅ Token checked
 
 *This diagram is for educational purposes and shows the security improvement made to the authentication system.*
 
+
+
+

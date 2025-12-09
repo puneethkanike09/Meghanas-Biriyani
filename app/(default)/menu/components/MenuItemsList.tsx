@@ -8,7 +8,7 @@ interface MenuItemsListProps {
     items: MenuItem[];
     categories: { id: string; name: string }[];
     expandedDishId: string | null;
-    showAddOnsForId: string | null;
+    showOptionSetsForId: string | null;
     onCardClick: (itemId: string) => void;
     onAddClick: (item: MenuItem) => void;
 }
@@ -17,7 +17,7 @@ export default function MenuItemsList({
     items,
     categories,
     expandedDishId,
-    showAddOnsForId,
+    showOptionSetsForId,
     onCardClick,
     onAddClick,
 }: MenuItemsListProps) {
@@ -25,8 +25,8 @@ export default function MenuItemsList({
 
     // Helper to check if item is vegetarian based on tags
     const isVegetarian = (item: MenuItem) => {
-        // Tag ID for vegetarian: "5dc8f4fbe3db4b0796b32a14"
-        return item.itemTagIds?.includes("5dc8f4fbe3db4b0796b32a14") || false;
+        // Check if "Vegetarian" tag exists in itemTagIds
+        return item.itemTagIds?.includes("Vegetarian") || false;
     };
 
     // Create category lookup map
@@ -70,14 +70,14 @@ export default function MenuItemsList({
                                     >
                                         <DishCard
                                             id={item.itemId}
-                                            name={item.name}
+                                            name={item.itemName}
                                             description={item.extraInfo?.protein ? `Protein: ${item.extraInfo.protein}g, Calories: ${item.calorieCount || 0}` : ""}
                                             price={item.price}
                                             rating={4.5}
                                             reviews={0}
                                             isVeg={isVegetarian(item)}
-                                            image="/assets/homepage/images/top10.jpg"
-                                            outOfStock={item.status !== "Active"}
+                                            image={item.imageURL && item.imageURL.trim() ? item.imageURL : "/assets/homepage/images/top10.jpg"}
+                                            outOfStock={item.isOutOfStock || item.status !== "Active"}
                                             variant={isExpanded ? "expanded" : "default"}
                                             onClick={isExpanded ? undefined : () => onCardClick(item.itemId)}
                                             onAdd={() => onAddClick(item)}

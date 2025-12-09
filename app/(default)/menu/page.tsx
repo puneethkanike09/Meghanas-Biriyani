@@ -17,7 +17,7 @@ function MenuPageContent() {
 
     const [selectedCategoryId, setSelectedCategoryId] = useState("all");
     const [expandedDishId, setExpandedDishId] = useState<string | null>(null);
-    const [showAddOnsForId, setShowAddOnsForId] = useState<string | null>(null);
+    const [showOptionSetsForId, setShowOptionSetsForId] = useState<string | null>(null);
 
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [categories, setCategories] = useState<{ id: string; name: string }[]>([{ id: "all", name: "All" }]);
@@ -73,19 +73,19 @@ function MenuPageContent() {
     const handleCardClick = (itemId: string) => {
         // Toggle expansion
         setExpandedDishId(expandedDishId === itemId ? null : itemId);
-        // Close add-ons when expanding
-        setShowAddOnsForId(null);
+        // Close option sets when expanding
+        setShowOptionSetsForId(null);
     };
 
     const handleAddClick = (item: MenuItem) => {
         // Check if item is vegetarian based on tags
-        const isVeg = item.itemTagIds?.includes("5dc8f4fbe3db4b0796b32a14") || false;
+        const isVeg = item.itemTagIds?.includes("Vegetarian") || false;
 
         // Always add to cart first
         addItem({
             id: item.itemId,
             itemId: item.itemId,
-            name: item.name,
+            name: item.itemName,
             price: item.price,
             isVegetarian: isVeg
         });
@@ -131,7 +131,7 @@ function MenuPageContent() {
                                 items={menuItems}
                                 categories={categories}
                                 expandedDishId={expandedDishId}
-                                showAddOnsForId={showAddOnsForId}
+                                showOptionSetsForId={showOptionSetsForId}
                                 onCardClick={handleCardClick}
                                 onAddClick={handleAddClick}
                             />

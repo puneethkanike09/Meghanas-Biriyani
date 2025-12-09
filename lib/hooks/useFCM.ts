@@ -30,24 +30,24 @@ interface UseFCMOptions {
    * Default: false
    */
   autoRequestPermission?: boolean;
-  
+
   /**
    * Whether to automatically save token to backend
    * Default: true
    */
   autoSaveToken?: boolean;
-  
+
   /**
    * Custom handler for foreground messages
    * If not provided, will show a toast notification
    */
   onMessage?: (payload: MessagePayload) => void;
-  
+
   /**
    * User ID to associate with the FCM token (optional)
    */
   userId?: string;
-  
+
   /**
    * Whether to enable verbose logging
    * Default: false
@@ -60,32 +60,32 @@ interface UseFCMReturn {
    * The FCM device token (null if not available)
    */
   token: string | null;
-  
+
   /**
    * Current notification permission status
    */
   permission: NotificationPermission;
-  
+
   /**
    * Whether FCM is supported in this browser
    */
   isSupported: boolean;
-  
+
   /**
    * Whether FCM is currently initializing
    */
   isLoading: boolean;
-  
+
   /**
    * Any error that occurred during initialization
    */
   error: Error | null;
-  
+
   /**
    * Function to manually request notification permission and get token
    */
   requestPermission: () => Promise<void>;
-  
+
   /**
    * Function to manually refresh the FCM token
    */
@@ -124,16 +124,16 @@ export const useFCM = (options: UseFCMOptions = {}): UseFCMReturn => {
    */
   const defaultMessageHandler = useCallback((payload: MessagePayload) => {
     log("Foreground message received:", payload);
-    
+
     const title = payload.notification?.title || "New Notification";
     const body = payload.notification?.body || "You have a new notification";
-    
+
     // Show toast notification
     toast.success(title, {
       description: body,
       duration: 5000,
     });
-    
+
     // Also show browser notification
     showNotification(title, {
       body,
@@ -157,13 +157,13 @@ export const useFCM = (options: UseFCMOptions = {}): UseFCMReturn => {
 
     try {
       const vapidKey = process.env.NEXT_PUBLIC_FIREBASE_VAPID_KEY;
-      
+
       if (!vapidKey) {
         throw new Error("VAPID key is not configured");
       }
 
       const fcmToken = await getFCMToken(vapidKey);
-      
+
       if (fcmToken) {
         setToken(fcmToken);
         setPermission("granted");
@@ -244,7 +244,7 @@ export const useFCM = (options: UseFCMOptions = {}): UseFCMReturn => {
     }
 
     log("Setting up foreground message listener");
-    
+
     const messageHandler = customMessageHandler || defaultMessageHandler;
     const unsubscribe = onForegroundMessage(messageHandler);
 
@@ -264,4 +264,7 @@ export const useFCM = (options: UseFCMOptions = {}): UseFCMReturn => {
     refreshToken,
   };
 };
+
+
+
 

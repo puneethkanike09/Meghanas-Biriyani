@@ -77,6 +77,9 @@ export default function DishCard({
 
     const formattedPrice = typeof price === 'number' ? `₹${price}` : price;
 
+    // Check if image is external URL (starts with http:// or https://)
+    const isExternalImage = image.startsWith('http://') || image.startsWith('https://');
+
     // Expanded variant has different layout
     if (variant === "expanded") {
         return (
@@ -88,6 +91,7 @@ export default function DishCard({
                             src={image}
                             alt={name}
                             fill
+                            unoptimized={isExternalImage}
                             className={`object-cover ${outOfStock ? "grayscale" : ""}`}
                         />
                         {outOfStock && (
@@ -200,6 +204,7 @@ export default function DishCard({
                     src={image}
                     alt={name}
                     fill
+                    unoptimized={isExternalImage}
                     className={`object-cover ${outOfStock ? "grayscale" : ""}`}
                 />
 

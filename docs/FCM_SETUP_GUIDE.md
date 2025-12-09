@@ -375,3 +375,6 @@ If you encounter issues:
 3. Test in Chrome/Firefox first
 4. Check Firebase Console for any project issues
 
+
+
+

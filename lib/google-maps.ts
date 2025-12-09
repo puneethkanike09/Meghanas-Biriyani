@@ -9,7 +9,7 @@ export const loadGoogleMaps = async (): Promise<typeof google> => {
         return googleMapsPromise;
     }
 
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || 'AIzaSyDcfZ8FDBA4JuyvgRG4FsvTFMBuGgrz79s';
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
     if (!apiKey) {
         throw new Error('Google Maps API key is not configured. Please add NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to your .env.local file');

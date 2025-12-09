@@ -6,6 +6,7 @@ import CartItemCard from "./components/CartItemCard";
 import CartSummary, { type ChargeLine } from "./components/CartSummary";
 import MenuAddonCard, { type MenuAddonItem } from "../menu/components/MenuAddonCard";
 import { useCartStore } from "@/store/useCartStore";
+import { type Option } from "@/services/menu.service";
 
 const CHECKOUT_STEPS: CartProgressStep[] = [
     { number: 1, label: "Cart Confirmation", status: "current" as const },
@@ -86,14 +87,31 @@ export default function CartPage() {
         }
     };
 
-    const handleAddAddon = (addon: MenuAddonItem) => {
-        addItem({
-            id: String(addon.id),
-            itemId: String(addon.id), // Mock itemId
-            name: addon.name,
-            price: addon.price,
-            isVegetarian: addon.isVeg
-        });
+    const handleAddAddon = (addon: Option | MenuAddonItem) => {
+        // Check if it's an Option type (has optionId) or legacy MenuAddonItem (has id as number)
+        const isOption = 'optionId' in addon;
+        
+        if (isOption) {
+            // Handle Option type
+            const option = addon as Option;
+            addItem({
+                id: option.optionId,
+                itemId: option.itemId,
+                name: option.optionName,
+                price: option.price,
+                isVegetarian: false // Options don't have veg info, default to false
+            });
+        } else {
+            // Handle legacy MenuAddonItem type
+            const menuAddon = addon as MenuAddonItem;
+            addItem({
+                id: String(menuAddon.id),
+                itemId: String(menuAddon.id), // Mock itemId
+                name: menuAddon.name,
+                price: menuAddon.price,
+                isVegetarian: menuAddon.isVeg
+            });
+        }
     };
 
     return (
