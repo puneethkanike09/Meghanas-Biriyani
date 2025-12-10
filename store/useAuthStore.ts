@@ -94,10 +94,11 @@ export const useAuthStore = create<AuthState>()(
                     }
                     return;
                 }
-                set({
+                set((state) => ({
+                    ...state,
                     accessToken,
                     isRefreshing: false
-                });
+                }));
             },
 
             logout: () => {

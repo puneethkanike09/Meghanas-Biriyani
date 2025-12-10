@@ -4,9 +4,11 @@ import { useState } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import RadioCard from "@/components/ui/RadioCard";
+import { AddressService } from "@/services/address.service";
 import {
     ADDRESS_TYPE_OPTIONS,
     type AddressItem,
@@ -61,6 +63,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
         : DEFAULT_VALUES;
 
     const [formValues, setFormValues] = useState<AddressFormValues>(initialValues);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleFieldChange =
         (field: keyof AddressFormValues) =>
@@ -79,12 +82,50 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
         }));
     };
 
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        // In a real application we would persist the form data.
-        // For now, redirect back to the address list.
-        router.push("/profile/address");
+        if (isSubmitting) return;
+
+        setIsSubmitting(true);
+
+        try {
+            // Map UI address types to API expected values
+            const addressTypeMap: Record<AddressType, 'HOME' | 'WORK' | 'OTHER'> = {
+                home: 'HOME',
+                office: 'WORK',
+                other: 'OTHER'
+            };
+
+            const addressData = {
+                label: formValues.label,
+                houseFlatDoorNumber: formValues.houseNumber,
+                streetLocalityArea: formValues.street,
+                landmark: formValues.landmark || undefined,
+                city: formValues.city,
+                pincode: formValues.pincode,
+                addressType: addressTypeMap[formValues.type],
+            };
+
+            await AddressService.addAddress(addressData);
+
+            toast.success("Address added successfully!");
+            router.push("/profile/address");
+        } catch (error: any) {
+            console.error("Failed to add address:", error);
+
+            let errorMessage = "Failed to add address";
+            if (error.response?.data?.message) {
+                const msg = error.response.data.message;
+                errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
+            toast.error(errorMessage);
+        } finally {
+            setIsSubmitting(false);
+        }
     };
 
     const handleBack = () => {
@@ -244,8 +285,8 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                     </section>
 
                     <div className="flex flex-col">
-                        <Button type="submit" variant="primary" className="w-full">
-                            {isEdit ? "Update Address" : "Save Address"}
+                        <Button type="submit" variant="primary" className="w-full" disabled={isSubmitting}>
+                            {isSubmitting ? "Saving..." : (isEdit ? "Update Address" : "Save Address")}
                         </Button>
                     </div>
                 </form>
