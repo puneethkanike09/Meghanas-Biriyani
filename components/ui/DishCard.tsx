@@ -1,5 +1,8 @@
+"use client";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
+import { LocationService } from "@/services/location.service";
 import StarRating from "./StarRating";
 import VegSymbol from "./assets/icons/vegSymbol.svg";
 import NonVegSymbol from "./assets/icons/nonvegSymbol.svg";
@@ -65,6 +68,11 @@ export default function DishCard({
     const { getItemQuantity, addItem, removeItem, getCartItemId } = useCartStore();
     const cartQuantity = getItemQuantity(id.toString());
     const displayQuantity = quantity !== undefined ? quantity : cartQuantity;
+    const [isDeliverable, setIsDeliverable] = useState(false);
+
+    useEffect(() => {
+        setIsDeliverable(LocationService.isWithinRange());
+    }, []);
 
     // Default image heights based on variant
     const defaultImageHeight = variant === "compact"
@@ -73,6 +81,12 @@ export default function DishCard({
 
     const handleAddClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
+
+        // Strict check: if validation hasn't passed or we are out of range, block action
+        if (!LocationService.isWithinRange()) {
+            return;
+        }
+
         onAdd?.();
         // Add to cart store with details
         const numericPrice = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.]/g, '')) || 0;
@@ -362,12 +376,12 @@ export default function DishCard({
                         </div>
                     ) : (
                         <button
-                            className={`inline-flex h-9 items-center justify-center gap-2 px-[14px] rounded-[8px] font-semibold text-sm transition-colors min-w-[114px] ${outOfStock
+                            className={`inline-flex h-9 items-center justify-center gap-2 px-[14px] rounded-[8px] font-semibold text-sm transition-colors min-w-[114px] ${outOfStock || !isDeliverable
                                 ? "bg-brand-200 text-white cursor-not-allowed"
                                 : "bg-tango text-white cursor-pointer"
                                 }`}
                             onClick={handleAddClick}
-                            disabled={outOfStock}
+                            disabled={outOfStock || !isDeliverable}
                         >
                             <Image
                                 src={AddDefaultIcon}

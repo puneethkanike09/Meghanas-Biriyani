@@ -8,7 +8,8 @@ import { Alert, AlertDescription } from "@/components/ui/Alert";
 import Button from "@/components/ui/Button";
 import { Card, CardContent } from "@/components/ui/Card";
 import StarRating from "@/components/ui/StarRating";
-import { getPlacePredictions, getCurrentLocation, reverseGeocode } from "@/lib/google-maps";
+import { getPlacePredictions, getCurrentLocation, reverseGeocode, getPlaceDetails } from "@/lib/google-maps";
+import { LocationService } from "@/services/location.service";
 
 interface Outlet {
     name: string;
@@ -134,11 +135,14 @@ export default function SelectDeliveryForm() {
                 description: locationData.formatted_address.substring(0, 60) + (locationData.formatted_address.length > 60 ? "..." : "")
             });
 
-            // TODO: Store location data (lat, lng, address, place_id) in state/backend
-            // For now, just redirect to home
+            // Find nearest branch based on these coordinates
+            await LocationService.findNearestBranch(latitude, longitude);
+
             router.push("/home");
         } catch (error: any) {
             console.error("Location error:", error);
+            // Show the specific backend error if available
+            toast.error(error.message || "Failed to find nearest branch");
 
             // Handle specific error cases
             if (error.code === 1) {
@@ -170,13 +174,29 @@ export default function SelectDeliveryForm() {
         }
     };
 
-    const handleSelectLocation = (location: string) => {
-        toast.success("Location selected", {
-            description: location.substring(0, 50) + "..."
-        });
+    const handleSelectLocation = async (placeId: string, description: string) => {
+        try {
+            const place = await getPlaceDetails(placeId);
+            const location = place.geometry?.location;
 
-        // TODO: Store location in state/backend
-        router.push("/home");
+            if (location) {
+                const lat = location.lat();
+                const lng = location.lng();
+
+                await LocationService.findNearestBranch(lat, lng);
+
+                toast.success("Location selected", {
+                    description: description.substring(0, 50) + "..."
+                });
+
+                router.push("/home");
+            } else {
+                toast.error("Could not fetch location details");
+            }
+        } catch (error) {
+            console.error("Failed to select location:", error);
+            toast.error("Failed to process location selection");
+        }
     };
 
     const handleSelectOutlet = () => {
@@ -251,7 +271,7 @@ export default function SelectDeliveryForm() {
                             <div
                                 key={prediction.place_id}
                                 className="flex w-full cursor-pointer items-start gap-2 rounded-lg p-3 transition-colors hover:bg-gray-50"
-                                onClick={() => handleSelectLocation(prediction.description)}
+                                onClick={() => handleSelectLocation(prediction.place_id, prediction.description)}
                             >
                                 <Image
                                     src="/assets/profile/icons/Location.svg"

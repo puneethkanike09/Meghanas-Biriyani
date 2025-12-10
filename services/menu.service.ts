@@ -1,4 +1,5 @@
 import apiClient from '@/lib/api-client';
+import { LocationService } from './location.service';
 
 export interface Option {
     optionId: string;
@@ -72,7 +73,7 @@ export interface MenuResponse {
 export const MenuService = {
     getMenuItems: async (params?: any): Promise<MenuResponse> => {
         const defaultParams = {
-            branchCode: 'HO',
+            branchCode: LocationService.getBranchCode(),
             channel: 'Meghana Web sale',
             limit: params?.categoryId ? 100 : 100, // 10000 for "All", 100 for specific category
             ...params
@@ -83,7 +84,7 @@ export const MenuService = {
 
     getCategories: async (): Promise<{ categories: any[], total: number }> => {
         const params = {
-            branchCode: 'HO',
+            branchCode: LocationService.getBranchCode(),
             channel: 'Meghana Web sale'
         };
         const response = await apiClient.get('/menu/catalog/categories', { params });
