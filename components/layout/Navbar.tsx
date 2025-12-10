@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
 import { useCartStore } from "@/store/useCartStore";
 
 const ICONS = {
@@ -13,12 +12,9 @@ const ICONS = {
 };
 
 export default function Navbar() {
-    const { cartCount, fetchCart } = useCartStore();
+    const { cartCount } = useCartStore();
     const count = cartCount();
 
-    useEffect(() => {
-        fetchCart();
-    }, []);
 
     return (
         <div className="fixed top-0 left-0 right-0 z-50 desktop:top-4 desktop:px-16">

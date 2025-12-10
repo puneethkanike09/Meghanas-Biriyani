@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import CartProgress, { type CartProgressStep } from "./components/CartProgress";
 import CartItemCard from "./components/CartItemCard";
 import CartSummary, { type ChargeLine } from "./components/CartSummary";
@@ -48,12 +49,13 @@ const SUGGESTED_ADDONS: MenuAddonItem[] = [
 ];
 
 export default function CartPage() {
-    const { items: cartItems, addItem, removeItem, fetchCart, subtotal, tax, deliveryFee, total } = useCartStore();
+    // Re-fetch cart on mount REMOVED for Local-First Strategy
+    // useEffect(() => {
+    //     fetchCart();
+    // }, []);
 
-    // Re-fetch cart on mount to ensure freshness
-    useEffect(() => {
-        fetchCart();
-    }, []);
+    const router = useRouter();
+    const { items: cartItems, addItem, removeItem, fetchCart, subtotal, tax, deliveryFee, total, syncCart, loading } = useCartStore();
 
     const charges: ChargeLine[] = [
         { label: "Item Total", value: subtotal, emphasize: true },
@@ -66,27 +68,27 @@ export default function CartPage() {
 
     const onQuantityChangeWrapper = async (itemId: number | string, delta: number) => {
         const item = cartItems.find(i => i.item_id === String(itemId));
-        if (!item) {
-            return;
-        }
+        if (!item) return;
 
         const newQuantity = item.quantity + delta;
-        
-        if (newQuantity < 0) {
-            // Don't allow negative quantities
-            return;
-        }
-        
+
+        if (newQuantity < 0) return;
+
         if (newQuantity === 0) {
-            // If quantity becomes 0, remove the item from cart
             try {
                 await removeItem(item.cart_item_id);
             } catch (error) {
                 console.error("Failed to remove item from cart:", error);
             }
         } else {
-            // Otherwise, update the quantity
             await addItem(String(itemId), newQuantity);
+        }
+    };
+
+    const handleCheckout = async () => {
+        const success = await syncCart();
+        if (success) {
+            router.push("/cart/delivery");
         }
     };
 
@@ -97,11 +99,19 @@ export default function CartPage() {
         if (isOption) {
             // Handle Option type
             const option = addon as Option;
-            addItem(option.optionId, 1);
+            addItem(option.optionId, 1, {
+                name: option.optionName,
+                price: option.price,
+                image: "/assets/homepage/images/top10.jpg" // Fallback or defined image
+            });
         } else {
             // Handle legacy MenuAddonItem type
             const menuAddon = addon as MenuAddonItem;
-            addItem(String(menuAddon.id), 1);
+            addItem(String(menuAddon.id), 1, {
+                name: menuAddon.name,
+                price: menuAddon.price,
+                image: menuAddon.image
+            });
         }
     };
 
@@ -161,7 +171,7 @@ export default function CartPage() {
                         </div>
 
                         <div className="desktop:w-[360px] desktop:shrink-0 desktop:sticky desktop:top-[209px]">
-                            <CartSummary charges={charges} totalPayable={totalPayable} />
+                            <CartSummary charges={charges} totalPayable={totalPayable} onCheckout={handleCheckout} isLoading={loading} />
                         </div>
                     </div>
                 </div>

@@ -74,8 +74,13 @@ export default function DishCard({
     const handleAddClick = async (e: React.MouseEvent) => {
         e.stopPropagation();
         onAdd?.();
-        // Add to cart store
-        await addItem(id.toString(), 1);
+        // Add to cart store with details
+        const numericPrice = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.]/g, '')) || 0;
+        await addItem(id.toString(), 1, {
+            name,
+            price: numericPrice,
+            image
+        });
     };
 
     const handleQuantityChange = async (e: React.MouseEvent, change: number) => {
@@ -84,25 +89,37 @@ export default function DishCard({
         // Update cart store
         // Calculate new quantity based on current display quantity
         const newQuantity = (displayQuantity || 0) + change;
-        
+
         if (newQuantity < 0) {
             // Don't allow negative quantities
             return;
         }
-        
+
         if (newQuantity === 0) {
             // If quantity becomes 0, remove the item from cart
             const cartItemId = getCartItemId(id.toString());
+            // If cartItemId exists (it should), remove it.
+            // If local-only item, we might not have cartItemId in a consistent way if we used item_id for lookups?
+            // store.removeItem uses cart_item_id.
+            // But getCartItemId returns logic based on item_id.
             if (cartItemId) {
                 try {
                     await removeItem(cartItemId);
                 } catch (error) {
                     console.error("Failed to remove item from cart:", error);
                 }
+            } else {
+                // Fallback: if we can't find cartItemId (unlikely with our store logic), try to remove by item_id or warn
+                console.warn("Could not find cart_item_id for removal", id);
             }
         } else {
             // Otherwise, update the quantity
-            await addItem(id.toString(), newQuantity);
+            const numericPrice = typeof price === 'number' ? price : parseFloat(String(price).replace(/[^0-9.]/g, '')) || 0;
+            await addItem(id.toString(), newQuantity, {
+                name,
+                price: numericPrice,
+                image
+            });
         }
     };
 
