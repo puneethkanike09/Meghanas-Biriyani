@@ -35,7 +35,7 @@ export default function ShoppingCart() {
         if (newQuantity < 0) {
             return;
         }
-        
+
         if (newQuantity === 0) {
             // If quantity becomes 0, remove the item from cart
             try {
@@ -53,7 +53,7 @@ export default function ShoppingCart() {
         if (items.length === 0) {
             return;
         }
-        
+
         try {
             await clearCart();
         } catch (error) {
@@ -170,6 +170,7 @@ export default function ShoppingCart() {
                             <Button
                                 variant="primary"
                                 className="w-full"
+                                href="/cart"
                             >
                                 Place Order
                             </Button>
