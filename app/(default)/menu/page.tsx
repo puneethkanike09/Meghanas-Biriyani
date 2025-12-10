@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef, Suspense } from "react";
 import FilterBar from "./components/FilterBar";
 import FilterBarSkeleton from "./components/FilterBarSkeleton";
 import MenuItemsList from "./components/MenuItemsList";
@@ -13,19 +12,18 @@ import DishCardSkeleton from "@/components/ui/DishCardSkeleton";
 import CategoryHeadingSkeleton from "@/components/ui/CategoryHeadingSkeleton";
 
 function MenuPageContent() {
-    const searchParams = useSearchParams();
-    const filterParam = searchParams.get('filter');
-
-    const [selectedCategoryId, setSelectedCategoryId] = useState("all");
+    const { categories: storedCategories, fetchCategories, loading: categoriesLoading, selectedCategoryId: storeSelectedCategoryId, setSelectedCategoryId: setStoreSelectedCategoryId } = useMenuStore();
+    
+    // Initialize with store value if available, otherwise default to "all"
+    const [selectedCategoryId, setSelectedCategoryId] = useState(() => storeSelectedCategoryId || "all");
     const [expandedDishId, setExpandedDishId] = useState<string | null>(null);
     const [showOptionSetsForId, setShowOptionSetsForId] = useState<string | null>(null);
 
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const hasClearedStore = useRef(false);
 
     const addItem = useCartStore((state) => state.addItem);
-
-    const { categories: storedCategories, fetchCategories, loading: categoriesLoading } = useMenuStore();
 
     // Transform stored categories for local usage (adding "All" option)
     const [categories, setCategories] = useState<{ id: string; name: string }[]>([{ id: "all", name: "All" }]);
@@ -42,12 +40,16 @@ function MenuPageContent() {
     // Fetch Categories on Mount
     useEffect(() => {
         fetchCategories();
+    }, [fetchCategories]);
 
-        // If there's a filter param, select that category
-        if (filterParam) {
-            setSelectedCategoryId(filterParam);
+    // Update selected category when store changes (even if already on page)
+    useEffect(() => {
+        if (storeSelectedCategoryId && storeSelectedCategoryId !== selectedCategoryId) {
+            setSelectedCategoryId(storeSelectedCategoryId);
+            // Clear the store selection after using it
+            setStoreSelectedCategoryId(null);
         }
-    }, [fetchCategories, filterParam]);
+    }, [storeSelectedCategoryId, selectedCategoryId, setStoreSelectedCategoryId]);
 
     // Fetch Items when Category Changes
     useEffect(() => {
@@ -90,7 +92,11 @@ function MenuPageContent() {
                     <FilterBar
                         categories={categories}
                         selectedCategoryId={selectedCategoryId}
-                        onSelectCategory={setSelectedCategoryId}
+                        onSelectCategory={(categoryId) => {
+                            setSelectedCategoryId(categoryId);
+                            // Clear store selection when user manually selects
+                            setStoreSelectedCategoryId(null);
+                        }}
                     />
                 )}
             </div>

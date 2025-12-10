@@ -6,9 +6,11 @@ interface MenuState {
     items: MenuItem[];
     loading: boolean;
     error: string | null;
+    selectedCategoryId: string | null;
 
     // Actions
     fetchCategories: () => Promise<void>;
+    setSelectedCategoryId: (categoryId: string | null) => void;
 }
 
 export const useMenuStore = create<MenuState>((set, get) => ({
@@ -16,6 +18,11 @@ export const useMenuStore = create<MenuState>((set, get) => ({
     items: [],
     loading: false,
     error: null,
+    selectedCategoryId: null,
+
+    setSelectedCategoryId: (categoryId: string | null) => {
+        set({ selectedCategoryId: categoryId });
+    },
 
     fetchCategories: async () => {
         // If we already have categories or are loading, don't fetch again

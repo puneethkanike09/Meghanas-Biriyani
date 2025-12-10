@@ -1,31 +1,16 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { useRouter, usePathname } from "next/navigation";
 
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
+import { useMenuStore } from "@/store/useMenuStore";
 
 interface MenuHamburgerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     label?: string;
     onSelectCategory?: (category: string) => void;
 }
-
-const MENU_ITEMS = [
-    "Recommended",
-    "Box Biriyani - New Launch",
-    "Day Special",
-    "Extra",
-    "Veg Starter",
-    "Sea Food Starter",
-    "Non-Veg Starter",
-    "Non-Veg Biriyani",
-    "Non-Veg Curries",
-    "Indian Breads",
-    "Egg",
-    "Veg Curries",
-    "Rice",
-    "Close",
-];
 
 export default function MenuHamburger({
     label = "Menu",
@@ -33,18 +18,31 @@ export default function MenuHamburger({
     onSelectCategory,
     ...props
 }: MenuHamburgerProps) {
+    const router = useRouter();
+    const pathname = usePathname();
+    const { categories, fetchCategories, loading, setSelectedCategoryId } = useMenuStore();
     const [isHovered, setIsHovered] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [maxHeight, setMaxHeight] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
 
+    // Fetch categories on mount
+    useEffect(() => {
+        fetchCategories();
+    }, []);
+
     const handleToggle = () => {
         setIsOpen((prev) => !prev);
     };
 
-    const handleSelect = (item: string) => {
-        onSelectCategory?.(item);
+    const handleSelect = (categoryId: string) => {
+        setSelectedCategoryId(categoryId);
+        // Only navigate if not already on menu page
+        if (pathname !== '/menu') {
+            router.push('/menu');
+        }
         setIsOpen(false);
+        onSelectCategory?.(categoryId);
     };
 
     useEffect(() => {
@@ -147,29 +145,33 @@ export default function MenuHamburger({
                             className="flex w-60 flex-col items-stretch gap-1 overflow-y-auto custom-scrollbar"
                             style={{ maxHeight: maxHeight > 0 ? `${maxHeight}px` : "70vh" }}
                         >
-                            {MENU_ITEMS.map((item) => {
-                                const isClose = item.toLowerCase() === "close";
-                                return (
+                            {loading ? (
+                                <div className="flex items-center justify-center py-4">
+                                    <span className="text-base font-normal text-white">Loading...</span>
+                                </div>
+                            ) : (
+                                <>
+                                    {categories.map((category) => (
+                                        <Button
+                                            key={category.categoryId}
+                                            type="button"
+                                            variant="dark"
+                                            className="h-auto w-full shrink-0 justify-center rounded-full bg-transparent px-3 py-2 text-white hover:bg-gray-800 border-none shadow-none"
+                                            onClick={() => handleSelect(category.categoryId)}
+                                        >
+                                            <span className="text-base font-normal text-white">{category.name}</span>
+                                        </Button>
+                                    ))}
                                     <Button
-                                        key={item}
                                         type="button"
                                         variant="dark"
-                                        className={cn(
-                                            "h-auto w-full flex-shrink-0 justify-center rounded-full bg-transparent px-3 py-2 text-white hover:bg-gray-800 border-none shadow-none",
-                                            isClose && "bg-gray-900 hover:bg-gray-800"
-                                        )}
-                                        onClick={() => {
-                                            if (isClose) {
-                                                setIsOpen(false);
-                                                return;
-                                            }
-                                            handleSelect(item);
-                                        }}
+                                        className="h-auto w-full shrink-0 justify-center rounded-full bg-gray-900 px-3 py-2 text-white hover:bg-gray-800 border-none shadow-none"
+                                        onClick={() => setIsOpen(false)}
                                     >
-                                        <span className="text-base font-normal text-white">{item}</span>
+                                        <span className="text-base font-normal text-white">Close</span>
                                     </Button>
-                                );
-                            })}
+                                </>
+                            )}
                         </div>
                     </nav>
                 </div>

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import useEmblaCarousel from "embla-carousel-react";
 import { MenuService } from "@/services/menu.service";
 import { useMenuStore } from "@/store/useMenuStore";
@@ -13,7 +13,8 @@ const ARROW_DISABLED = "/assets/homepage/icons/Arrow Left.svg";
 
 
 export default function VibeSection() {
-    const { categories, fetchCategories, loading } = useMenuStore();
+    const router = useRouter();
+    const { categories, fetchCategories, loading, setSelectedCategoryId } = useMenuStore();
     const [canScrollPrev, setCanScrollPrev] = useState(false);
     const [canScrollNext, setCanScrollNext] = useState(false);
 
@@ -162,17 +163,19 @@ export default function VibeSection() {
                             // Let's safe check.
                             const imageUrl = (category as any).imageURL || "/assets/homepage/images/top10.jpg";
 
+                            const handleCategoryClick = () => {
+                                setSelectedCategoryId(category.categoryId);
+                                router.push('/menu');
+                            };
+
                             return (
                                 <div
                                     key={category.categoryId}
                                     className="flex-[0_0_260px] tablet:flex-[0_0_300px] desktop:flex-[0_0_316px] min-w-0 px-2 tablet:px-3"
                                 >
-                                    <Link
-                                        href={{
-                                            pathname: '/menu',
-                                            query: { filter: category.categoryId }
-                                        }}
-                                        className="group cursor-pointer block"
+                                    <button
+                                        onClick={handleCategoryClick}
+                                        className="group cursor-pointer block w-full"
                                     >
                                         <div className="relative w-full h-[300px] tablet:h-[350px] desktop:h-[380px] rounded-3xl overflow-hidden">
                                             <Image
@@ -191,7 +194,7 @@ export default function VibeSection() {
                                                 </h3>
                                             </div>
                                         </div>
-                                    </Link>
+                                    </button>
                                 </div>
                             );
                         })}
