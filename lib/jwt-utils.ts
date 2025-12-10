@@ -107,3 +107,27 @@ export function getTokenExpiration(token: string | null): Date | null {
     return new Date(payload.exp * 1000);
 }
 
+/**
+ * Extracts partial user data from JWT token
+ * Note: JWT only contains user_id (sub) and role, not phone or name
+ * @param token - The JWT access token
+ * @returns Partial user object with id and role, or null if invalid
+ */
+export function extractUserFromToken(token: string | null): { id: string; role: string } | null {
+    if (!token) return null;
+
+    const payload = decodeJWT(token);
+    if (!payload) return null;
+
+    const userId = payload.user_id || payload.sub;
+    const role = payload.role;
+
+    if (!userId || !role) {
+        return null;
+    }
+
+    return {
+        id: userId,
+        role: role,
+    };
+}

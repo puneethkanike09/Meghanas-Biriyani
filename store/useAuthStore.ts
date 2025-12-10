@@ -94,11 +94,25 @@ export const useAuthStore = create<AuthState>()(
                     }
                     return;
                 }
-                set((state) => ({
-                    ...state,
-                    accessToken,
-                    isRefreshing: false
-                }));
+
+                set((state) => {
+                    // Extract id and role from new token
+                    const tokenData = require('@/lib/jwt-utils').extractUserFromToken(accessToken);
+
+                    // Merge with existing user data to preserve phone and name
+                    const updatedUser = state.user && tokenData ? {
+                        ...state.user,        // Keep existing phone and name
+                        id: tokenData.id,     // Update id from token
+                        role: tokenData.role, // Update role from token
+                    } : state.user; // If no token data, keep existing user
+
+                    return {
+                        ...state,
+                        user: updatedUser,
+                        accessToken,
+                        isRefreshing: false
+                    };
+                });
             },
 
             logout: () => {
@@ -135,12 +149,14 @@ export const useAuthStore = create<AuthState>()(
                 }
 
                 if (state) {
-                    // Validate token on rehydration, logout if invalid
+                    // Don't immediately logout on expired token
+                    // isAuthenticated() will return false, and any API call will trigger refresh
+                    // This prevents unnecessary logouts when refresh token is still valid
                     if (state.accessToken && !isTokenValid(state.accessToken)) {
                         if (process.env.NODE_ENV === 'development') {
-                            console.warn('Stored token is expired or invalid, logging out');
+                            console.warn('Stored access token is expired - will attempt refresh on next API call');
                         }
-                        state.logout();
+                        // Don't call logout() - let the refresh flow handle it
                     }
                     state.setHasHydrated(true);
                 }

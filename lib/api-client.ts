@@ -91,9 +91,16 @@ async function refreshToken(): Promise<string | null> {
       store.finishRefresh(accessToken);
 
       return accessToken;
-    } catch (error) {
-      // Refresh failed - reset store and clear cookies
-      store.logout();
+    } catch (error: any) {
+      // Only logout if refresh token is actually invalid (401)
+      // Don't logout on network errors, timeouts, or other failures
+      const isRefreshTokenInvalid = error?.response?.status === 401;
+
+      if (isRefreshTokenInvalid) {
+        // Refresh token is invalid - user needs to login again
+        store.logout();
+      }
+      // For other errors (network, timeout), keep state and let user retry
 
       // Clear refresh promise
       refreshPromise = null;
@@ -158,7 +165,8 @@ apiClient.interceptors.response.use(
       // Prevent infinite retry loops
       const retryCount = originalRequest._retryCount ?? 0;
       if (retryCount >= MAX_REFRESH_RETRIES) {
-        useAuthStore.getState().logout();
+        // Don't logout here - could be a network issue
+        // Let the refresh function handle logout if refresh token is invalid
         return Promise.reject(new Error('Max refresh retries exceeded'));
       }
 
@@ -203,7 +211,9 @@ apiClient.interceptors.response.use(
       } catch (refreshError: any) {
         // Refresh failed - process queue with error
         processQueue(refreshError, null);
-        useAuthStore.getState().logout();
+
+        // Don't logout here - refreshToken() function already handles it
+        // This prevents duplicate logout calls
 
         const refreshErrorMsg = refreshError?.response?.data?.message ||
           refreshError?.message ||
