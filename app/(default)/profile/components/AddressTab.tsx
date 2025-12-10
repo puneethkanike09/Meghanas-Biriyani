@@ -50,8 +50,28 @@ export default function AddressTab() {
         fetchAddresses();
     }, []);
 
-    const handleDelete = (id: string | number) => {
-        setAddresses((prev) => prev.filter((addr) => addr.id !== id));
+    const handleDelete = async (id: string | number) => {
+        if (!window.confirm("Are you sure you want to delete this address?")) {
+            return;
+        }
+
+        try {
+            await AddressService.deleteAddress(String(id));
+            setAddresses((prev) => prev.filter((addr) => addr.id !== id));
+            toast.success("Address deleted successfully!");
+        } catch (error: any) {
+            console.error("Failed to delete address:", error);
+            
+            let errorMessage = "Failed to delete address";
+            if (error.response?.data?.message) {
+                const msg = error.response.data.message;
+                errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+            
+            toast.error(errorMessage);
+        }
     };
 
     const handleEdit = (id: string | number) => {
