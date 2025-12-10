@@ -107,14 +107,21 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                 addressType: addressTypeMap[formValues.type],
             };
 
-            await AddressService.addAddress(addressData);
+            if (isEdit && address?.id) {
+                // Update existing address
+                await AddressService.updateAddress(String(address.id), addressData);
+                toast.success("Address updated successfully!");
+            } else {
+                // Create new address
+                await AddressService.addAddress(addressData);
+                toast.success("Address added successfully!");
+            }
 
-            toast.success("Address added successfully!");
             router.push("/profile/address");
         } catch (error: any) {
-            console.error("Failed to add address:", error);
+            console.error(`Failed to ${isEdit ? 'update' : 'add'} address:`, error);
 
-            let errorMessage = "Failed to add address";
+            let errorMessage = `Failed to ${isEdit ? 'update' : 'add'} address`;
             if (error.response?.data?.message) {
                 const msg = error.response.data.message;
                 errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;

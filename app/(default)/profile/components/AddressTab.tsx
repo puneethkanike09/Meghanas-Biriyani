@@ -28,7 +28,7 @@ export default function AddressTab() {
 
                 // Map API response to UI format
                 const mappedAddresses: AddressItem[] = response.addresses.map((addr) => ({
-                    id: parseInt(addr.id) || 0,
+                    id: addr.id, // Keep as string (UUID) from API
                     label: addr.label,
                     type: addr.address_type.toLowerCase() === 'work' ? 'office' : addr.address_type.toLowerCase() as AddressType,
                     houseNumber: addr.house_flat_door_number,
@@ -50,11 +50,11 @@ export default function AddressTab() {
         fetchAddresses();
     }, []);
 
-    const handleDelete = (id: number) => {
+    const handleDelete = (id: string | number) => {
         setAddresses((prev) => prev.filter((addr) => addr.id !== id));
     };
 
-    const handleEdit = (id: number) => {
+    const handleEdit = (id: string | number) => {
         router.push(`/profile/address/${id}/edit`);
     };
 

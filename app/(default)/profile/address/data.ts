@@ -1,7 +1,7 @@
 export type AddressType = "home" | "office" | "other";
 
 export interface AddressItem {
-    id: number;
+    id: string | number; // Support both string (UUID from API) and number (for backward compatibility)
     label: string;
     type: AddressType;
     houseNumber: string;
