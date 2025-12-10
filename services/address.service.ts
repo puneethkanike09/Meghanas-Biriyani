@@ -14,12 +14,16 @@ export interface Address {
     id: string;
     label: string;
     house_flat_door_number: string;
-    appartment_road_area: string;
+    street_locality_area: string;
     landmark?: string;
     city: string;
     pincode: string;
-    address_type: string;
+    address_type: 'HOME' | 'WORK' | 'OTHER';
     location?: string;
+}
+
+export interface AddressListResponse {
+    addresses: Address[];
 }
 
 
@@ -29,9 +33,9 @@ export const AddressService = {
         return response.data;
     },
 
-    // Placeholder for future methods
-    getAddresses: async (): Promise<Address[]> => {
-        const response = await apiClient.get<Address[]>('/users/customers/addresses');
+    // Get all addresses for the authenticated customer
+    getAddresses: async (): Promise<AddressListResponse> => {
+        const response = await apiClient.get<AddressListResponse>('/users/customers/addresses');
         return response.data;
     },
 
