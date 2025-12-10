@@ -65,7 +65,7 @@ export default function Button(props: ButtonProps) {
   const { children, ...buttonProps } = restProps as NativeButtonProps;
 
   return (
-    <button className={classes} {...buttonProps}>
+    <button className={classes} {...buttonProps} suppressHydrationWarning>
       {renderContent(children)}
     </button>
   );

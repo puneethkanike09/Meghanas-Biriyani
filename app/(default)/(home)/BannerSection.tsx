@@ -116,6 +116,7 @@ export default function BannerSection() {
                                     }`}
                                 aria-label={`Go to slide ${index + 1}`}
                                 aria-current={index === selectedIndex ? "true" : "false"}
+                                suppressHydrationWarning
                             />
                         ))}
                     </div>
@@ -126,6 +127,7 @@ export default function BannerSection() {
                             onClick={scrollPrev}
                             className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200 cursor-pointer"
                             aria-label="Previous slide"
+                            suppressHydrationWarning
                         >
                             <Image
                                 src={ARROW_ENABLED}
@@ -139,6 +141,7 @@ export default function BannerSection() {
                             onClick={scrollNext}
                             className="inline-flex items-center p-2 bg-gray-100 rounded-[100px] hover:bg-gray-300 transition-all duration-200 cursor-pointer"
                             aria-label="Next slide"
+                            suppressHydrationWarning
                         >
                             <Image
                                 src={ARROW_ENABLED}

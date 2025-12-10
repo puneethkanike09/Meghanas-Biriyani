@@ -32,7 +32,7 @@ export default function FilterBar({
             <div className="flex items-center gap-4">
                 {/* Filter By Button - Fixed */}
                 <div className="flex items-center gap-3 flex-shrink-0">
-                    <button className="inline-flex h-9 items-center gap-2 px-[14px] rounded-full border border-gray-200 bg-white transition-colors cursor-pointer">
+                    <button className="inline-flex h-9 items-center gap-2 px-[14px] rounded-full border border-gray-200 bg-white transition-colors cursor-pointer" suppressHydrationWarning>
                         <span className="text-base font-semibold text-gray-900 whitespace-nowrap">
                             Filter by
                         </span>
@@ -62,6 +62,7 @@ export default function FilterBar({
                                         ? "bg-tango text-white border-transparent"
                                         : "bg-white text-gray-700 border-gray-200"
                                         }`}
+                                    suppressHydrationWarning
                                 >
                                     {category.name}
                                 </button>

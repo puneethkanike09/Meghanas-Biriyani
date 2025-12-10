@@ -18,9 +18,20 @@ function removeSessionCookies(response: NextResponse) {
 }
 
 export async function POST(request: NextRequest) {
+    // Debug: Log all cookies to see what's available
+    const allCookies = request.cookies.getAll();
+    console.log('[Refresh API] All cookies:', allCookies.map(c => ({ name: c.name, hasValue: !!c.value, valueLength: c.value?.length || 0 })));
+    
     const refreshToken = request.cookies.get(REFRESH_TOKEN_COOKIE)?.value;
 
-    if (!refreshToken) {
+    // Validate refresh token exists and is not empty
+    if (!refreshToken || refreshToken.trim() === '') {
+        console.error('[Refresh API] No refresh token found in cookies', {
+            cookieName: REFRESH_TOKEN_COOKIE,
+            cookieExists: !!request.cookies.get(REFRESH_TOKEN_COOKIE),
+            cookieValue: request.cookies.get(REFRESH_TOKEN_COOKIE)?.value || 'undefined',
+            allCookieNames: allCookies.map(c => c.name)
+        });
         const response = NextResponse.json(
             { message: "Session expired" },
             { status: 401 }
@@ -29,10 +40,32 @@ export async function POST(request: NextRequest) {
     }
 
     try {
+        // Prepare payload with refresh token
+        const payload = { refresh_token: refreshToken };
+        
+        // Validate payload before sending
+        if (!payload.refresh_token || payload.refresh_token.trim() === '') {
+            console.error('[Refresh API] Refresh token is empty in payload!', {
+                refreshToken: payload.refresh_token,
+                refreshTokenType: typeof payload.refresh_token
+            });
+            const response = NextResponse.json(
+                { message: "Invalid refresh token" },
+                { status: 401 }
+            );
+            return removeSessionCookies(response);
+        }
+        
+        console.log('[Refresh API] Calling backend refresh endpoint', {
+            url: `${API_BASE_URL}/auth/refresh`,
+            payload: { refresh_token: payload.refresh_token.substring(0, 20) + '...' }, // Log first 20 chars only for security
+            refreshTokenLength: payload.refresh_token.length
+        });
+
         // Call backend refresh endpoint
         const backendResponse = await axios.post(
             `${API_BASE_URL}/auth/refresh`,
-            { refresh_token: refreshToken },
+            payload,
             {
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,6 +108,15 @@ export async function POST(request: NextRequest) {
 
         return response;
     } catch (error: any) {
+        // Log error details for debugging
+        console.error('[Refresh API] Error refreshing token:', {
+            status: error?.response?.status,
+            statusText: error?.response?.statusText,
+            message: error?.message,
+            responseData: error?.response?.data,
+            requestPayload: error?.config?.data
+        });
+
         // Check if it's a 401 from backend (invalid refresh token)
         if (error?.response?.status === 401) {
             const response = NextResponse.json(

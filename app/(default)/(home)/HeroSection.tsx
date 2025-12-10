@@ -16,8 +16,7 @@ export default function HeroSection() {
         />
       </div>
 
-      <div className="section-container pb-8 tablet:pb-10 desktop:pb-12 
-        pt-24 tablet:pt-28 desktop:pt-32">
+      <div className="section-container pb-8 tablet:pb-10 desktop:pb-12 pt-24 tablet:pt-28 desktop:pt-32">
         <div className="grid grid-cols-1 desktop:grid-cols-2 gap-8 desktop:gap-12 items-center">
           {/* Left Content */}
           <div className="text-white z-10">

@@ -107,6 +107,7 @@ export default function MenuHamburger({
                 onFocus={() => setIsHovered(true)}
                 onBlur={() => setIsHovered(false)}
                 onClick={handleToggle}
+                suppressHydrationWarning
                 {...props}
             >
                 <span

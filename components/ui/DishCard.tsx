@@ -66,11 +66,15 @@ export default function DishCard({
     id,
 }: DishCardProps) {
     const { getItemQuantity, addItem, removeItem, getCartItemId } = useCartStore();
-    const cartQuantity = getItemQuantity(id.toString());
-    const displayQuantity = quantity !== undefined ? quantity : cartQuantity;
+    const [mounted, setMounted] = useState(false);
     const [isDeliverable, setIsDeliverable] = useState(false);
+    
+    // Only access cart store after mount to avoid hydration mismatch
+    const cartQuantity = mounted ? getItemQuantity(id.toString()) : 0;
+    const displayQuantity = quantity !== undefined ? quantity : cartQuantity;
 
     useEffect(() => {
+        setMounted(true);
         setIsDeliverable(LocationService.isWithinRange());
     }, []);
 
@@ -275,6 +279,7 @@ export default function DishCard({
                     <div className="absolute inset-0 bg-[#00000080] flex items-center justify-center">
                         <button
                             className="inline-flex h-auto items-center justify-center px-4 py-2.5 whitespace-nowrap rounded-[8px] font-semibold text-[13px] desktop:text-sm bg-white text-black border border-gray-300 cursor-default pointer-events-none"
+                            suppressHydrationWarning
                         >
                             Out of Stock
                         </button>

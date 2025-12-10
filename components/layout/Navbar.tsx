@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useCartStore } from "@/store/useCartStore";
@@ -13,7 +14,13 @@ const ICONS = {
 
 export default function Navbar() {
     const { cartCount } = useCartStore();
+    const [mounted, setMounted] = useState(false);
     const count = cartCount();
+
+    // Only render badge after client-side hydration to avoid hydration mismatch
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
 
     return (
@@ -105,7 +112,7 @@ export default function Navbar() {
                                     height={28}
                                     className="h-6 w-6 tablet:h-6 tablet:w-6"
                                 />
-                                {count > 0 && (
+                                {mounted && count > 0 && (
                                     <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-600 text-[10px] font-bold text-white shadow-sm">
                                         {count}
                                     </span>

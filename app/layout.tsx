@@ -60,6 +60,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${proximaNova.variable} ${geistSans.variable} ${geistMono.variable} font-proxima-nova antialiased`}
+        suppressHydrationWarning
       >
         <FCMProvider>
           {children}
