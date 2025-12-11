@@ -61,7 +61,7 @@ export default function AddressTab() {
             toast.success("Address deleted successfully!");
         } catch (error: any) {
             console.error("Failed to delete address:", error);
-            
+
             let errorMessage = "Failed to delete address";
             if (error.response?.data?.message) {
                 const msg = error.response.data.message;
@@ -69,7 +69,7 @@ export default function AddressTab() {
             } else if (error.message) {
                 errorMessage = error.message;
             }
-            
+
             toast.error(errorMessage);
         }
     };

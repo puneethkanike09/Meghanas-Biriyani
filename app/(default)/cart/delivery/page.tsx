@@ -9,6 +9,7 @@ import DeliveryAddressCard from "../components/DeliveryAddressCard";
 import OrderSummary, { type OrderItem, type OrderCharge } from "../components/OrderSummary";
 import Button from "@/components/ui/Button";
 import { AddressService } from "@/services/address.service";
+import { OrderService } from "@/services/order.service";
 import { useCartStore } from "@/store/useCartStore";
 import type { AddressItem, AddressType } from "../../profile/address/data";
 
@@ -24,6 +25,7 @@ export default function DeliveryPage() {
     const [addresses, setAddresses] = useState<AddressItem[]>([]);
     const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
     const [selectedAddressId, setSelectedAddressId] = useState<string | number | null>(null);
+    const [isCreatingOrder, setIsCreatingOrder] = useState(false);
 
     // Fetch addresses from API
     useEffect(() => {
@@ -45,7 +47,7 @@ export default function DeliveryPage() {
                 }));
 
                 setAddresses(mappedAddresses);
-                
+
                 // Auto-select first address if available
                 if (mappedAddresses.length > 0 && !selectedAddressId) {
                     setSelectedAddressId(mappedAddresses[0].id);
@@ -90,9 +92,65 @@ export default function DeliveryPage() {
         router.push("/profile/address/new");
     };
 
-    const handleProceedToPay = () => {
-        // Navigate to payment page
-        router.push("/cart/payment");
+    const handleProceedToPay = async () => {
+        if (isCreatingOrder) return;
+
+        // Validate address selection
+        if (!selectedAddressId) {
+            toast.error("Please select a delivery address");
+            return;
+        }
+
+        // Validate cart has items
+        if (cartItems.length === 0) {
+            toast.error("Your cart is empty");
+            return;
+        }
+
+        setIsCreatingOrder(true);
+
+        try {
+            // Map cart items to order items format
+            // Note: skuCode might not be available in cart, using item_id as fallback
+            const orderItems = cartItems.map((item) => ({
+                shortName: item.item_name,
+                longName: item.item_name,
+                skuCode: item.item_id, // Using item_id as skuCode fallback
+                itemId: item.item_id,
+                quantity: item.quantity,
+                unitPrice: item.base_price,
+            }));
+
+            // Create order
+            const order = await OrderService.createOrder({
+                branchCode: "HO",
+                channel: "Meghana Web sale",
+                items: orderItems,
+                status: "Open",
+            });
+
+            // Store order ID in sessionStorage for payment page
+            if (typeof window !== 'undefined') {
+                sessionStorage.setItem('currentOrderId', order.id);
+            }
+
+            // Navigate to payment page
+            router.push("/cart/payment");
+        } catch (error: any) {
+            console.error("Failed to create order:", error);
+
+            let errorMessage = "Failed to create order";
+            if (error.response?.data?.message) {
+                const msg = error.response.data.message;
+                errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
+            } else if (error.message) {
+                errorMessage = error.message;
+            }
+
+            toast.error(errorMessage);
+        } finally {
+            setIsCreatingOrder(false);
+        }
     };
 
     return (
@@ -172,6 +230,8 @@ export default function DeliveryPage() {
                                 charges={charges}
                                 totalPayable={totalPayable}
                                 onProceed={handleProceedToPay}
+                                ctaLabel={isCreatingOrder ? "Creating Order..." : "Proceed to Pay"}
+                                isCtaDisabled={isCreatingOrder || !selectedAddressId || cartItems.length === 0}
                             />
                         </div>
                     </div>

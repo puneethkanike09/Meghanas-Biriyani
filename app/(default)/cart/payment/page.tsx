@@ -1,13 +1,12 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import { toast } from "sonner";
 import CartProgress, { type CartProgressStep } from "../components/CartProgress";
-import DeliveryAddressCard from "../components/DeliveryAddressCard";
-import OrderSummary from "../components/OrderSummary";
-import Button from "@/components/ui/Button";
-import { INITIAL_ADDRESSES, type AddressItem } from "../../profile/address/data";
+import OrderSummary, { type OrderItem, type OrderCharge } from "../components/OrderSummary";
+import { OrderService } from "@/services/order.service";
+import { useCartStore } from "@/store/useCartStore";
 
 const PAYMENT_STEPS: CartProgressStep[] = [
     { number: 1, label: "Cart Confirmation", status: "completed" },
@@ -15,19 +14,6 @@ const PAYMENT_STEPS: CartProgressStep[] = [
     { number: 3, label: "Payment", status: "current" },
 ];
 
-// Mock order data - in real app this would come from cart state/context
-const ORDER_ITEMS = [
-    { id: 1, name: "Chicken Biriyani", quantity: 2, price: 349, isVeg: false },
-    { id: 2, name: "Paneer 65", quantity: 2, price: 249, isVeg: true },
-    { id: 3, name: "Pepper Chicken", quantity: 2, price: 299, isVeg: false },
-];
-
-const COST_BREAKDOWN = [
-    { label: "Item Total", value: 897, isBold: true, hasInfo: false },
-    { label: "Restaurant Packaging Charges", value: 10, isBold: false, hasInfo: false },
-    { label: "Delivery Fee", value: 35, isBold: false, hasInfo: true },
-    { label: "Taxes", value: 10.47, isBold: false, hasInfo: true },
-];
 
 const RAZORPAY_KEY =
     process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID ??
@@ -111,42 +97,128 @@ function loadRazorpayScript() {
 
 export default function PaymentPage() {
     const router = useRouter();
-    const [addresses] = useState<AddressItem[]>(() => INITIAL_ADDRESSES);
-    const [selectedAddressId] = useState<number | null>(1);
+    const { items: cartItems, subtotal, tax, deliveryFee, total } = useCartStore();
+    const [orderId, setOrderId] = useState<string | null>(null);
+    const [transaction, setTransaction] = useState<any>(null);
+    const [isInitializing, setIsInitializing] = useState(true);
     const [isCheckoutReady, setIsCheckoutReady] = useState(false);
 
-    const handleSelectAddress = () => {
-        // Placeholder for payment method selection
-    };
+    // Get order ID from sessionStorage
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const storedOrderId = sessionStorage.getItem('currentOrderId');
+            if (storedOrderId) {
+                setOrderId(storedOrderId);
+            } else {
+                toast.error("No order found. Please start from cart.");
+                router.push("/cart");
+            }
+        }
+    }, [router]);
 
-    const totalPayable = COST_BREAKDOWN.reduce((sum, item) => sum + item.value, 0);
-    const totalPayableInPaise = Math.round(totalPayable * 100);
+    // Map cart items to OrderItem format
+    const orderItems: OrderItem[] = useMemo(() => {
+        return cartItems.map((item, index) => ({
+            id: index + 1,
+            name: item.item_name,
+            quantity: item.quantity,
+            price: item.item_total,
+            isVeg: true, // Note: is_veg field not in cart structure, defaulting to true
+        }));
+    }, [cartItems]);
+
+    // Create charges array from cart store
+    const charges: OrderCharge[] = useMemo(() => [
+        { label: "Item Total", value: subtotal, isBold: true, hasInfo: false },
+        { label: "Restaurant Packaging Charges", value: 10, isBold: false, hasInfo: false },
+        { label: "Delivery Fee", value: deliveryFee, isBold: false, hasInfo: true },
+        { label: "Taxes", value: tax, isBold: false, hasInfo: true },
+    ], [subtotal, tax, deliveryFee]);
+
+    const totalPayable = total;
+
+    // Initiate payment when order ID is available
+    useEffect(() => {
+        const initiatePayment = async () => {
+            if (!orderId || !totalPayable || totalPayable <= 0) {
+                setIsInitializing(false);
+                return;
+            }
+
+            try {
+                setIsInitializing(true);
+                
+                // Initiate payment
+                const paymentTransaction = await OrderService.initiatePayment({
+                    orderId: orderId,
+                    amount: totalPayable,
+                    gateway: "RAZORPAY",
+                    currency: "INR",
+                });
+
+                setTransaction(paymentTransaction);
+                
+                // Load Razorpay script
+                const scriptLoaded = await loadRazorpayScript();
+                if (scriptLoaded && window.Razorpay) {
+                    setIsCheckoutReady(true);
+                }
+            } catch (error: any) {
+                console.error("Failed to initiate payment:", error);
+                
+                let errorMessage = "Failed to initiate payment";
+                if (error.response?.data?.message) {
+                    const msg = error.response.data.message;
+                    errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                
+                toast.error(errorMessage);
+            } finally {
+                setIsInitializing(false);
+            }
+        };
+
+        if (orderId) {
+            initiatePayment();
+        }
+    }, [orderId, totalPayable]);
 
     const openRazorpayCheckout = useCallback(async () => {
-        if (!RAZORPAY_KEY) {
-            console.warn("Razorpay key missing");
+        if (!transaction) {
+            toast.error("Payment not initialized. Please wait...");
+            return;
+        }
+
+        if (!transaction.keyId) {
+            console.warn("Razorpay key missing from transaction");
             return;
         }
 
         const scriptLoaded = await loadRazorpayScript();
-        const isReady = scriptLoaded && !!window.Razorpay;
-        setIsCheckoutReady(isReady);
-
-        if (!isReady) {
+        if (!scriptLoaded || !window.Razorpay) {
             console.error("Failed to load Razorpay checkout script");
+            toast.error("Failed to load payment gateway");
             return;
         }
 
         const paymentLogo = HOSTED_LOGO_URL;
 
         const options: RazorpayOptions = {
-            key: RAZORPAY_KEY,
-            amount: totalPayableInPaise,
-            currency: "INR",
+            key: transaction.keyId, // Use keyId from transaction
+            amount: transaction.amount, // Already in paise from transaction
+            currency: transaction.currency,
             name: "Meghana Foods",
             description: "Order Payment",
             image: paymentLogo ?? undefined,
-            handler: () => {
+            order_id: transaction.gatewayTransactionId, // Razorpay order ID
+            handler: (response: any) => {
+                console.log("Payment success:", response);
+                // Clear order ID from sessionStorage
+                if (typeof window !== 'undefined') {
+                    sessionStorage.removeItem('currentOrderId');
+                }
                 router.push("/cart/confirmation");
             },
             prefill: {
@@ -155,7 +227,8 @@ export default function PaymentPage() {
                 contact: "+911234567890",
             },
             notes: {
-                address: "Meghana Foods Koramangala",
+                orderId: orderId || "",
+                transactionId: transaction.transactionId,
             },
             theme: {
                 color: "#f47729",
@@ -170,17 +243,29 @@ export default function PaymentPage() {
 
         const razorpayInstance = new RazorpayConstructor(options);
         razorpayInstance.open();
-        razorpayInstance.on("payment.failed", () => {
-            alert("Payment failed, please try again.");
+        razorpayInstance.on("payment.failed", (response: any) => {
+            console.error("Payment failed:", response);
+            toast.error("Payment failed, please try again.");
         });
-    }, [router, totalPayableInPaise]);
+    }, [transaction, orderId, router]);
 
+    // Auto-open Razorpay when ready (only once)
     useEffect(() => {
-        void openRazorpayCheckout();
-    }, [openRazorpayCheckout]);
+        if (isCheckoutReady && transaction && !isInitializing) {
+            // Small delay to ensure UI is ready
+            const timer = setTimeout(() => {
+                openRazorpayCheckout();
+            }, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [isCheckoutReady, transaction, isInitializing, openRazorpayCheckout]);
 
     const handleProceedToPay = () => {
-        void openRazorpayCheckout();
+        if (isCheckoutReady && transaction) {
+            openRazorpayCheckout();
+        } else {
+            toast.error("Payment is not ready yet. Please wait...");
+        }
     };
 
     return (
@@ -206,12 +291,18 @@ export default function PaymentPage() {
                         {/* Order Summary Section */}
                         <div className="desktop:w-[316px] desktop:shrink-0 desktop:sticky desktop:top-[209px]">
                             <OrderSummary
-                                items={ORDER_ITEMS}
-                                charges={COST_BREAKDOWN}
+                                items={orderItems}
+                                charges={charges}
                                 totalPayable={totalPayable}
                                 onProceed={handleProceedToPay}
-                                ctaLabel={isCheckoutReady ? "Reopen Payment" : "Initializing"}
-                                isCtaDisabled={!isCheckoutReady}
+                                ctaLabel={
+                                    isInitializing 
+                                        ? "Initializing Payment..." 
+                                        : isCheckoutReady 
+                                        ? "Reopen Payment" 
+                                        : "Pay Now"
+                                }
+                                isCtaDisabled={!isCheckoutReady || isInitializing}
                             />
                         </div>
                     </div>
