@@ -2,8 +2,10 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import OrderDetailsDrawer from "./OrderDetailsDrawer";
+import { OrderService } from "@/services/order.service";
 
 interface OrderDestination {
     name: string;
@@ -36,115 +38,176 @@ interface Order {
     totalAmount: string;
 }
 
-const ordersData: Order[] = [
-    {
-        id: "1234567890",
-        images: [
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-        ],
-        status: "delivered",
-        statusText: "Order Delivered",
-        date: "Thu, Sep 15, 2025, 10:00 PM",
-        menuItems: [
-            { name: "Chicken Biriyani", price: "₹349", isVeg: false, quantity: 1 },
-            { name: "Paneer 65", price: "₹249", isVeg: true, quantity: 1 },
-            { name: "Pepper Chicken", price: "₹299", isVeg: false, quantity: 1 },
-        ],
-        destinations: [
-            { name: "Meghana Foods", address: "Koramangala, Bengaluru" },
-            {
-                name: "Koncept Nest",
-                address: "Ganapathi Nagar, Banashankari Stage I, Banashankari, Bengaluru, Karnataka 560026, India. Ganapathi Nagar, Banashankari Stage I, Banashankari, Bengaluru, Karnataka 560026, India.",
-            },
-            {
-                name: "Koncept Nest",
-                address: "Ganapathi Nagar, Banashankari Stage I, Banashankari, Bengaluru, Karnataka 560026, India.",
-            },
-            {
-                name: "Koncept Nest",
-                address: "Ganapathi Nagar, Banashankari Stage I, Banashankari, Bengaluru, Karnataka 560026, India.",
-            },
-        ],
-        charges: [
-            { label: "Item Total", value: "₹897", emphasize: true },
-            { label: "Restaurant Packaging Charges", value: "₹10" },
-            { label: "Delivery Fee", value: "₹35" },
-            { label: "Taxes", value: "₹10.47" },
-        ],
-        paymentMethod: "Paid Via UPI",
-        totalAmount: "₹952.47",
-    },
-    {
-        id: "1234567891",
-        images: [
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-        ],
-        status: "delivered",
-        statusText: "Order Delivered",
-        date: "Wed, Sep 14, 2025, 09:15 PM",
-        menuItems: [
-            { name: "Chicken Biriyani", price: "₹349", isVeg: false, quantity: 1 },
-            { name: "Paneer 65", price: "₹249", isVeg: true, quantity: 1 },
-            { name: "Butter Naan", price: "₹89", isVeg: true, quantity: 2 },
-        ],
-        destinations: [
-            { name: "Meghana Foods", address: "Indiranagar, Bengaluru" },
-            {
-                name: "Koncept Nest",
-                address: "Ganapathi Nagar, Banashankari Stage I, Banashankari, Bengaluru, Karnataka 560026, India.",
-            },
-        ],
-        charges: [
-            { label: "Item Total", value: "₹776", emphasize: true },
-            { label: "Restaurant Packaging Charges", value: "₹12" },
-            { label: "Delivery Fee", value: "₹30" },
-            { label: "Taxes", value: "₹9.14" },
-        ],
-        paymentMethod: "Paid Via UPI",
-        totalAmount: "₹827.14",
-    },
-    {
-        id: "1234567892",
-        images: [
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-            "/assets/homepage/images/top10.jpg",
-        ],
-        status: "cancelled",
-        statusText: "Order Cancelled",
-        date: "Tue, Sep 13, 2025, 08:45 PM",
-        menuItems: [
-            { name: "Chicken Biriyani", price: "₹349", isVeg: false, quantity: 1 },
-            { name: "Paneer 65", price: "₹249", isVeg: true, quantity: 1 },
-            { name: "Pepper Chicken", price: "₹299", isVeg: false, quantity: 1 },
-            { name: "Golden Baby Corn", price: "₹199", isVeg: true, quantity: 1 },
-            { name: "Chilly Chicken (Andhra Style)", price: "₹259", isVeg: false, quantity: 1 },
-        ],
-        destinations: [
-            { name: "Meghana Foods", address: "HSR Layout, Bengaluru" },
-            {
-                name: "Koncept Nest",
-                address: "Ganapathi Nagar, Banashankari Stage I, Banashankari, Bengaluru, Karnataka 560026, India.",
-            },
-        ],
-        charges: [
-            { label: "Item Total", value: "₹1,355", emphasize: true },
-            { label: "Restaurant Packaging Charges", value: "₹12" },
-            { label: "Delivery Fee", value: "₹40" },
-            { label: "Taxes", value: "₹18.20" },
-        ],
-        paymentMethod: "Payment Failed",
-        totalAmount: "₹1,425.20",
-    },
-];
+// Helper function to format date
+const formatDate = (dateString: string): string => {
+    try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: 'numeric',
+            minute: '2-digit',
+            hour12: true,
+        });
+    } catch {
+        return dateString;
+    }
+};
+
+// Helper function to format currency
+const formatCurrency = (amount: number): string => {
+    return `₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+};
+
+// Helper function to map API order to UI Order format
+const mapApiOrderToUIOrder = (apiOrder: any): Order => {
+    // Map status
+    let status: "delivered" | "cancelled" | "processing" = "processing";
+    let statusText = "Processing";
+    
+    if (apiOrder.status?.toLowerCase() === "delivered" || apiOrder.status?.toLowerCase() === "completed") {
+        status = "delivered";
+        statusText = "Order Delivered";
+    } else if (apiOrder.status?.toLowerCase() === "cancelled" || apiOrder.status?.toLowerCase() === "canceled") {
+        status = "cancelled";
+        statusText = "Order Cancelled";
+    }
+
+    // Map items
+    const menuItems: OrderItem[] = (apiOrder.items || []).map((item: any) => ({
+        name: item.longName || item.shortName || item.name || "Unknown Item",
+        price: formatCurrency(item.unitPrice || item.price || 0),
+        isVeg: false, // Default, can be enhanced if API provides this
+        quantity: item.quantity || 1,
+    }));
+
+    // Get images from items (if available)
+    const images = (apiOrder.items || [])
+        .map((item: any) => item.imageUrl || item.image_url || "/assets/homepage/images/top10.jpg")
+        .filter((img: string) => img) || ["/assets/homepage/images/top10.jpg"];
+
+    // Map charges (if available in API response)
+    const charges: OrderCharge[] = [
+        { 
+            label: "Item Total", 
+            value: formatCurrency(apiOrder.subtotal || apiOrder.total || 0), 
+            emphasize: true 
+        },
+    ];
+    
+    if (apiOrder.deliveryFee) {
+        charges.push({ label: "Delivery Fee", value: formatCurrency(apiOrder.deliveryFee) });
+    }
+    if (apiOrder.tax) {
+        charges.push({ label: "Taxes", value: formatCurrency(apiOrder.tax) });
+    }
+
+    // Map destinations (if available)
+    const destinations: OrderDestination[] = apiOrder.deliveryAddress ? [{
+        name: apiOrder.deliveryAddress.label || "Delivery Address",
+        address: [
+            apiOrder.deliveryAddress.house_flat_door_number,
+            apiOrder.deliveryAddress.street_locality_area,
+            apiOrder.deliveryAddress.landmark,
+            apiOrder.deliveryAddress.city,
+            apiOrder.deliveryAddress.pincode,
+        ].filter(Boolean).join(", "),
+    }] : [];
+
+    return {
+        id: apiOrder.id || apiOrder.orderId || "",
+        images: images.length > 0 ? images : ["/assets/homepage/images/top10.jpg"],
+        status,
+        statusText,
+        date: formatDate(apiOrder.createdAt || apiOrder.created_at || apiOrder.date || new Date().toISOString()),
+        menuItems,
+        destinations,
+        charges,
+        paymentMethod: apiOrder.paymentMethod || apiOrder.payment_method || "Paid",
+        totalAmount: formatCurrency(apiOrder.total || apiOrder.totalAmount || 0),
+    };
+};
 
 export default function OrdersTab() {
     const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+    const [orders, setOrders] = useState<Order[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
+
+    // Fetch orders on component mount
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                setIsLoading(true);
+                const response = await OrderService.getOrders({ page: 1, limit: 20 });
+                
+                if (response.orders && Array.isArray(response.orders)) {
+                    const mappedOrders = response.orders.map(mapApiOrderToUIOrder);
+                    setOrders(mappedOrders);
+                    
+                    // Check if there are more pages
+                    if (response.totalPages) {
+                        setHasMore(page < response.totalPages);
+                    } else {
+                        setHasMore(response.orders.length >= (response.limit || 20));
+                    }
+                } else {
+                    setOrders([]);
+                    setHasMore(false);
+                }
+            } catch (error: any) {
+                console.error("Failed to fetch orders:", error);
+                let errorMessage = "Failed to load orders";
+                if (error.response?.data?.message) {
+                    const msg = error.response.data.message;
+                    errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
+                } else if (error.message) {
+                    errorMessage = error.message;
+                }
+                toast.error(errorMessage);
+                setOrders([]);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchOrders();
+    }, []);
+
+    // Load more orders
+    const handleLoadMore = async () => {
+        if (isLoadingMore || !hasMore) return;
+
+        try {
+            setIsLoadingMore(true);
+            const nextPage = page + 1;
+            const response = await OrderService.getOrders({ page: nextPage, limit: 20 });
+            
+            if (response.orders && Array.isArray(response.orders)) {
+                const mappedOrders = response.orders.map(mapApiOrderToUIOrder);
+                setOrders((prev) => [...prev, ...mappedOrders]);
+                setPage(nextPage);
+                
+                // Check if there are more pages
+                if (response.totalPages) {
+                    setHasMore(nextPage < response.totalPages);
+                } else {
+                    setHasMore(response.orders.length >= (response.limit || 20));
+                }
+            } else {
+                setHasMore(false);
+            }
+        } catch (error: any) {
+            console.error("Failed to load more orders:", error);
+            toast.error("Failed to load more orders");
+        } finally {
+            setIsLoadingMore(false);
+        }
+    };
 
     useEffect(() => {
         if (selectedOrder) {
@@ -175,8 +238,17 @@ export default function OrdersTab() {
             </header>
 
             {/* Orders List */}
-            <div className="flex flex-col gap-4">
-                {ordersData.map((order, index) => {
+            {isLoading ? (
+                <div className="flex items-center justify-center py-12">
+                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-tango"></div>
+                </div>
+            ) : orders.length === 0 ? (
+                <div className="flex flex-col items-center justify-center py-12 gap-4">
+                    <p className="text-gray-500">No orders found</p>
+                </div>
+            ) : (
+                <div className="flex flex-col gap-4">
+                    {orders.map((order, index) => {
                     const itemsSummary = order.menuItems
                         .map((item) => `${item.name} x${item.quantity}`)
                         .join(", ");
@@ -277,16 +349,21 @@ export default function OrdersTab() {
                             </div>
                         </div>
                     );
-                })}
-            </div>
+                    })}
+                </div>
+            )}
 
             {/* Load More Button */}
-            <Button
-                variant="neutral"
-                className="w-full"
-            >
-                Show More Orders
-            </Button>
+            {hasMore && !isLoading && (
+                <Button
+                    variant="neutral"
+                    className="w-full"
+                    onClick={handleLoadMore}
+                    disabled={isLoadingMore}
+                >
+                    {isLoadingMore ? "Loading..." : "Show More Orders"}
+                </Button>
+            )}
             {selectedOrder && (
                 <OrderDetailsDrawer
                     order={selectedOrder}
