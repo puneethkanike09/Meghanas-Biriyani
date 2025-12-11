@@ -87,8 +87,8 @@ export default function CartSummary({ charges, totalPayable, onCheckout, isLoadi
                 <Button
                     variant="primary"
                     onClick={handleCheckout}
-                    disabled={isLoading}
-                    className="flex-1 bg-tango hover:bg-tango/90 items-center justify-center gap-2 px-3.5 py-2 rounded-lg border border-solid border-tango h-auto disabled:opacity-70 disabled:cursor-not-allowed"
+                    disabled={isLoading || totalPayable <= 0}
+                    className="flex-1 bg-tango items-center justify-center gap-2 px-3.5 py-2 rounded-lg border border-solid border-tango h-auto disabled:opacity-70 disabled:cursor-not-allowed"
                 >
                     {isLoading ? (
                         <div className="flex items-center gap-2">

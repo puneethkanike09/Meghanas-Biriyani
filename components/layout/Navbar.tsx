@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCartStore } from "@/store/useCartStore";
+import { AddressService } from "@/services/address.service";
+import { ADDRESS_TYPE_ICON_MAP, formatAddress, type AddressItem, type AddressType } from "@/app/(default)/profile/address/data";
+import { cn } from "@/lib/utils";
 
 const ICONS = {
     location: "/assets/navbar/icons/Location.svg",
@@ -16,11 +20,70 @@ export default function Navbar() {
     const { cartCount } = useCartStore();
     const [mounted, setMounted] = useState(false);
     const count = cartCount();
+    const [addresses, setAddresses] = useState<AddressItem[]>([]);
+    const [selectedAddress, setSelectedAddress] = useState<AddressItem | null>(null);
+    const [isAddressDropdownOpen, setIsAddressDropdownOpen] = useState(false);
+    const [isLoadingAddresses, setIsLoadingAddresses] = useState(true);
+    const addressDropdownRef = useRef<HTMLDivElement>(null);
 
     // Only render badge after client-side hydration to avoid hydration mismatch
     useEffect(() => {
         setMounted(true);
     }, []);
+
+    // Fetch addresses
+    useEffect(() => {
+        const fetchAddresses = async () => {
+            try {
+                setIsLoadingAddresses(true);
+                const response = await AddressService.getAddresses();
+
+                // Map API response to UI format
+                const mappedAddresses: AddressItem[] = response.addresses.map((addr) => ({
+                    id: addr.id,
+                    label: addr.label,
+                    type: (addr.address_type.toLowerCase() === 'work' ? 'office' : addr.address_type.toLowerCase()) as AddressType,
+                    houseNumber: addr.house_flat_door_number,
+                    street: addr.street_locality_area,
+                    landmark: addr.landmark,
+                    city: addr.city,
+                    pincode: addr.pincode,
+                }));
+
+                setAddresses(mappedAddresses);
+
+                // Auto-select first address if available
+                if (mappedAddresses.length > 0 && !selectedAddress) {
+                    setSelectedAddress(mappedAddresses[0]);
+                }
+            } catch (error) {
+                console.error("Failed to fetch addresses:", error);
+            } finally {
+                setIsLoadingAddresses(false);
+            }
+        };
+
+        fetchAddresses();
+    }, []);
+
+    // Handle click outside to close dropdown
+    useEffect(() => {
+        if (!isAddressDropdownOpen) return;
+
+        const handleClickOutside = (event: MouseEvent) => {
+            if (
+                addressDropdownRef.current &&
+                !addressDropdownRef.current.contains(event.target as Node)
+            ) {
+                setIsAddressDropdownOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isAddressDropdownOpen]);
 
 
     return (
@@ -30,7 +93,7 @@ export default function Navbar() {
                     {/* Left Section */}
                     <div className="flex items-center gap-2 tablet:gap-4 desktop:gap-8 desktop:flex-1">
                         {/* Logo */}
-                        <Link href="/home" className="flex flex-shrink-0 items-center">
+                        <Link href="/home" className="flex shrink-0 items-center">
                             <Image
                                 src="/assets/navbar/images/logo.svg"
                                 alt="Meghana's Foods"
@@ -41,21 +104,91 @@ export default function Navbar() {
                             />
                         </Link>
 
-                        {/* Location */}
-                        <div className="hidden min-w-0 items-center gap-2 tablet:flex">
-                            <Image
-                                src={ICONS.location}
-                                alt="Location pin"
-                                width={24}
-                                height={24}
-                                className="h-4 w-4 text-gray-600 tablet:h-5 tablet:w-5"
-                            />
-                            <div className="flex min-w-0 flex-col">
-                                <span className="text-[10px] text-gray-500 tablet:text-xs">Deliver To</span>
-                                <span className="truncate text-xs font-semibold text-gray-900 tablet:text-sm">
-                                    708, 6th Main Rd, SBI Staff Colony, H...
-                                </span>
-                            </div>
+                        {/* Location Dropdown */}
+                        <div className="hidden min-w-0 items-center gap-2 tablet:flex relative" ref={addressDropdownRef}>
+                            <button
+                                onClick={() => setIsAddressDropdownOpen(!isAddressDropdownOpen)}
+                                className="flex min-w-0 items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                            >
+                                <Image
+                                    src={ICONS.location}
+                                    alt="Location pin"
+                                    width={24}
+                                    height={24}
+                                    className="h-4 w-4 text-gray-600 tablet:h-5 tablet:w-5 shrink-0"
+                                />
+                                <div className="flex min-w-0 flex-col text-left">
+                                    <span className="text-[10px] text-gray-500 tablet:text-xs">Deliver To</span>
+                                    {isLoadingAddresses ? (
+                                        <span className="text-xs font-semibold text-gray-900 tablet:text-sm">Loading...</span>
+                                    ) : selectedAddress ? (
+                                        <span className="truncate text-xs font-semibold text-gray-900 tablet:text-sm">
+                                            {formatAddress(selectedAddress).length > 40
+                                                ? `${formatAddress(selectedAddress).substring(0, 40)}...`
+                                                : formatAddress(selectedAddress)
+                                            }
+                                        </span>
+                                    ) : (
+                                        <span className="text-xs font-semibold text-gray-900 tablet:text-sm">Select Address</span>
+                                    )}
+                                </div>
+                                <ChevronDownIcon
+                                    className={cn(
+                                        "h-4 w-4 text-gray-600 transition-transform shrink-0",
+                                        isAddressDropdownOpen && "rotate-180"
+                                    )}
+                                />
+                            </button>
+
+                            {/* Address Dropdown */}
+                            {isAddressDropdownOpen && !isLoadingAddresses && addresses.length > 0 && (
+                                <div className="absolute top-full left-0 mt-2 w-80 max-h-[400px] overflow-y-auto custom-scrollbar bg-white rounded-xl border border-gray-200 shadow-lg z-50">
+                                    <div className="p-2">
+                                        {addresses.map((address) => {
+                                            const isSelected = selectedAddress?.id === address.id;
+                                            return (
+                                                <button
+                                                    key={address.id}
+                                                    onClick={() => {
+                                                        setSelectedAddress(address);
+                                                        setIsAddressDropdownOpen(false);
+                                                    }}
+                                                    className={cn(
+                                                        "w-full flex items-start gap-3 p-3 rounded-lg text-left transition-colors cursor-pointer",
+                                                        isSelected
+                                                            ? "bg-tango/10 border border-tango"
+                                                            : "hover:bg-gray-50 border border-transparent"
+                                                    )}
+                                                >
+                                                    <Image
+                                                        src={ADDRESS_TYPE_ICON_MAP[address.type].src}
+                                                        alt={ADDRESS_TYPE_ICON_MAP[address.type].alt}
+                                                        width={20}
+                                                        height={20}
+                                                        className="mt-0.5 shrink-0"
+                                                    />
+                                                    <div className="flex-1 min-w-0 flex flex-col gap-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className={cn(
+                                                                "text-sm font-semibold",
+                                                                isSelected ? "text-tango" : "text-midnight"
+                                                            )}>
+                                                                {address.label}
+                                                            </span>
+                                                            {isSelected && (
+                                                                <span className="text-xs text-tango font-medium">Selected</span>
+                                                            )}
+                                                        </div>
+                                                        <p className="text-xs text-gray-600 line-clamp-2">
+                                                            {formatAddress(address)}
+                                                        </p>
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
 

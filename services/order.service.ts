@@ -17,13 +17,16 @@ export interface CreateOrderRequest {
 }
 
 export interface CreateOrderResponse {
-    id: string;
-    branchCode: string;
-    channel: string;
-    items: OrderItem[];
+    orderId: string;
     status: string;
-    createdAt?: string;
-    updatedAt?: string;
+    message?: string;
+    orderData?: {
+        branchCode: string;
+        totalAmount: number;
+        items: OrderItem[];
+    };
+    // Legacy support - some APIs might return id instead
+    id?: string;
 }
 
 export interface PaymentInitiateRequest {

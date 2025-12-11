@@ -2,10 +2,12 @@
 
 import { useMemo, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import CartProgress, { type CartProgressStep } from "./components/CartProgress";
 import CartItemCard from "./components/CartItemCard";
 import CartSummary, { type ChargeLine } from "./components/CartSummary";
 import MenuAddonCard, { type MenuAddonItem } from "../menu/components/MenuAddonCard";
+import Button from "@/components/ui/Button";
 import { useCartStore } from "@/store/useCartStore";
 import { type Option } from "@/services/menu.service";
 
@@ -127,8 +129,29 @@ export default function CartPage() {
                         <div className="flex-1 space-y-6 desktop:min-w-0">
                             <div className="flex flex-col gap-4">
                                 {cartItems.length === 0 ? (
-                                    <div className="text-center py-12 bg-gray-50 rounded-xl">
-                                        <p className="text-gray-500 text-lg">Your cart is empty</p>
+                                    <div className="flex flex-col items-center justify-center py-16 px-4 bg-white rounded-xl">
+                                        <div className="mb-6 flex items-center justify-center">
+                                            <Image
+                                                src="/assets/cart/images/Mask group.svg"
+                                                alt="Empty cart"
+                                                width={156}
+                                                height={120}
+                                                className="w-[156px] h-[120px]"
+                                            />
+                                        </div>
+                                        <h2 className="text-xl font-semibold text-gray-900 mb-2 text-center">
+                                            Oops, your cart&apos;s on a diet
+                                        </h2>
+                                        <p className="text-gray-500 text-base font-normal mb-6 text-center max-w-md">
+                                            Add something tasty before it fades into emptiness.
+                                        </p>
+                                        <Button
+                                            variant="primary"
+                                            href="/menu"
+                                            className="bg-tango text-white px-6 py-3 rounded-lg"
+                                        >
+                                            Feed the cart
+                                        </Button>
                                     </div>
                                 ) : (
                                     cartItems.map((item) => (

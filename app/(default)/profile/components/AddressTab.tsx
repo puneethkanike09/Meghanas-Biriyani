@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Button from "@/components/ui/Button";
+import Loader from "@/components/ui/Loader";
 import { AddressService } from "@/services/address.service";
 import type { Address } from "@/services/address.service";
 import {
@@ -51,27 +52,39 @@ export default function AddressTab() {
     }, []);
 
     const handleDelete = async (id: string | number) => {
-        if (!window.confirm("Are you sure you want to delete this address?")) {
-            return;
-        }
+        const address = addresses.find((addr) => addr.id === id);
+        const addressLabel = address?.label || "this address";
 
-        try {
-            await AddressService.deleteAddress(String(id));
-            setAddresses((prev) => prev.filter((addr) => addr.id !== id));
-            toast.success("Address deleted successfully!");
-        } catch (error: any) {
-            console.error("Failed to delete address:", error);
+        toast.warning("Delete Address", {
+            description: `Are you sure you want to delete ${addressLabel}? This action cannot be undone.`,
+            action: {
+                label: "Delete",
+                onClick: async () => {
+                    try {
+                        await AddressService.deleteAddress(String(id));
+                        setAddresses((prev) => prev.filter((addr) => addr.id !== id));
+                        toast.success("Address deleted successfully!");
+                    } catch (error: any) {
+                        console.error("Failed to delete address:", error);
 
-            let errorMessage = "Failed to delete address";
-            if (error.response?.data?.message) {
-                const msg = error.response.data.message;
-                errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
+                        let errorMessage = "Failed to delete address";
+                        if (error.response?.data?.message) {
+                            const msg = error.response.data.message;
+                            errorMessage = Array.isArray(msg) ? msg.join(", ") : msg;
+                        } else if (error.message) {
+                            errorMessage = error.message;
+                        }
 
-            toast.error(errorMessage);
-        }
+                        toast.error(errorMessage);
+                    }
+                },
+            },
+            cancel: {
+                label: "Cancel",
+                onClick: () => { },
+            },
+            duration: Infinity, // Keep it open until user clicks
+        });
     };
 
     const handleEdit = (id: string | number) => {
@@ -94,7 +107,7 @@ export default function AddressTab() {
             {/* Addresses Grid */}
             {isLoading ? (
                 <div className="flex items-center justify-center py-12">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-tango"></div>
+                    <Loader message="Loading addresses..." />
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-4 tablet:grid-cols-2">

@@ -70,7 +70,7 @@ export function formatAddress(address: AddressItem): string {
         address.houseNumber,
         address.street,
         address.city,
-        address.pincode ? `PIN ${address.pincode}` : "",
+        address.pincode ? `${address.pincode}` : "",
     ];
 
     if (address.landmark) {

@@ -147,7 +147,7 @@ export default function PaymentPage() {
 
             try {
                 setIsInitializing(true);
-                
+
                 // Initiate payment
                 const paymentTransaction = await OrderService.initiatePayment({
                     orderId: orderId,
@@ -157,7 +157,7 @@ export default function PaymentPage() {
                 });
 
                 setTransaction(paymentTransaction);
-                
+
                 // Load Razorpay script
                 const scriptLoaded = await loadRazorpayScript();
                 if (scriptLoaded && window.Razorpay) {
@@ -165,7 +165,7 @@ export default function PaymentPage() {
                 }
             } catch (error: any) {
                 console.error("Failed to initiate payment:", error);
-                
+
                 let errorMessage = "Failed to initiate payment";
                 if (error.response?.data?.message) {
                     const msg = error.response.data.message;
@@ -173,7 +173,7 @@ export default function PaymentPage() {
                 } else if (error.message) {
                     errorMessage = error.message;
                 }
-                
+
                 toast.error(errorMessage);
             } finally {
                 setIsInitializing(false);
@@ -215,6 +215,7 @@ export default function PaymentPage() {
             order_id: transaction.gatewayTransactionId, // Razorpay order ID
             handler: (response: any) => {
                 console.log("Payment success:", response);
+                console.log("Razorpay Transaction ID:", response.razorpay_payment_id);
                 // Clear order ID from sessionStorage
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem('currentOrderId');
@@ -296,11 +297,11 @@ export default function PaymentPage() {
                                 totalPayable={totalPayable}
                                 onProceed={handleProceedToPay}
                                 ctaLabel={
-                                    isInitializing 
-                                        ? "Initializing Payment..." 
-                                        : isCheckoutReady 
-                                        ? "Reopen Payment" 
-                                        : "Pay Now"
+                                    isInitializing
+                                        ? "Initializing Payment..."
+                                        : isCheckoutReady
+                                            ? "Reopen Payment"
+                                            : "Pay Now"
                                 }
                                 isCtaDisabled={!isCheckoutReady || isInitializing}
                             />

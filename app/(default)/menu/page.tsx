@@ -46,10 +46,16 @@ function MenuPageContent() {
     useEffect(() => {
         if (storeSelectedCategoryId && storeSelectedCategoryId !== selectedCategoryId) {
             setSelectedCategoryId(storeSelectedCategoryId);
-            // Clear the store selection after using it
-            setStoreSelectedCategoryId(null);
+            // Don't clear the store selection - keep it for MenuHamburger to show
         }
-    }, [storeSelectedCategoryId, selectedCategoryId, setStoreSelectedCategoryId]);
+    }, [storeSelectedCategoryId, selectedCategoryId]);
+    
+    // Sync local selectedCategoryId back to store so MenuHamburger can show it
+    useEffect(() => {
+        if (selectedCategoryId && selectedCategoryId !== "all") {
+            setStoreSelectedCategoryId(selectedCategoryId);
+        }
+    }, [selectedCategoryId, setStoreSelectedCategoryId]);
 
     // Fetch Items when Category Changes
     useEffect(() => {
@@ -94,8 +100,12 @@ function MenuPageContent() {
                         selectedCategoryId={selectedCategoryId}
                         onSelectCategory={(categoryId) => {
                             setSelectedCategoryId(categoryId);
-                            // Clear store selection when user manually selects
-                            setStoreSelectedCategoryId(null);
+                            // Update store selection when user manually selects
+                            if (categoryId !== "all") {
+                                setStoreSelectedCategoryId(categoryId);
+                            } else {
+                                setStoreSelectedCategoryId(null);
+                            }
                         }}
                     />
                 )}

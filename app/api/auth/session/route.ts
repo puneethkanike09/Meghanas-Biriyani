@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     response.cookies.set(REFRESH_TOKEN_COOKIE, body.refreshToken, {
         httpOnly: true,
         secure: IS_PRODUCTION,
-        sameSite: "lax",
+        sameSite: "strict",
         path: "/",
         maxAge: REFRESH_TOKEN_TTL,
     });

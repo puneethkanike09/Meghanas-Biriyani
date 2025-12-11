@@ -22,6 +22,7 @@ const apiClient = axios.create({
 // Shared refresh promise to serialize concurrent refresh attempts
 let refreshPromise: Promise<string | null> | null = null;
 let refreshTimeout: ReturnType<typeof setTimeout> | null = null;
+let refreshTokenInvalid = false; // Flag to prevent refresh attempts after 401
 const REFRESH_TIMEOUT_MS = 10000; // 10 seconds max for refresh
 const MAX_REFRESH_RETRIES = 1;
 
@@ -47,6 +48,11 @@ const processQueue = (error: unknown | null, token: string | null = null) => {
 // Refresh token function
 async function refreshToken(): Promise<string | null> {
   const store = useAuthStore.getState();
+
+  // Prevent refresh attempts if we know the refresh token is invalid
+  if (refreshTokenInvalid) {
+    throw new Error('Refresh token is invalid. Please login again.');
+  }
 
   // If already refreshing, return existing promise
   if (refreshPromise) {
@@ -90,6 +96,9 @@ async function refreshToken(): Promise<string | null> {
       // Update store with new token
       store.finishRefresh(accessToken);
 
+      // Reset invalid flag on successful refresh
+      refreshTokenInvalid = false;
+
       return accessToken;
     } catch (error: any) {
       // Only logout if refresh token is actually invalid (401)
@@ -97,6 +106,8 @@ async function refreshToken(): Promise<string | null> {
       const isRefreshTokenInvalid = error?.response?.status === 401;
 
       if (isRefreshTokenInvalid) {
+        // Mark refresh token as invalid to prevent further attempts
+        refreshTokenInvalid = true;
         // Refresh token is invalid - user needs to login again
         store.logout();
       }
@@ -155,10 +166,16 @@ apiClient.interceptors.response.use(
 
     // Handle 401 Unauthorized - attempt token refresh
     if (error.response?.status === 401) {
-      // If refresh request failed, reset and logout
+      // If refresh request failed, mark as invalid and logout
       if (isRefreshRequest) {
+        refreshTokenInvalid = true;
         useAuthStore.getState().logout();
         processQueue(error, null);
+        return Promise.reject(new Error('Session expired. Please login again.'));
+      }
+
+      // Don't attempt refresh if we know the refresh token is invalid
+      if (refreshTokenInvalid) {
         return Promise.reject(new Error('Session expired. Please login again.'));
       }
 
@@ -225,5 +242,10 @@ apiClient.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// Export function to reset refresh token invalid flag (called when new session is established)
+export function resetRefreshTokenInvalid() {
+  refreshTokenInvalid = false;
+}
 
 export default apiClient;

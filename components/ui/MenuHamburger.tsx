@@ -20,11 +20,13 @@ export default function MenuHamburger({
 }: MenuHamburgerProps) {
     const router = useRouter();
     const pathname = usePathname();
-    const { categories, fetchCategories, loading, setSelectedCategoryId } = useMenuStore();
+    const { categories, fetchCategories, loading, setSelectedCategoryId, selectedCategoryId } = useMenuStore();
     const [isHovered, setIsHovered] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [maxHeight, setMaxHeight] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
+    const scrollContainerRef = useRef<HTMLDivElement>(null);
+    const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
 
     // Fetch categories on mount
     useEffect(() => {
@@ -63,6 +65,49 @@ export default function MenuHamburger({
         calculateMaxHeight();
         window.addEventListener("resize", calculateMaxHeight);
 
+        // Auto-scroll to selected category when menu opens
+        if (selectedCategoryId && !loading && scrollContainerRef.current && categories.length > 0) {
+            const scrollToSelected = () => {
+                const scrollContainer = scrollContainerRef.current;
+                if (!scrollContainer) return;
+
+                // Try to get button from refs first, then from DOM
+                let selectedButton = buttonRefs.current.get(selectedCategoryId);
+                if (!selectedButton) {
+                    const domButton = scrollContainer.querySelector(
+                        `[data-category-id="${selectedCategoryId}"]`
+                    ) as HTMLButtonElement;
+                    if (domButton) {
+                        selectedButton = domButton;
+                    }
+                }
+
+                if (!selectedButton) return;
+
+                // Get actual viewport positions
+                const containerRect = scrollContainer.getBoundingClientRect();
+                const buttonRect = selectedButton.getBoundingClientRect();
+
+                // Calculate centers
+                const containerCenterY = containerRect.top + containerRect.height / 2;
+                const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+
+                // Calculate how much we need to scroll
+                const scrollDelta = buttonCenterY - containerCenterY;
+
+                // Apply the scroll
+                scrollContainer.scrollBy({
+                    top: scrollDelta,
+                    behavior: "smooth",
+                });
+            };
+
+            // Wait for DOM to be ready and categories to render
+            requestAnimationFrame(() => {
+                setTimeout(scrollToSelected, 150);
+            });
+        }
+
         const handleClickOutside = (event: MouseEvent) => {
             if (
                 containerRef.current &&
@@ -87,7 +132,7 @@ export default function MenuHamburger({
             document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("keydown", handleKeyDown);
         };
-    }, [isOpen]);
+    }, [isOpen, selectedCategoryId, categories, loading]);
 
     return (
         <div ref={containerRef} className="relative flex justify-center">
@@ -142,6 +187,7 @@ export default function MenuHamburger({
                 <div className="pointer-events-auto absolute bottom-0 left-1/2 z-50 -translate-x-1/2">
                     <nav className="inline-flex flex-col items-center justify-center rounded-3xl bg-black-main px-2 py-3 shadow-lg ring-1 ring-black/10">
                         <div
+                            ref={scrollContainerRef}
                             className="flex w-60 flex-col items-stretch gap-1 overflow-y-auto custom-scrollbar"
                             style={{ maxHeight: maxHeight > 0 ? `${maxHeight}px` : "70vh" }}
                         >
@@ -151,17 +197,38 @@ export default function MenuHamburger({
                                 </div>
                             ) : (
                                 <>
-                                    {categories.map((category) => (
-                                        <Button
-                                            key={category.categoryId}
-                                            type="button"
-                                            variant="dark"
-                                            className="h-auto w-full shrink-0 justify-center rounded-full bg-transparent px-3 py-2 text-white hover:bg-gray-800 border-none shadow-none"
-                                            onClick={() => handleSelect(category.categoryId)}
-                                        >
-                                            <span className="text-base font-normal text-white">{category.name}</span>
-                                        </Button>
-                                    ))}
+                                    {categories.map((category) => {
+                                        const isSelected = selectedCategoryId === category.categoryId;
+                                        return (
+                                            <div
+                                                key={category.categoryId}
+                                                ref={(el) => {
+                                                    if (el) {
+                                                        const button = el.querySelector('button[data-category-id]') as HTMLButtonElement;
+                                                        if (button) {
+                                                            buttonRefs.current.set(category.categoryId, button);
+                                                        }
+                                                    } else {
+                                                        buttonRefs.current.delete(category.categoryId);
+                                                    }
+                                                }}
+                                            >
+                                                <button
+                                                    type="button"
+                                                    data-category-id={category.categoryId}
+                                                    className={cn(
+                                                        "h-auto w-full shrink-0 justify-center rounded-full px-3 py-2 border-none shadow-none text-base font-normal transition-colors cursor-pointer",
+                                                        isSelected
+                                                            ? "bg-tango text-white hover:bg-tango"
+                                                            : "bg-transparent text-white hover:bg-gray-800"
+                                                    )}
+                                                    onClick={() => handleSelect(category.categoryId)}
+                                                >
+                                                    {category.name}
+                                                </button>
+                                            </div>
+                                        );
+                                    })}
                                     <Button
                                         type="button"
                                         variant="dark"

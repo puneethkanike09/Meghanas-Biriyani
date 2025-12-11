@@ -8,6 +8,7 @@ import CartProgress, { type CartProgressStep } from "../components/CartProgress"
 import DeliveryAddressCard from "../components/DeliveryAddressCard";
 import OrderSummary, { type OrderItem, type OrderCharge } from "../components/OrderSummary";
 import Button from "@/components/ui/Button";
+import Loader from "@/components/ui/Loader";
 import { AddressService } from "@/services/address.service";
 import { OrderService } from "@/services/order.service";
 import { useCartStore } from "@/store/useCartStore";
@@ -130,8 +131,12 @@ export default function DeliveryPage() {
             });
 
             // Store order ID in sessionStorage for payment page
-            if (typeof window !== 'undefined') {
-                sessionStorage.setItem('currentOrderId', order.id);
+            // Use orderId from response, fallback to id for legacy support
+            const orderIdToStore = order.orderId || order.id;
+            if (typeof window !== 'undefined' && orderIdToStore) {
+                sessionStorage.setItem('currentOrderId', orderIdToStore);
+            } else {
+                throw new Error("Order ID not found in response");
             }
 
             // Navigate to payment page
@@ -172,7 +177,7 @@ export default function DeliveryPage() {
 
                             {isLoadingAddresses ? (
                                 <div className="flex items-center justify-center py-12">
-                                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-tango"></div>
+                                    <Loader message="Loading addresses..." />
                                 </div>
                             ) : addresses.length === 0 ? (
                                 <div className="text-center py-12 bg-gray-50 rounded-xl">

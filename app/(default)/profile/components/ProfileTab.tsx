@@ -5,6 +5,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import Loader from "@/components/ui/Loader";
 import { cn } from "@/lib/utils";
 import { AuthService } from "@/services/auth.service";
 import { UserService } from "@/services/user.service";
@@ -141,7 +142,7 @@ export default function ProfileTab() {
             {/* Form */}
             {isLoading ? (
                 <div className="flex items-center justify-center py-12">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-tango"></div>
+                    <Loader message="Loading profile..." />
                 </div>
             ) : (
                 <div className="flex flex-col tablet:flex-row gap-4">

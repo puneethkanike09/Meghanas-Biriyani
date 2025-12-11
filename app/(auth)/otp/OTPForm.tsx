@@ -132,6 +132,10 @@ export default function OTPForm() {
                 refreshToken: response.refresh_token
             });
 
+            // Reset refresh token invalid flag since we have a new valid session
+            const { resetRefreshTokenInvalid } = await import('@/lib/api-client');
+            resetRefreshTokenInvalid();
+
             // Update Zustand store with access token and user (refresh token now in httpOnly cookies)
             setAuth({
                 user: response.user,

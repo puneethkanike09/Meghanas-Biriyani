@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { toast } from "sonner";
 import AddressForm from "../../components/AddressForm";
+import Loader from "@/components/ui/Loader";
 import { AddressService } from "@/services/address.service";
 import type { AddressItem, AddressType } from "../../data";
 
@@ -62,7 +63,7 @@ export default function EditAddressPage() {
     if (isLoading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-tango"></div>
+                <Loader message="Loading address..." />
             </div>
         );
     }
