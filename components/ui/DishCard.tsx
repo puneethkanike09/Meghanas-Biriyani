@@ -68,7 +68,7 @@ export default function DishCard({
     const { getItemQuantity, addItem, removeItem, getCartItemId } = useCartStore();
     const [mounted, setMounted] = useState(false);
     const [isDeliverable, setIsDeliverable] = useState(false);
-    
+
     // Only access cart store after mount to avoid hydration mismatch
     const cartQuantity = mounted ? getItemQuantity(id.toString()) : 0;
     const displayQuantity = quantity !== undefined ? quantity : cartQuantity;
@@ -149,7 +149,7 @@ export default function DishCard({
     // Expanded variant has different layout
     if (variant === "expanded") {
         return (
-            <div 
+            <div
                 onClick={onClick}
                 className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
             >
@@ -175,10 +175,7 @@ export default function DishCard({
                     </div>
 
                     {/* Details Section */}
-                    <div 
-                        className="flex flex-col gap-4 p-4 tablet:p-6 flex-1 bg-white"
-                        onClick={(e) => e.stopPropagation()}
-                    >
+                    <div className="flex flex-col gap-4 p-4 tablet:p-6 flex-1 bg-white">
                         {/* Veg/Non-veg Icon & Rating */}
                         <div className="flex items-center justify-between">
                             {isVeg ? <VegIcon /> : <NonVegIcon />}
@@ -204,7 +201,10 @@ export default function DishCard({
                         <div className="flex-1" />
 
                         {/* Price & Add Button */}
-                        <div className="flex items-center justify-between">
+                        <div
+                            className="flex items-center justify-between"
+                            onClick={(e) => e.stopPropagation()}
+                        >
                             <span className="text-xl tablet:text-2xl font-semibold text-midnight">
                                 {formattedPrice}
                             </span>
