@@ -48,7 +48,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                     <div className="space-y-1">
 
                         <h2 className="text-2xl font-semibold text-midnight">
-                            #{order.id}
+                            {order.id.startsWith('#') ? order.id : `#${order.id}`}
                         </h2>
                     </div>
                     <button
@@ -156,7 +156,7 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                                         />
                                         <div className="flex flex-col">
                                             <span className="text-xs font-semibold text-midnight">
-                                                {item.name}
+                                                {item.name} {item.quantity > 1 ? `x${item.quantity}` : ''}
                                             </span>
                                         </div>
                                     </div>

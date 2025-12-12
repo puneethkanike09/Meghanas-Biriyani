@@ -11,6 +11,7 @@ export interface OrderItem {
 
 export interface DeliveryAddress {
     label: string;
+    name?: string; // Optional name field
     addressLine: string;
     city: string;
     state: string;
@@ -66,8 +67,75 @@ export interface GetOrdersParams {
     limit?: number;
 }
 
+export interface OrderItemResponse {
+    id: string;
+    shortName: string;
+    quantity: string;
+    unitPrice: string;
+    itemTotalAmount: string;
+}
+
+export interface BillingBreakdown {
+    itemTotal: string;
+    packagingCharges: string;
+    deliveryFee: string;
+    taxes: string;
+    totalBill: string;
+}
+
+export interface BranchAddress {
+    name: string;
+    addressLine: string;
+    city: string;
+    state: string;
+    country: string;
+    zip: string;
+}
+
+export interface OrderDeliveryAddress {
+    label: string;
+    name: string;
+    addressLine: string;
+    city: string;
+    state: string;
+    country: string;
+    zip: string;
+    landmark?: string;
+}
+
+export interface OrderResponse {
+    id: string;
+    displayOrderId: string;
+    ristaSaleId: string;
+    invoiceNumber: string;
+    customerId: string;
+    branchCode: string;
+    status: string;
+    invoiceType: string;
+    fulfillmentStatus: string;
+    orderStatus: string;
+    channel: string;
+    customerName: string;
+    customerEmail: string | null;
+    customerPhone: string;
+    itemTotalAmount: string;
+    totalAmount: string;
+    billAmount: string;
+    createdAt: string;
+    updatedAt: string;
+    closedAt: string;
+    deliveryDateTime: string;
+    branchAddress: BranchAddress;
+    deliveryAddress: OrderDeliveryAddress;
+    items: OrderItemResponse[];
+    payments: any[];
+    billingBreakdown: BillingBreakdown;
+    deliveryInfo?: any;
+    sourceInfo?: any;
+}
+
 export interface GetOrdersResponse {
-    orders: any[]; // Will be refined based on actual API response
+    orders: OrderResponse[];
     total?: number;
     page?: number;
     limit?: number;

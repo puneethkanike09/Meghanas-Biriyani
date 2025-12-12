@@ -97,7 +97,7 @@ function loadRazorpayScript() {
 
 export default function PaymentPage() {
     const router = useRouter();
-    const { items: cartItems, subtotal, tax, deliveryFee, total } = useCartStore();
+    const { items: cartItems, subtotal, tax, deliveryFee, total, clearCart } = useCartStore();
     const [orderId, setOrderId] = useState<string | null>(null);
     const [transaction, setTransaction] = useState<any>(null);
     const [isInitializing, setIsInitializing] = useState(true);
@@ -213,14 +213,27 @@ export default function PaymentPage() {
             description: "Order Payment",
             image: paymentLogo ?? undefined,
             order_id: transaction.gatewayTransactionId, // Razorpay order ID
-            handler: (response: any) => {
+            handler: async (response: any) => {
                 console.log("Payment success:", response);
                 console.log("Razorpay Transaction ID:", response.razorpay_payment_id);
+                
+                // Clear cart immediately on successful payment
+                try {
+                    await clearCart();
+                    console.log("✅ Cart cleared after successful payment");
+                } catch (cartError) {
+                    console.error("Failed to clear cart:", cartError);
+                    // Don't block navigation - cart clearing is not critical for showing confirmation
+                }
+                
                 // Clear order ID from sessionStorage
                 if (typeof window !== 'undefined') {
                     sessionStorage.removeItem('currentOrderId');
                 }
-                router.push("/cart/confirmation");
+                
+                // Pass transactionId to confirmation page
+                const transactionId = transaction?.transactionId || response.razorpay_payment_id;
+                router.push(`/cart/confirmation?transactionId=${transactionId}`);
             },
             prefill: {
                 name: "Meghana Foods Patron",

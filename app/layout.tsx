@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "sonner";
 import { FCMProvider } from "@/components/FCMProvider";
+import { AuthProvider } from "@/components/AuthProvider";
 import "./globals.css";
 
 const geistSans = localFont({
@@ -63,7 +64,9 @@ export default function RootLayout({
         suppressHydrationWarning
       >
         <FCMProvider>
-          {children}
+          <AuthProvider>
+            {children}
+          </AuthProvider>
         </FCMProvider>
         <Toaster position="bottom-right" richColors />
       </body>

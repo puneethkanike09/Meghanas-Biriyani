@@ -144,18 +144,18 @@ export default function DeliveryPage() {
                 branchCode: "HO",
                 channel: "Meghana Web sale",
                 items: orderItems,
-                // delivery: {
-                //     mode: " ", // Delivery mode - could be "DELIVERY", "PICKUP", etc.
-                //     address: {
-                //         label: selectedAddress.label,
-                //         addressLine: addressLine,
-                //         city: city,
-                //         state: state,
-                //         country: "India", // Default to India
-                //         zip: selectedAddress.pincode,
-                //         landmark: selectedAddress.landmark,
-                //     },
-                // },
+                delivery: {
+                    mode: "Delivery", // Delivery mode - could be "DELIVERY", "PICKUP", etc.
+                    address: {
+                        label: selectedAddress.label,
+                        addressLine: addressLine,
+                        city: city,
+                        state: state,
+                        country: "India", // Default to India
+                        zip: selectedAddress.pincode,
+                        landmark: selectedAddress.landmark,
+                    },
+                },
                 status: "Open",
             });
 

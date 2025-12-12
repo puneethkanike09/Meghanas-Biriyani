@@ -62,72 +62,130 @@ const formatCurrency = (amount: number): string => {
     return `₹${amount.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 };
 
+// Helper function to format address
+const formatAddress = (address: {
+    addressLine: string;
+    city: string;
+    state: string;
+    country: string;
+    zip: string;
+    landmark?: string;
+}): string => {
+    const parts = [
+        address.addressLine,
+        address.landmark,
+        address.city,
+        address.state,
+        address.zip,
+        address.country,
+    ].filter(Boolean);
+    return parts.join(', ');
+};
+
 // Helper function to map API order to UI Order format
 const mapApiOrderToUIOrder = (apiOrder: any): Order => {
-    // Map status
+    // Map status based on fulfillmentStatus and orderStatus
     let status: "delivered" | "cancelled" | "processing" = "processing";
-    let statusText = "Processing";
+    let statusText = apiOrder.orderStatus || "Processing";
 
-    if (apiOrder.status?.toLowerCase() === "delivered" || apiOrder.status?.toLowerCase() === "completed") {
+    const fulfillmentStatus = apiOrder.fulfillmentStatus?.toUpperCase();
+    if (fulfillmentStatus === "DELIVERED" || fulfillmentStatus === "COMPLETED") {
         status = "delivered";
-        statusText = "Order Delivered";
-    } else if (apiOrder.status?.toLowerCase() === "cancelled" || apiOrder.status?.toLowerCase() === "canceled") {
+        statusText = apiOrder.orderStatus || "Order Delivered";
+    } else if (fulfillmentStatus === "CANCELLED" || fulfillmentStatus === "CANCELED" || apiOrder.status?.toUpperCase() === "CANCELLED") {
         status = "cancelled";
-        statusText = "Order Cancelled";
+        statusText = apiOrder.orderStatus || "Order Cancelled";
+    } else {
+        statusText = apiOrder.orderStatus || "Processing";
     }
 
-    // Map items
+    // Map items - itemTotalAmount is the total for the item (unitPrice * quantity)
     const menuItems: OrderItem[] = (apiOrder.items || []).map((item: any) => ({
-        name: item.longName || item.shortName || item.name || "Unknown Item",
-        price: formatCurrency(item.unitPrice || item.price || 0),
+        name: item.shortName || "Unknown Item",
+        price: formatCurrency(parseFloat(item.itemTotalAmount || "0")), // Total price for this item (unitPrice * quantity)
         isVeg: false, // Default, can be enhanced if API provides this
-        quantity: item.quantity || 1,
+        quantity: parseInt(item.quantity || "1", 10),
     }));
 
-    // Get images from items (if available)
-    const images = (apiOrder.items || [])
-        .map((item: any) => item.imageUrl || item.image_url || "/assets/homepage/images/top10.jpg")
-        .filter((img: string) => img) || ["/assets/homepage/images/top10.jpg"];
+    // Use placeholder images (API doesn't provide item images)
+    const images = menuItems.map(() => "/assets/homepage/images/top10.jpg");
 
-    // Map charges (if available in API response)
-    const charges: OrderCharge[] = [
-        {
+    // Map charges from billingBreakdown
+    const billingBreakdown = apiOrder.billingBreakdown || {};
+    const charges: OrderCharge[] = [];
+
+    if (billingBreakdown.itemTotal) {
+        charges.push({
             label: "Item Total",
-            value: formatCurrency(apiOrder.subtotal || apiOrder.total || 0),
+            value: formatCurrency(parseFloat(billingBreakdown.itemTotal)),
             emphasize: true
-        },
-    ];
-
-    if (apiOrder.deliveryFee) {
-        charges.push({ label: "Delivery Fee", value: formatCurrency(apiOrder.deliveryFee) });
-    }
-    if (apiOrder.tax) {
-        charges.push({ label: "Taxes", value: formatCurrency(apiOrder.tax) });
+        });
     }
 
-    // Map destinations (if available)
-    const destinations: OrderDestination[] = apiOrder.deliveryAddress ? [{
-        name: apiOrder.deliveryAddress.label || "Delivery Address",
-        address: [
-            apiOrder.deliveryAddress.house_flat_door_number,
-            apiOrder.deliveryAddress.street_locality_area,
-            apiOrder.deliveryAddress.landmark,
-            apiOrder.deliveryAddress.city,
-            apiOrder.deliveryAddress.pincode,
-        ].filter(Boolean).join(", "),
-    }] : [];
+    if (billingBreakdown.packagingCharges && parseFloat(billingBreakdown.packagingCharges) > 0) {
+        charges.push({
+            label: "Packaging Charges",
+            value: formatCurrency(parseFloat(billingBreakdown.packagingCharges))
+        });
+    }
+
+    if (billingBreakdown.deliveryFee && parseFloat(billingBreakdown.deliveryFee) > 0) {
+        charges.push({
+            label: "Delivery Fee",
+            value: formatCurrency(parseFloat(billingBreakdown.deliveryFee))
+        });
+    }
+
+    if (billingBreakdown.taxes && parseFloat(billingBreakdown.taxes) > 0) {
+        charges.push({
+            label: "Taxes",
+            value: formatCurrency(parseFloat(billingBreakdown.taxes))
+        });
+    }
+
+    // Map destinations - branch address and delivery address
+    const destinations: OrderDestination[] = [];
+
+    if (apiOrder.branchAddress) {
+        destinations.push({
+            name: apiOrder.branchAddress.name || "Branch",
+            address: formatAddress(apiOrder.branchAddress),
+        });
+    }
+
+    if (apiOrder.deliveryAddress) {
+        destinations.push({
+            name: apiOrder.deliveryAddress.label || "Delivery Address",
+            address: formatAddress(apiOrder.deliveryAddress),
+        });
+    }
+
+    // Determine payment method from payments array or tags
+    let paymentMethod = "Paid";
+    if (apiOrder.payments && apiOrder.payments.length > 0) {
+        const payment = apiOrder.payments[0];
+        paymentMethod = payment.method || payment.gateway || "Paid";
+    } else if (apiOrder.tags && Array.isArray(apiOrder.tags)) {
+        // Check for COD tag
+        if (apiOrder.tags.some((tag: string) => tag.toLowerCase() === "cod")) {
+            paymentMethod = "Cash on Delivery";
+        }
+    }
+
+    // Use displayOrderId or invoiceNumber for display
+    const displayId = apiOrder.displayOrderId || apiOrder.invoiceNumber || apiOrder.id;
 
     return {
-        id: apiOrder.id || apiOrder.orderId || "",
+        id: displayId,
         images: images.length > 0 ? images : ["/assets/homepage/images/top10.jpg"],
         status,
         statusText,
-        date: formatDate(apiOrder.createdAt || apiOrder.created_at || apiOrder.date || new Date().toISOString()),
+        date: formatDate(apiOrder.createdAt || apiOrder.deliveryDateTime || new Date().toISOString()),
         menuItems,
         destinations,
         charges,
-        paymentMethod: apiOrder.paymentMethod || apiOrder.payment_method || "Paid",
-        totalAmount: formatCurrency(apiOrder.total || apiOrder.totalAmount || 0),
+        paymentMethod,
+        totalAmount: formatCurrency(parseFloat(billingBreakdown.totalBill || apiOrder.billAmount || apiOrder.totalAmount || 0)),
     };
 };
 
@@ -293,7 +351,7 @@ export default function OrdersTab() {
                                         {/* Order Details */}
                                         <div className="flex flex-col gap-2">
                                             <div className="text-sm font-normal text-midnight">
-                                                ORDER #{order.id}
+                                                {order.id.startsWith('#') ? order.id : `ORDER ${order.id}`}
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Image

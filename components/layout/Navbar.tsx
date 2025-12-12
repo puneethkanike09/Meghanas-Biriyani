@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useCartStore } from "@/store/useCartStore";
+import { useAuthStore } from "@/store/useAuthStore";
 import { AddressService } from "@/services/address.service";
 import { ADDRESS_TYPE_ICON_MAP, formatAddress, type AddressItem, type AddressType } from "@/app/(default)/profile/address/data";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,7 @@ const ICONS = {
 
 export default function Navbar() {
     const { cartCount } = useCartStore();
+    const { isAuthenticated, accessToken } = useAuthStore();
     const [mounted, setMounted] = useState(false);
     const count = cartCount();
     const [addresses, setAddresses] = useState<AddressItem[]>([]);
@@ -31,8 +33,14 @@ export default function Navbar() {
         setMounted(true);
     }, []);
 
-    // Fetch addresses
+    // Fetch addresses only if user is authenticated
     useEffect(() => {
+        // Don't fetch addresses if user is not authenticated
+        if (!isAuthenticated()) {
+            setIsLoadingAddresses(false);
+            return;
+        }
+
         const fetchAddresses = async () => {
             try {
                 setIsLoadingAddresses(true);
@@ -64,7 +72,7 @@ export default function Navbar() {
         };
 
         fetchAddresses();
-    }, []);
+    }, [accessToken]);
 
     // Handle click outside to close dropdown
     useEffect(() => {
