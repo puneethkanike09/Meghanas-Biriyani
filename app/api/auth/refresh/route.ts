@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString()
         });
         const response = NextResponse.json(
-            { message: "Session expired" },
+            { message: "Session expired. Please login again." },
             { status: 401 }
         );
         console.log('🔄 [REFRESH API] Returning 401 - removing cookies');

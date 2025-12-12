@@ -180,7 +180,15 @@ export default function OTPForm() {
                 </h1>
             </header>
 
-            <div className="flex flex-col gap-6">
+            <form
+                className="flex flex-col gap-6"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    if (otp.join("").length === 4 && !loading) {
+                        handleConfirm();
+                    }
+                }}
+            >
                 <div className="flex gap-3">
                     {otp.map((digit, index) => (
                         <div key={index} className="relative h-16 w-16">
@@ -191,7 +199,14 @@ export default function OTPForm() {
                                 maxLength={1}
                                 value={digit}
                                 onChange={(e) => handleOtpChange(index, e.target.value)}
-                                onKeyDown={(e) => handleKeyDown(index, e)}
+                                onKeyDown={(e) => {
+                                    handleKeyDown(index, e);
+                                    // Handle Enter key on any input
+                                    if (e.key === "Enter" && otp.join("").length === 4 && !loading) {
+                                        e.preventDefault();
+                                        handleConfirm();
+                                    }
+                                }}
                                 onPaste={handlePaste}
                                 className="h-full w-full rounded-lg border border-gray-300 text-center text-5xl font-normal text-midnight transition-colors focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20"
                                 style={{ padding: 0, lineHeight: "64px" }}
@@ -223,25 +238,24 @@ export default function OTPForm() {
                 </div>
 
                 <Button
-                    type="button"
+                    type="submit"
                     variant="primary"
-                    onClick={handleConfirm}
                     className="h-auto w-full py-2.5"
                     disabled={otp.join("").length !== 4 || loading}
                 >
                     {loading ? "Verifying..." : "Confirm OTP"}
                 </Button>
+            </form>
 
-                <div className="flex items-center gap-3 text-sm text-gray-500">
-                    <span className="h-px flex-1 bg-gray-200" />
-                    OR
-                    <span className="h-px flex-1 bg-gray-200" />
-                </div>
-
-                <Button href="/home" variant="neutral">
-                    Skip for Now
-                </Button>
+            <div className="flex items-center gap-3 text-sm text-gray-500">
+                <span className="h-px flex-1 bg-gray-200" />
+                OR
+                <span className="h-px flex-1 bg-gray-200" />
             </div>
+
+            <Button href="/home" variant="neutral">
+                Skip for Now
+            </Button>
         </div>
     );
 }

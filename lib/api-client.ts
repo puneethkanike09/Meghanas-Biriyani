@@ -2,6 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import { toast } from 'sonner';
 import { useAuthStore } from '@/store/useAuthStore';
 import { isTokenExpired, decodeJWT } from '@/lib/jwt-utils';
+import { navigate } from '@/lib/navigation';
 
 // Note: API base URL must be set via NEXT_PUBLIC_API_URL environment variable
 // We use a fallback for build time to prevent build errors
@@ -167,7 +168,7 @@ async function refreshToken(): Promise<string | null> {
 
         // Redirect to signin page (only if not already there or on root)
         if (typeof window !== 'undefined' && window.location.pathname !== '/' && !window.location.pathname.startsWith('/signin')) {
-          window.location.href = '/signin';
+          navigate('/signin');
         }
       } else {
         console.warn('🔄 [API CLIENT] refreshToken() - Non-401 error, keeping state (network/timeout issue)');
@@ -348,7 +349,7 @@ apiClient.interceptors.response.use(
 
         // Redirect to signin page (only if not already there or on root)
         if (typeof window !== 'undefined' && window.location.pathname !== '/' && !window.location.pathname.startsWith('/signin')) {
-          window.location.href = '/signin';
+          navigate('/signin');
         }
 
         return Promise.reject(new Error(errorMessage));
@@ -376,7 +377,7 @@ apiClient.interceptors.response.use(
           console.error('Failed to clear session cookies:', e);
         }
         if (typeof window !== 'undefined') {
-          window.location.href = '/signin';
+          navigate('/signin');
         }
         return Promise.reject(new Error(errorMessage));
       }
