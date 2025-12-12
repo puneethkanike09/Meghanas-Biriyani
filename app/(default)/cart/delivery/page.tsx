@@ -111,6 +111,12 @@ export default function DeliveryPage() {
         setIsCreatingOrder(true);
 
         try {
+            // Get selected address
+            const selectedAddress = addresses.find(addr => addr.id === selectedAddressId);
+            if (!selectedAddress) {
+                throw new Error("Selected address not found");
+            }
+
             // Map cart items to order items format
             // Note: skuCode might not be available in cart, using item_id as fallback
             const orderItems = cartItems.map((item) => ({
@@ -122,11 +128,34 @@ export default function DeliveryPage() {
                 unitPrice: item.base_price,
             }));
 
-            // Create order
+            // Parse city to extract city and state
+            // Format is typically "City, State" or just "City"
+            const cityParts = selectedAddress.city.split(',').map(part => part.trim());
+            const city = cityParts[0] || selectedAddress.city;
+            const state = cityParts[1] || "Karnataka"; // Default to Karnataka if not specified
+
+            // Construct addressLine from houseNumber and street
+            const addressLine = [selectedAddress.houseNumber, selectedAddress.street]
+                .filter(Boolean)
+                .join(', ');
+
+            // Create order with delivery address
             const order = await OrderService.createOrder({
                 branchCode: "HO",
                 channel: "Meghana Web sale",
                 items: orderItems,
+                // delivery: {
+                //     mode: " ", // Delivery mode - could be "DELIVERY", "PICKUP", etc.
+                //     address: {
+                //         label: selectedAddress.label,
+                //         addressLine: addressLine,
+                //         city: city,
+                //         state: state,
+                //         country: "India", // Default to India
+                //         zip: selectedAddress.pincode,
+                //         landmark: selectedAddress.landmark,
+                //     },
+                // },
                 status: "Open",
             });
 

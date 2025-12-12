@@ -9,10 +9,26 @@ export interface OrderItem {
     unitPrice: number;
 }
 
+export interface DeliveryAddress {
+    label: string;
+    addressLine: string;
+    city: string;
+    state: string;
+    country: string;
+    zip: string;
+    landmark?: string;
+}
+
+export interface Delivery {
+    mode: string;
+    address: DeliveryAddress;
+}
+
 export interface CreateOrderRequest {
     branchCode: string;
     channel: string;
     items: OrderItem[];
+    delivery?: Delivery;
     status: string;
 }
 
@@ -82,5 +98,3 @@ export const OrderService = {
         return response.data;
     },
 };
-
-

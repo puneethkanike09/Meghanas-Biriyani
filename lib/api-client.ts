@@ -108,7 +108,8 @@ async function refreshToken(): Promise<string | null> {
       if (isRefreshTokenInvalid) {
         // Mark refresh token as invalid to prevent further attempts
         refreshTokenInvalid = true;
-        // Refresh token is invalid - user needs to login again
+        // Refresh token is invalid or missing - user needs to login again
+        // Clear all user data since we can't authenticate without a valid refresh token
         store.logout();
       }
       // For other errors (network, timeout), keep state and let user retry
@@ -246,6 +247,16 @@ apiClient.interceptors.response.use(
 // Export function to reset refresh token invalid flag (called when new session is established)
 export function resetRefreshTokenInvalid() {
   refreshTokenInvalid = false;
+}
+
+// Export function to manually trigger token refresh (for app load scenarios)
+export async function attemptTokenRefresh(): Promise<string | null> {
+  try {
+    return await refreshToken();
+  } catch (error) {
+    // Silently fail - let the interceptor handle it on next API call
+    return null;
+  }
 }
 
 export default apiClient;
