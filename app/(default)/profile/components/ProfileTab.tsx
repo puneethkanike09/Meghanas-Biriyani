@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { toast } from "sonner";
 import Button from "@/components/ui/Button";
@@ -10,8 +11,14 @@ import { cn } from "@/lib/utils";
 import { AuthService } from "@/services/auth.service";
 import { UserService } from "@/services/user.service";
 import { deleteFcmToken } from "@/lib/firebase";
+import { useAuthStore } from "@/store/useAuthStore";
+import { useCartStore } from "@/store/useCartStore";
+import { resetRefreshTokenInvalid } from "@/lib/api-client";
 
 export default function ProfileTab() {
+    const router = useRouter();
+    const { logout: logoutStore } = useAuthStore();
+    const { clearCart } = useCartStore();
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState("");
     const [phone, setPhone] = useState("");
@@ -104,12 +111,33 @@ export default function ProfileTab() {
 
     const handleLogout = async () => {
         try {
-            await deleteFcmToken(); // Delete client-side FCM token
+            // Delete FCM token
+            await deleteFcmToken();
+            
+            // Clear cart
+            try {
+                await clearCart();
+            } catch (cartError) {
+                // Silently fail - cart clearing is not critical for logout
+            }
+            
+            // IMPORTANT: Call backend logout FIRST while access token is still available
+            // The apiClient interceptor needs the token from the store to add it to the header
             await AuthService.logout();
-            window.location.href = '/signin';
+            
+            // After backend logout succeeds, clear local state
+            logoutStore();
+            
+            // Reset refresh token invalid flag
+            resetRefreshTokenInvalid();
+            
+            // Navigate to signin page
+            router.push('/signin');
         } catch (error) {
-            console.error("Logout failed", error);
-            window.location.href = '/signin';
+            // Even if logout fails, clear local state and redirect
+            logoutStore();
+            resetRefreshTokenInvalid();
+            router.push('/signin');
         }
     };
 

@@ -192,7 +192,6 @@ export default function PaymentPage() {
         }
 
         if (!transaction.keyId) {
-            console.warn("Razorpay key missing from transaction");
             return;
         }
 
@@ -214,13 +213,9 @@ export default function PaymentPage() {
             image: paymentLogo ?? undefined,
             order_id: transaction.gatewayTransactionId, // Razorpay order ID
             handler: async (response: any) => {
-                console.log("Payment success:", response);
-                console.log("Razorpay Transaction ID:", response.razorpay_payment_id);
-                
                 // Clear cart immediately on successful payment
                 try {
                     await clearCart();
-                    console.log("✅ Cart cleared after successful payment");
                 } catch (cartError) {
                     console.error("Failed to clear cart:", cartError);
                     // Don't block navigation - cart clearing is not critical for showing confirmation

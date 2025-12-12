@@ -31,19 +31,16 @@ export function useFCM() {
                     });
 
                     if (currentToken) {
-                        console.log('FCM Token:', currentToken);
                         setFcmToken(currentToken);
 
                         // Send to backend
                         // Ideally we check if it changed, but simple approach implies sending it on auth.
                         // Backend should handle upsert idempotency.
                         await AuthService.updateFcmToken(currentToken);
-                    } else {
-                        console.log('No registration token available. Request permission to generate one.');
                     }
                 }
             } catch (error) {
-                console.error('An error occurred while retrieving token or setting up messaging.', error);
+                // Silently fail - FCM token update is not critical
             }
         };
 
@@ -54,7 +51,6 @@ export function useFCM() {
         if (typeof window !== 'undefined' && messaging) {
             // Foreground message listener
             const unsubscribe = onMessage(messaging, (payload) => {
-                console.log('Foreground message received:', payload);
                 // You can use a toast or snackbar library here to show the notification
                 // e.g., toast(payload.notification?.title);
                 // For now, we will rely on browser Notification if permission granted 

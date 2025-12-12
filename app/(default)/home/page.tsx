@@ -18,15 +18,7 @@ export default function HomePage() {
     const { accessToken } = useAuthStore();
 
     useEffect(() => {
-        if (accessToken) {
-            const expirationDate = getTokenExpiration(accessToken);
-            console.log('🔑 Access Token Info:');
-            console.log('  Token:', accessToken.substring(0, 20) + '...');
-            console.log('  Expires at:', expirationDate?.toLocaleString() || 'Unknown');
-            console.log('  Time remaining:', expirationDate ? Math.floor((expirationDate.getTime() - Date.now()) / 1000 / 60) + ' minutes' : 'Unknown');
-        } else {
-            console.log('🔑 No access token found');
-        }
+        // Token expiration is handled by the API client interceptor
     }, [accessToken]);
 
     return (

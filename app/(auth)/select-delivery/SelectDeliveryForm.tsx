@@ -123,13 +123,10 @@ export default function SelectDeliveryForm() {
             const position = await getCurrentLocation();
             const { latitude, longitude } = position.coords;
 
-            console.log('📍 Location detected:', { latitude, longitude, accuracy: position.coords.accuracy });
 
             // Reverse geocode to get address with detailed info
             const locationData = await reverseGeocode(latitude, longitude);
 
-            console.log('🏠 Address found:', locationData.formatted_address);
-            console.log('📌 Place ID:', locationData.place_id);
 
             toast.success("Location detected successfully!", {
                 description: locationData.formatted_address.substring(0, 60) + (locationData.formatted_address.length > 60 ? "..." : "")

@@ -155,7 +155,6 @@ export default function OTPForm() {
                 router.push("/home");
             }
         } catch (error: any) {
-            console.error("OTP Error:", error);
             const errorMsg = getErrorMessage(error, "Invalid OTP. Please try again.");
             toast.error(errorMsg);
         } finally {

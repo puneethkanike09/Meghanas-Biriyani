@@ -182,6 +182,7 @@ export default function VibeSection() {
                                                 src={imageUrl}
                                                 alt={category.name}
                                                 fill
+                                                sizes="(max-width: 768px) 260px, (max-width: 1200px) 300px, 316px"
                                                 className="object-cover"
                                             />
                                             {/* Overlay */}

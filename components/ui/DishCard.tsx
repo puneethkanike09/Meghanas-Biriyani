@@ -270,6 +270,7 @@ export default function DishCard({
                     src={image}
                     alt={name}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     unoptimized={isExternalImage}
                     className={`object-cover ${outOfStock ? "grayscale" : ""}`}
                 />

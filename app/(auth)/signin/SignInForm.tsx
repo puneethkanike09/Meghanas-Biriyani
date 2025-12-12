@@ -114,7 +114,6 @@ export default function SignInForm() {
             toast.success(successMsg);
             router.push('/otp');
         } catch (error: any) {
-            console.error("Auth error:", error);
             const errorMsg = getErrorMessage(error, "Failed to send OTP. Please try again.");
             toast.error(errorMsg);
         } finally {

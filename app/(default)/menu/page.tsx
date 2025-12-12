@@ -13,7 +13,7 @@ import CategoryHeadingSkeleton from "@/components/ui/CategoryHeadingSkeleton";
 
 function MenuPageContent() {
     const { categories: storedCategories, fetchCategories, loading: categoriesLoading, selectedCategoryId: storeSelectedCategoryId, setSelectedCategoryId: setStoreSelectedCategoryId } = useMenuStore();
-    
+
     // Initialize with store value if available, otherwise default to "all"
     const [selectedCategoryId, setSelectedCategoryId] = useState(() => storeSelectedCategoryId || "all");
     const [expandedDishId, setExpandedDishId] = useState<string | null>(null);
@@ -49,13 +49,22 @@ function MenuPageContent() {
             // Don't clear the store selection - keep it for MenuHamburger to show
         }
     }, [storeSelectedCategoryId, selectedCategoryId]);
-    
+
     // Sync local selectedCategoryId back to store so MenuHamburger can show it
     useEffect(() => {
         if (selectedCategoryId && selectedCategoryId !== "all") {
             setStoreSelectedCategoryId(selectedCategoryId);
         }
     }, [selectedCategoryId, setStoreSelectedCategoryId]);
+
+    // Scroll to top when category changes
+    useEffect(() => {
+        // Scroll to top of the page instantly when category changes
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+        });
+    }, [selectedCategoryId]);
 
     // Fetch Items when Category Changes
     useEffect(() => {
@@ -85,7 +94,6 @@ function MenuPageContent() {
     const handleAddClick = (item: MenuItem) => {
         // DishCard handles cart addition internally.
         // This callback is kept for logging or future analytics.
-        console.log("Item added from MenuItemsList:", item.itemId);
     };
 
     return (
