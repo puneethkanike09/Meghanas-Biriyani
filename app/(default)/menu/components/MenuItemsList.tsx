@@ -66,6 +66,7 @@ export default function MenuItemsList({
                                 return (
                                     <div
                                         key={item.itemId}
+                                        id={`dish-card-${item.itemId}`}
                                         className={isExpanded ? "col-span-1 tablet:col-span-2 desktop:col-span-3" : ""}
                                     >
                                         <DishCard
@@ -79,7 +80,7 @@ export default function MenuItemsList({
                                             image={item.imageURL && item.imageURL.trim() ? item.imageURL : "/assets/homepage/images/top10.jpg"}
                                             outOfStock={item.isOutOfStock || item.status !== "Active"}
                                             variant={isExpanded ? "expanded" : "default"}
-                                            onClick={isExpanded ? undefined : () => onCardClick(item.itemId)}
+                                            onClick={() => onCardClick(item.itemId)}
                                             onAdd={() => onAddClick(item)}
                                             quantity={cartItem?.quantity || 0}
                                             onUpdateQuantity={() => { }} // DishCard handles store update internally

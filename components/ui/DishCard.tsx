@@ -149,7 +149,10 @@ export default function DishCard({
     // Expanded variant has different layout
     if (variant === "expanded") {
         return (
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div 
+                onClick={onClick}
+                className={`bg-white rounded-xl border border-gray-200 overflow-hidden ${onClick ? 'cursor-pointer' : ''}`}
+            >
                 <div className="flex flex-col tablet:flex-row">
                     {/* Image Section */}
                     <div className="relative w-full tablet:w-1/2 h-[300px] tablet:h-[360px]">
@@ -172,7 +175,10 @@ export default function DishCard({
                     </div>
 
                     {/* Details Section */}
-                    <div className="flex flex-col gap-4 p-4 tablet:p-6 flex-1 bg-white">
+                    <div 
+                        className="flex flex-col gap-4 p-4 tablet:p-6 flex-1 bg-white"
+                        onClick={(e) => e.stopPropagation()}
+                    >
                         {/* Veg/Non-veg Icon & Rating */}
                         <div className="flex items-center justify-between">
                             {isVeg ? <VegIcon /> : <NonVegIcon />}

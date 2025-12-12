@@ -85,10 +85,34 @@ function MenuPageContent() {
     }, [selectedCategoryId]);
 
     const handleCardClick = (itemId: string) => {
+        const isCurrentlyExpanded = expandedDishId === itemId;
+
         // Toggle expansion
-        setExpandedDishId(expandedDishId === itemId ? null : itemId);
+        setExpandedDishId(isCurrentlyExpanded ? null : itemId);
         // Close option sets when expanding
         setShowOptionSetsForId(null);
+
+        // Scroll to the card when expanding (not when collapsing)
+        if (!isCurrentlyExpanded) {
+            // Use setTimeout to ensure DOM has updated with expanded card
+            setTimeout(() => {
+                const cardElement = document.getElementById(`dish-card-${itemId}`);
+                if (cardElement) {
+                    // Calculate offset to account for sticky navbar and filter bar
+                    const navbarHeight = 88; // Mobile/Tablet
+                    const filterBarHeight = 60; // Approximate filter bar height
+                    const offset = navbarHeight + filterBarHeight + 20; // Extra 20px padding
+
+                    const elementPosition = cardElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'auto'
+                    });
+                }
+            }, 100);
+        }
     };
 
     const handleAddClick = (item: MenuItem) => {
