@@ -110,7 +110,7 @@ const mapApiOrderToUIOrder = (apiOrder: any): Order => {
     // Use placeholder images (API doesn't provide item images)
     const images = menuItems.map(() => "/assets/homepage/images/top10.jpg");
 
-    // Map charges from billingBreakdown
+    // Map charges from billingBreakdown - show all items even if 0.00
     const billingBreakdown = apiOrder.billingBreakdown || {};
     const charges: OrderCharge[] = [];
 
@@ -122,26 +122,23 @@ const mapApiOrderToUIOrder = (apiOrder: any): Order => {
         });
     }
 
-    if (billingBreakdown.packagingCharges && parseFloat(billingBreakdown.packagingCharges) > 0) {
-        charges.push({
-            label: "Packaging Charges",
-            value: formatCurrency(parseFloat(billingBreakdown.packagingCharges))
-        });
-    }
+    // Always show Packaging Charges (even if 0.00)
+    charges.push({
+        label: "Packaging Charges",
+        value: formatCurrency(parseFloat(billingBreakdown.packagingCharges || "0"))
+    });
 
-    if (billingBreakdown.deliveryFee && parseFloat(billingBreakdown.deliveryFee) > 0) {
-        charges.push({
-            label: "Delivery Fee",
-            value: formatCurrency(parseFloat(billingBreakdown.deliveryFee))
-        });
-    }
+    // Always show Delivery Fee (even if 0.00)
+    charges.push({
+        label: "Delivery Fee",
+        value: formatCurrency(parseFloat(billingBreakdown.deliveryFee || "0"))
+    });
 
-    if (billingBreakdown.taxes && parseFloat(billingBreakdown.taxes) > 0) {
-        charges.push({
-            label: "Taxes",
-            value: formatCurrency(parseFloat(billingBreakdown.taxes))
-        });
-    }
+    // Always show Taxes (even if 0.00)
+    charges.push({
+        label: "Taxes",
+        value: formatCurrency(parseFloat(billingBreakdown.taxes || "0"))
+    });
 
     // Map destinations - branch address and delivery address
     const destinations: OrderDestination[] = [];
@@ -154,9 +151,11 @@ const mapApiOrderToUIOrder = (apiOrder: any): Order => {
     }
 
     if (apiOrder.deliveryAddress) {
+        // Use addressLine directly as it already contains the full formatted address
+        // The API provides addressLine with all components already formatted
         destinations.push({
             name: apiOrder.deliveryAddress.label || "Delivery Address",
-            address: formatAddress(apiOrder.deliveryAddress),
+            address: apiOrder.deliveryAddress.addressLine || formatAddress(apiOrder.deliveryAddress),
         });
     }
 
@@ -356,14 +355,14 @@ export default function OrdersTab() {
                                             <div className="flex items-center gap-2">
                                                 <Image
                                                     src={
-                                                        order.status === "delivered"
-                                                            ? "/assets/profile/icons/CheckmarkCircle.svg"
-                                                            : "/assets/profile/icons/DismissCircle.svg"
+                                                        order.status === "cancelled"
+                                                            ? "/assets/profile/icons/DismissCircle.svg"
+                                                            : "/assets/profile/icons/CheckmarkCircle.svg"
                                                     }
                                                     alt={
-                                                        order.status === "delivered"
-                                                            ? "Delivered"
-                                                            : "Cancelled"
+                                                        order.status === "cancelled"
+                                                            ? "Cancelled"
+                                                            : "Order Status"
                                                     }
                                                     width={24}
                                                     height={24}

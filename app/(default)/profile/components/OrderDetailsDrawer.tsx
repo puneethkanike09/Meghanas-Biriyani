@@ -111,14 +111,14 @@ export default function OrderDetailsDrawer({ order, totalItems, onClose }: Order
                         <div className="inline-flex items-center gap-2">
                             <Image
                                 src={
-                                    order.status === "delivered"
-                                        ? "/assets/profile/icons/CheckmarkCircle.svg"
-                                        : "/assets/profile/icons/DismissCircle.svg"
+                                    order.status === "cancelled"
+                                        ? "/assets/profile/icons/DismissCircle.svg"
+                                        : "/assets/profile/icons/CheckmarkCircle.svg"
                                 }
                                 alt={
-                                    order.status === "delivered"
-                                        ? "Order delivered"
-                                        : "Order cancelled"
+                                    order.status === "cancelled"
+                                        ? "Order cancelled"
+                                        : "Order status"
                                 }
                                 width={20}
                                 height={20}
