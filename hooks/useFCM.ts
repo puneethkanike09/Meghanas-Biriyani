@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { messaging } from '../lib/firebase';
 import { getToken, onMessage } from 'firebase/messaging';
 import { useAuthStore } from '@/store/useAuthStore';
@@ -6,11 +6,13 @@ import { AuthService } from '@/services/auth.service';
 import { toast } from 'sonner';
 
 const NOTIFICATION_PROMPT_DISMISSED_KEY = 'notification_prompt_dismissed';
-const NOTIFICATION_PROMPT_SHOWN_KEY = 'notification_prompt_shown';
+const NOTIFICATION_PROMPT_SHOWN_KEY = 'notification_prompt_shown_session';
 
 export function useFCM() {
     const { accessToken, _hasHydrated } = useAuthStore();
     const [fcmToken, setFcmToken] = useState<string | null>(null);
+    const toastShownRef = useRef(false);
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     const setupFCM = useCallback(async () => {
         if (!messaging) return;
@@ -76,15 +78,31 @@ export function useFCM() {
             return;
         }
 
+        // Check sessionStorage FIRST - this persists across re-renders and remounts
+        const hasShownInSession = sessionStorage.getItem(NOTIFICATION_PROMPT_SHOWN_KEY) === 'true';
+        if (hasShownInSession) {
+            // Already processed in this session, don't do anything
+            return;
+        }
+
+        // Check if we've already processed this check (prevent re-running in same render cycle)
+        if (toastShownRef.current) {
+            return;
+        }
+
         // Check if permission is already granted
         if (Notification.permission === 'granted') {
             // Permission already granted, get token directly
             setupFCM();
+            toastShownRef.current = true;
+            sessionStorage.setItem(NOTIFICATION_PROMPT_SHOWN_KEY, 'true');
             return;
         }
 
         // Check if permission is denied (user blocked it)
         if (Notification.permission === 'denied') {
+            toastShownRef.current = true;
+            sessionStorage.setItem(NOTIFICATION_PROMPT_SHOWN_KEY, 'true');
             return;
         }
 
@@ -96,7 +114,7 @@ export function useFCM() {
         if (dismissedData) {
             try {
                 const parsed = JSON.parse(dismissedData);
-                wasDismissed = parsed.dismissed || true;
+                wasDismissed = parsed.dismissed === true; // Fix: use === instead of ||
                 dismissedTimestamp = parsed.timestamp || 0;
             } catch {
                 // Legacy format - just a string "true"
@@ -127,9 +145,14 @@ export function useFCM() {
 
         // Only show toast if permission is default and we can show again
         if (currentPermission === 'default' && canShowAgain) {
+            // Mark that we're showing the toast (both ref and sessionStorage)
+            toastShownRef.current = true;
+            sessionStorage.setItem(NOTIFICATION_PROMPT_SHOWN_KEY, 'true');
+
             // Small delay to ensure page is loaded
-            const timer = setTimeout(() => {
+            timerRef.current = setTimeout(() => {
                 toast('Enable Notifications', {
+                    id: 'notification-permission-prompt', // Use a unique ID to prevent duplicates
                     description: 'Stay updated with real-time order status, delivery updates, and exclusive offers.',
                     duration: Infinity, // Keep it open until user clicks
                     action: {
@@ -154,9 +177,19 @@ export function useFCM() {
                     },
                 });
             }, 2000); // Show after 2 seconds
-            return () => clearTimeout(timer);
+
+            return () => {
+                if (timerRef.current) {
+                    clearTimeout(timerRef.current);
+                }
+            };
+        } else {
+            // Mark as processed even if we're not showing the toast
+            toastShownRef.current = true;
+            sessionStorage.setItem(NOTIFICATION_PROMPT_SHOWN_KEY, 'true');
         }
-    }, [accessToken, _hasHydrated, setupFCM, requestNotificationPermission]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [accessToken, _hasHydrated]); // setupFCM is stable (empty deps), so we can safely omit it
 
     useEffect(() => {
         if (typeof window !== 'undefined' && messaging) {

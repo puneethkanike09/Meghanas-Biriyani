@@ -246,15 +246,15 @@ export default function OTPForm() {
                 </Button>
             </form>
 
-            <div className="flex items-center gap-3 text-sm text-gray-500">
-                <span className="h-px flex-1 bg-gray-200" />
-                OR
-                <span className="h-px flex-1 bg-gray-200" />
-            </div>
+                <div className="flex items-center gap-3 text-sm text-gray-500">
+                    <span className="h-px flex-1 bg-gray-200" />
+                    OR
+                    <span className="h-px flex-1 bg-gray-200" />
+                </div>
 
-            <Button href="/home" variant="neutral">
-                Skip for Now
-            </Button>
+                <Button href="/home" variant="neutral">
+                    Skip for Now
+                </Button>
         </div>
     );
 }

@@ -8,7 +8,9 @@ import { toast } from "sonner";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import RadioCard from "@/components/ui/RadioCard";
+import { Alert, AlertDescription } from "@/components/ui/Alert";
 import { AddressService } from "@/services/address.service";
+import LocationMap from "@/components/LocationMap";
 import {
     ADDRESS_TYPE_OPTIONS,
     type AddressItem,
@@ -64,6 +66,9 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
 
     const [formValues, setFormValues] = useState<AddressFormValues>(initialValues);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [mapPopulatedFields, setMapPopulatedFields] = useState<Set<string>>(new Set());
+    const [isWithin5km, setIsWithin5km] = useState<boolean | null>(null);
+    const [branchCode, setBranchCode] = useState<string>("");
 
     const handleFieldChange =
         (field: keyof AddressFormValues) =>
@@ -139,6 +144,60 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
         router.back();
     };
 
+    const handleLocationChange = (location: {
+        lat: number;
+        lng: number;
+        address?: {
+            formatted_address: string;
+            street?: string;
+            city?: string;
+            state?: string;
+            pincode?: string;
+            country?: string;
+        };
+        isWithin5km?: boolean;
+        branchCode?: string;
+    }) => {
+        // Update delivery availability
+        if (location.isWithin5km !== undefined) {
+            setIsWithin5km(location.isWithin5km);
+        }
+        if (location.branchCode) {
+            setBranchCode(location.branchCode);
+        }
+
+        if (location.address) {
+            const populatedFields = new Set<string>();
+            
+            // Populate fields from map
+            if (location.address.street) {
+                setFormValues((prev) => ({
+                    ...prev,
+                    street: location.address!.street || prev.street,
+                }));
+                populatedFields.add('street');
+            }
+            
+            if (location.address.city) {
+                setFormValues((prev) => ({
+                    ...prev,
+                    city: location.address!.city || prev.city,
+                }));
+                populatedFields.add('city');
+            }
+            
+            if (location.address.pincode) {
+                setFormValues((prev) => ({
+                    ...prev,
+                    pincode: location.address!.pincode || prev.pincode,
+                }));
+                populatedFields.add('pincode');
+            }
+            
+            setMapPopulatedFields(populatedFields);
+        }
+    };
+
     return (
         <div className="w-full  bg-white">
             <div className=" flex w-full max-w-[648px] flex-col gap-6 mx-auto">
@@ -146,6 +205,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                     type="button"
                     onClick={handleBack}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-gray-600 transition-colors hover:text-midnight cursor-pointer"
+                    suppressHydrationWarning
                 >
                     <Image
                         src="/assets/profile/icons/ArrowLeft.svg"
@@ -167,6 +227,12 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                 </header>
 
                 <form className="flex w-full flex-col gap-6" onSubmit={handleSubmit}>
+                    {/* Map Section */}
+                    <LocationMap
+                        onLocationChange={handleLocationChange}
+                        height="400px"
+                    />
+
                     <section className="grid gap-6">
                         <div className="grid gap-1.5">
                             <label htmlFor="label" className="text-sm font-medium text-gray-700">
@@ -179,6 +245,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                 onChange={handleFieldChange("label")}
                                 placeholder="e.g., Home, Parents' House"
                                 required
+                                suppressHydrationWarning
                             />
                         </div>
 
@@ -193,12 +260,16 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                 onChange={handleFieldChange("houseNumber")}
                                 placeholder="e.g., Flat 203, Green Residency"
                                 required
+                                suppressHydrationWarning
                             />
                         </div>
 
                         <div className="grid gap-1.5">
                             <label htmlFor="street" className="text-sm font-medium text-gray-700">
                                 Street / Locality / Area
+                                {mapPopulatedFields.has('street') && (
+                                    <span className="ml-2 text-xs text-gray-500">(from map - editable)</span>
+                                )}
                             </label>
                             <Input
                                 id="street"
@@ -207,6 +278,7 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                 onChange={handleFieldChange("street")}
                                 placeholder="e.g., 6th Cross, Koramangala"
                                 required
+                                suppressHydrationWarning
                             />
                         </div>
 
@@ -221,11 +293,15 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                     value={formValues.landmark}
                                     onChange={handleFieldChange("landmark")}
                                     placeholder="e.g., Near Forum Mall"
+                                    suppressHydrationWarning
                                 />
                             </div>
                             <div className="grid gap-1.5">
                                 <label htmlFor="city" className="text-sm font-medium text-gray-700">
                                     City
+                                    {mapPopulatedFields.has('city') && (
+                                        <span className="ml-2 text-xs text-gray-500">(from map)</span>
+                                    )}
                                 </label>
                                 <div className="relative">
                                     <select
@@ -234,7 +310,13 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                         value={formValues.city}
                                         onChange={handleFieldChange("city")}
                                         required
-                                        className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3.5 py-2.5 text-base text-midnight transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20"
+                                        disabled={mapPopulatedFields.has('city')}
+                                        suppressHydrationWarning
+                                        className={`w-full appearance-none rounded-lg border border-gray-300 px-3.5 py-2.5 text-base text-midnight transition focus:border-tango focus:outline-none focus:ring-2 focus:ring-tango/20 ${
+                                            mapPopulatedFields.has('city') 
+                                                ? 'bg-gray-100 cursor-not-allowed' 
+                                                : 'bg-white'
+                                        }`}
                                     >
                                         {CITY_OPTIONS.map((option) => (
                                             <option
@@ -261,6 +343,9 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                         <div className="grid gap-1.5">
                             <label htmlFor="pincode" className="text-sm font-medium text-gray-700">
                                 Pincode / ZIP code
+                                {mapPopulatedFields.has('pincode') && (
+                                    <span className="ml-2 text-xs text-gray-500">(from map)</span>
+                                )}
                             </label>
                             <Input
                                 id="pincode"
@@ -271,6 +356,9 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                                 onChange={handleFieldChange("pincode")}
                                 placeholder="e.g., 560095"
                                 required
+                                disabled={mapPopulatedFields.has('pincode')}
+                                className={mapPopulatedFields.has('pincode') ? 'bg-gray-100 cursor-not-allowed' : ''}
+                                suppressHydrationWarning
                             />
                         </div>
 
@@ -291,8 +379,32 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                         </div>
                     </section>
 
+                    {/* Delivery Availability Message */}
+                    {isWithin5km === false && (
+                        <Alert className="flex w-full items-start gap-2 rounded-xl border border-solid border-red-200 bg-red-50 p-4">
+                            <Image
+                                src="/assets/profile/icons/Location.svg"
+                                alt="Warning"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5 shrink-0 mt-0.5"
+                            />
+                            <AlertDescription className="flex-1 text-base font-normal text-red-800 tracking-normal">
+                                <p className="font-medium mb-1">Delivery not available</p>
+                                <p className="text-sm text-red-600">
+                                    We don't deliver to this location. Please select a different address within our delivery area.
+                                </p>
+                            </AlertDescription>
+                        </Alert>
+                    )}
+
                     <div className="flex flex-col">
-                        <Button type="submit" variant="primary" className="w-full" disabled={isSubmitting}>
+                        <Button 
+                            type="submit" 
+                            variant="primary" 
+                            className="w-full" 
+                            disabled={isSubmitting || isWithin5km === false}
+                        >
                             {isSubmitting ? "Saving..." : (isEdit ? "Update Address" : "Save Address")}
                         </Button>
                     </div>
