@@ -66,7 +66,7 @@ function OrderConfirmationContent() {
     // Show loader while fetching payment status
     if (isLoading) {
         return (
-            <div className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24 tablet:pt-28 desktop:pt-36">
+            <div className="section-container flex items-center justify-center py-12 tablet:py-16 desktop:py-20 bg-white pt-24 tablet:pt-28 desktop:pt-36 min-h-[400px]">
                 <div className="mx-auto flex w-full max-w-[648px] flex-col items-center justify-center gap-6">
                     <Loader message="Confirming your payment..." />
                 </div>
