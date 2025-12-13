@@ -229,6 +229,25 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                         height="400px"
                     />
 
+                    {/* Delivery Availability Message */}
+                    {isWithin5km === false && (
+                        <Alert className="flex w-full items-start gap-2 rounded-xl border border-solid border-red-200 bg-red-50 p-4">
+                            <Image
+                                src="/assets/profile/icons/Location.svg"
+                                alt="Warning"
+                                width={20}
+                                height={20}
+                                className="h-5 w-5 shrink-0 mt-0.5"
+                            />
+                            <AlertDescription className="flex-1 text-base font-normal text-red-800 tracking-normal">
+                                <p className="font-medium mb-1">Delivery not available</p>
+                                <p className="text-sm text-red-600">
+                                    We don't deliver to this location. Please select a different address within our delivery area.
+                                </p>
+                            </AlertDescription>
+                        </Alert>
+                    )}
+
                     <section className="grid gap-6">
                         <div className="grid gap-1.5">
                             <label htmlFor="label" className="text-sm font-medium text-gray-700">
@@ -350,25 +369,6 @@ export default function AddressForm({ mode, address }: AddressFormProps) {
                             </div>
                         </div>
                     </section>
-
-                    {/* Delivery Availability Message */}
-                    {isWithin5km === false && (
-                        <Alert className="flex w-full items-start gap-2 rounded-xl border border-solid border-red-200 bg-red-50 p-4">
-                            <Image
-                                src="/assets/profile/icons/Location.svg"
-                                alt="Warning"
-                                width={20}
-                                height={20}
-                                className="h-5 w-5 shrink-0 mt-0.5"
-                            />
-                            <AlertDescription className="flex-1 text-base font-normal text-red-800 tracking-normal">
-                                <p className="font-medium mb-1">Delivery not available</p>
-                                <p className="text-sm text-red-600">
-                                    We don't deliver to this location. Please select a different address within our delivery area.
-                                </p>
-                            </AlertDescription>
-                        </Alert>
-                    )}
 
                     <div className="flex flex-col">
                         <Button 

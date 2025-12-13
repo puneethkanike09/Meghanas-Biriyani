@@ -121,13 +121,13 @@ export const reverseGeocode = async (lat: number, lng: number): Promise<{
                     // Prefer more specific results (street_address, premise) that also have locality
                     // If none found, fall back to any result with locality
                     // If still none, use the most specific result
-                    
+
                     // First, try to find a specific result (street_address/premise) that has locality
                     let preferredResult = results.find(result => {
-                        const hasSpecificType = result.types.includes('street_address') || 
-                                               result.types.includes('premise') ||
-                                               result.types.includes('route');
-                        const hasLocality = result.address_components.some(comp => 
+                        const hasSpecificType = result.types.includes('street_address') ||
+                            result.types.includes('premise') ||
+                            result.types.includes('route');
+                        const hasLocality = result.address_components.some(comp =>
                             comp.types.includes('locality')
                         );
                         return hasSpecificType && hasLocality;
@@ -135,8 +135,8 @@ export const reverseGeocode = async (lat: number, lng: number): Promise<{
 
                     // If not found, try any result with locality (even if less specific)
                     if (!preferredResult) {
-                        preferredResult = results.find(result => 
-                            result.address_components.some(comp => 
+                        preferredResult = results.find(result =>
+                            result.address_components.some(comp =>
                                 comp.types.includes('locality')
                             )
                         );
