@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* Sonner Toast Custom Styles */
-[data-sonner-toast][data-type="success"] {
+/* [data-sonner-toast][data-type="success"] {
   background-color: #00804D !important;
   color: white !important;
   border-color: #00804D !important;
@@ -23,7 +23,7 @@
   background-color: #EAB308 !important;
   color: white !important;
   border-color: #EAB308 !important;
-}
+} */
 
 @layer base {
   html,
