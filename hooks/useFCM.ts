@@ -182,7 +182,7 @@ export function useFCM() {
             // Mark as processed even if we're not showing the toast
             toastShownRef.current = true;
             sessionStorage.setItem(NOTIFICATION_PROMPT_SHOWN_KEY, 'true');
-        }
+            }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [accessToken, _hasHydrated]); // setupFCM is stable (empty deps), so we can safely omit it
 

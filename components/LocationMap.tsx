@@ -395,7 +395,27 @@ export default function LocationMap({
                 const defaultCenter = { lat: 12.9716, lng: 77.5946 };
                 let center = initialLocation || defaultCenter;
 
-                // Create map
+                // Check location permission FIRST before creating map
+                // If permission is granted, get user's location immediately
+                const permissionState = await PermissionService.getLocationPermissionState();
+                if (permissionState === 'granted') {
+                    try {
+                        const position = await getCurrentLocation();
+                        if (isMounted) {
+                            center = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+                            setHasLocationPermission(true);
+                            setCurrentLocation(center);
+                        }
+                    } catch (error) {
+                        // If getting location fails, fall back to default/initial center
+                        console.error("Failed to get current location:", error);
+                    }
+                }
+
+                // Create map with the determined center (user location or default)
                 const map = new google.maps.Map(mapRef.current, {
                     center,
                     zoom: 15,
@@ -485,43 +505,38 @@ export default function LocationMap({
 
                 setIsLoading(false);
 
-                // Try to get user's current location first (non-blocking)
-                // If permission is granted, use user's location; otherwise use default/initial center
-                requestLocationPermission().then(async (position) => {
-                    if (position && isMounted && mapInstanceRef.current) {
-                        const newCenter = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude,
-                        };
-                        setCurrentLocation(newCenter);
-                        mapInstanceRef.current.setCenter(newCenter);
-                        if (markerRef.current) {
-                            markerRef.current.setPosition(newCenter);
-                        }
-                        // Small delay to ensure map and form are fully ready before updating address
-                        // This prevents race conditions on page refresh
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        if (isMounted) {
-                            await updateAddressFromCoordinates(newCenter.lat, newCenter.lng);
-                        }
-                    } else {
-                        // No permission or failed to get location - use default/initial center
-                        if (center && isMounted) {
+                // Update address from the initial center (user location if permission granted, otherwise default)
+                // Small delay to ensure map and form are fully ready before updating address
+                await new Promise(resolve => setTimeout(resolve, 100));
+                if (isMounted && center) {
+                    await updateAddressFromCoordinates(center.lat, center.lng);
+                }
+
+                // If permission is not granted, show the permission toast (non-blocking)
+                // This won't affect the map display, but will prompt user if they want to enable location
+                if (permissionState !== 'granted') {
+                    requestLocationPermission().then(async (position) => {
+                        if (position && isMounted && mapInstanceRef.current) {
+                            const newCenter = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+                            setCurrentLocation(newCenter);
+                            setHasLocationPermission(true);
+                            mapInstanceRef.current.setCenter(newCenter);
+                            if (markerRef.current) {
+                                markerRef.current.setPosition(newCenter);
+                            }
+                            // Update address from new location
                             await new Promise(resolve => setTimeout(resolve, 100));
                             if (isMounted) {
-                                await updateAddressFromCoordinates(center.lat, center.lng);
+                                await updateAddressFromCoordinates(newCenter.lat, newCenter.lng);
                             }
                         }
-                    }
-                }).catch(async () => {
-                    // Failed to get location - use default/initial center
-                    if (center && isMounted) {
-                        await new Promise(resolve => setTimeout(resolve, 100));
-                        if (isMounted) {
-                            await updateAddressFromCoordinates(center.lat, center.lng);
-                        }
-                    }
-                });
+                    }).catch(() => {
+                        // Silently fail - map is already showing with default location
+                    });
+                }
             } catch (error: any) {
                 if (!isMounted) return;
                 console.error("Map initialization error:", error);
