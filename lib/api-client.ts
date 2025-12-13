@@ -59,14 +59,9 @@ async function refreshToken(): Promise<string | null> {
     throw new Error('Refresh token is invalid. Please login again.');
   }
 
-  // Prevent refresh attempts if we're on auth pages (signin, otp, etc.)
-  // This prevents infinite loops when unauthenticated users visit these pages
-  if (typeof window !== 'undefined') {
-    const currentPath = window.location.pathname;
-    if (currentPath === '/' || currentPath.startsWith('/signin') || currentPath.startsWith('/otp') || currentPath.startsWith('/select-delivery')) {
-      throw new Error('Cannot refresh token on auth pages. Please login.');
-    }
-  }
+  // Allow refresh on any page if user has a token (proactive refresh from AuthProvider)
+  // The path check is only needed in the response interceptor to prevent automatic refresh
+  // when API calls fail on auth pages (for unauthenticated users)
 
   // If already refreshing, return existing promise
   if (refreshPromise) {

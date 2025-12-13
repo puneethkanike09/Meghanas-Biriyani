@@ -40,7 +40,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             attemptTokenRefresh()
                 .then((newToken) => {
                     // Refresh successful - token is now updated in store
-                    // Components will react to the updated token
+                    // If we're on an auth page, redirect to home
+                    if (typeof window !== 'undefined' && newToken) {
+                        const currentPath = window.location.pathname;
+                        if (currentPath === '/' || currentPath.startsWith('/signin') || currentPath.startsWith('/otp') || currentPath.startsWith('/select-delivery')) {
+                            router.replace('/home');
+                        }
+                    }
                 })
                 .catch(() => {
                     // Refresh failed - token refresh logic will handle logout/redirect
@@ -49,7 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     setIsRefreshing(false);
                 });
         }
-    }, [_hasHydrated, user, accessToken, isRefreshing]);
+    }, [_hasHydrated, user, accessToken, isRefreshing, router]);
 
     return <>{children}</>;
 }

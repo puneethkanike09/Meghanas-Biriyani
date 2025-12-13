@@ -218,6 +218,7 @@ export default function Navbar() {
                                     type="text"
                                     placeholder="Search for dishes, cuisines..."
                                     className="w-full rounded-xl border-none bg-gray-100 px-4 py-2 pl-10 text-black focus:outline-none placeholder:text-gray-500"
+                                    suppressHydrationWarning
                                 />
                             </div>
                         </div>

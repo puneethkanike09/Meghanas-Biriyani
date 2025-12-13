@@ -11,6 +11,7 @@ export default function HeroSection() {
           src="/assets/homepage/images/heroBg.png"
           alt="Hero Background"
           fill
+          sizes="100vw"
           className="object-cover"
           priority
         />
@@ -52,6 +53,7 @@ export default function HeroSection() {
               src="/assets/homepage/images/hero.png"
               alt="Delicious South Indian Cuisine"
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 50vw"
               className="object-contain"
               priority
             />
