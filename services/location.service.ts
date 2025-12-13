@@ -1,6 +1,5 @@
 import apiClient from '@/lib/api-client';
-
-const BRANCH_INFO_KEY = 'meghana_branch_info';
+import { CookieService } from './cookie.service';
 
 interface BranchInfo {
     branchCode: string;
@@ -11,6 +10,36 @@ interface NearestBranchResponse {
     branchCode: string;
     isWithin5km: boolean;
 }
+
+// Legacy localStorage key for migration
+const LEGACY_BRANCH_INFO_KEY = 'meghana_branch_info';
+
+/**
+ * Migrate branch info from localStorage to cookies
+ * This is a one-time migration for existing users
+ */
+const migrateBranchInfo = (): void => {
+    if (typeof window === 'undefined') return;
+
+    // Check if we already have cookie data
+    if (CookieService.getBranchInfo()) {
+        return; // Already migrated
+    }
+
+    // Try to get from localStorage
+    try {
+        const stored = localStorage.getItem(LEGACY_BRANCH_INFO_KEY);
+        if (stored) {
+            const info = JSON.parse(stored);
+            // Migrate to cookies
+            CookieService.setBranchInfo(info);
+            // Remove from localStorage (optional - can keep for backward compatibility)
+            // localStorage.removeItem(LEGACY_BRANCH_INFO_KEY);
+        }
+    } catch (e) {
+        console.error("Failed to migrate branch info", e);
+    }
+};
 
 export const LocationService = {
     findNearestBranch: async (latitude: number, longitude: number): Promise<BranchInfo> => {
@@ -25,7 +54,8 @@ export const LocationService = {
                 isWithin5km: response.data.isWithin5km
             };
 
-            LocationService.setBranchInfo(info);
+            // Store in cookies instead of localStorage
+            CookieService.setBranchInfo(info);
             return info;
         } catch (error: any) {
             console.error("Failed to find nearest branch:", error);
@@ -44,24 +74,10 @@ export const LocationService = {
         }
     },
 
-    setBranchInfo: (info: BranchInfo) => {
-        if (typeof window !== 'undefined') {
-            localStorage.setItem(BRANCH_INFO_KEY, JSON.stringify(info));
-        }
-    },
-
     getBranchInfo: (): BranchInfo | null => {
-        if (typeof window !== 'undefined') {
-            const stored = localStorage.getItem(BRANCH_INFO_KEY);
-            if (stored) {
-                try {
-                    return JSON.parse(stored);
-                } catch (e) {
-                    console.error("Failed to parse branch info", e);
-                }
-            }
-        }
-        return null;
+        // Migrate from localStorage on first access
+        migrateBranchInfo();
+        return CookieService.getBranchInfo();
     },
 
     getBranchCode: (): string => {
@@ -71,16 +87,7 @@ export const LocationService = {
 
     isWithinRange: (): boolean => {
         const info = LocationService.getBranchInfo();
-        // If no info, assume false or true? 
-        // If user hasn't selected location, maybe we shouldn't allow adding?
-        // Let's assume false to be safe, or true if we want to be permissive until checkout.
-        // Requirement: "else if isWithin5km: false then we disable"
-        // So default should probably be true for HO?
-        // Actually, if 'HO' is default, we might not have isWithin5km.
-        // Let's default to true for 'HO' (fallback) so we don't block users who haven't done location flow yet?
-        // Or default to false?
-        // User scenario: Register -> Select Delivery.
-        // So flow forces selection.
+        // If no info, default to true for 'HO' (fallback) so we don't block users who haven't done location flow yet
         return info ? info.isWithin5km : true;
     }
 };

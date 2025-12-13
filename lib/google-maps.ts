@@ -117,13 +117,40 @@ export const reverseGeocode = async (lat: number, lng: number): Promise<{
             },
             (results, status) => {
                 if (status === google.maps.GeocoderStatus.OK && results && results.length > 0) {
-                    // Find the most specific result (usually the first one)
-                    // Prefer results with street_address or premise
-                    const preferredResult = results.find(result =>
-                        result.types.includes('street_address') ||
-                        result.types.includes('premise') ||
-                        result.types.includes('sublocality')
-                    ) || results[0];
+                    // Strategy: Find a result that has a locality (city) field
+                    // Prefer more specific results (street_address, premise) that also have locality
+                    // If none found, fall back to any result with locality
+                    // If still none, use the most specific result
+                    
+                    // First, try to find a specific result (street_address/premise) that has locality
+                    let preferredResult = results.find(result => {
+                        const hasSpecificType = result.types.includes('street_address') || 
+                                               result.types.includes('premise') ||
+                                               result.types.includes('route');
+                        const hasLocality = result.address_components.some(comp => 
+                            comp.types.includes('locality')
+                        );
+                        return hasSpecificType && hasLocality;
+                    });
+
+                    // If not found, try any result with locality (even if less specific)
+                    if (!preferredResult) {
+                        preferredResult = results.find(result => 
+                            result.address_components.some(comp => 
+                                comp.types.includes('locality')
+                            )
+                        );
+                    }
+
+                    // If still not found, use the most specific result (street_address, premise, route)
+                    if (!preferredResult) {
+                        preferredResult = results.find(result =>
+                            result.types.includes('street_address') ||
+                            result.types.includes('premise') ||
+                            result.types.includes('route') ||
+                            result.types.includes('sublocality')
+                        ) || results[0];
+                    }
 
                     resolve({
                         formatted_address: preferredResult.formatted_address,

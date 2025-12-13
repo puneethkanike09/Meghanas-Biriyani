@@ -114,40 +114,40 @@ export default function Navbar() {
 
                         {/* Location Dropdown */}
                         {mounted && (
-                            <div className="hidden min-w-0 items-center gap-2 tablet:flex relative" ref={addressDropdownRef}>
-                                <button
-                                    onClick={() => setIsAddressDropdownOpen(!isAddressDropdownOpen)}
-                                    className="flex min-w-0 items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                                >
-                                    <Image
-                                        src={ICONS.location}
-                                        alt="Location pin"
-                                        width={24}
-                                        height={24}
-                                        className="h-4 w-4 text-gray-600 tablet:h-5 tablet:w-5 shrink-0"
-                                    />
-                                    <div className="flex min-w-0 flex-col text-left">
-                                        <span className="text-[10px] text-gray-500 tablet:text-xs">Deliver To</span>
-                                        {isLoadingAddresses ? (
-                                            <span className="text-xs font-semibold text-gray-900 tablet:text-sm">Loading...</span>
-                                        ) : selectedAddress ? (
-                                            <span className="truncate text-xs font-semibold text-gray-900 tablet:text-sm">
-                                                {formatAddress(selectedAddress).length > 40
-                                                    ? `${formatAddress(selectedAddress).substring(0, 40)}...`
-                                                    : formatAddress(selectedAddress)
-                                                }
-                                            </span>
-                                        ) : (
-                                            <span className="text-xs font-semibold text-gray-900 tablet:text-sm">Select Address</span>
-                                        )}
-                                    </div>
-                                    <ChevronDownIcon
-                                        className={cn(
-                                            "h-4 w-4 text-gray-600 transition-transform shrink-0",
-                                            isAddressDropdownOpen && "rotate-180"
-                                        )}
-                                    />
-                                </button>
+                        <div className="hidden min-w-0 items-center gap-2 tablet:flex relative" ref={addressDropdownRef}>
+                            <button
+                                onClick={() => setIsAddressDropdownOpen(!isAddressDropdownOpen)}
+                                className="flex min-w-0 items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
+                            >
+                                <Image
+                                    src={ICONS.location}
+                                    alt="Location pin"
+                                    width={24}
+                                    height={24}
+                                    className="h-4 w-4 text-gray-600 tablet:h-5 tablet:w-5 shrink-0"
+                                />
+                                <div className="flex min-w-0 flex-col text-left">
+                                    <span className="text-[10px] text-gray-500 tablet:text-xs">Deliver To</span>
+                                    {isLoadingAddresses ? (
+                                        <span className="text-xs font-semibold text-gray-900 tablet:text-sm">Loading...</span>
+                                    ) : selectedAddress ? (
+                                        <span className="truncate text-xs font-semibold text-gray-900 tablet:text-sm">
+                                            {formatAddress(selectedAddress).length > 40
+                                                ? `${formatAddress(selectedAddress).substring(0, 40)}...`
+                                                : formatAddress(selectedAddress)
+                                            }
+                                        </span>
+                                    ) : (
+                                        <span className="text-xs font-semibold text-gray-900 tablet:text-sm">Select Address</span>
+                                    )}
+                                </div>
+                                <ChevronDownIcon
+                                    className={cn(
+                                        "h-4 w-4 text-gray-600 transition-transform shrink-0",
+                                        isAddressDropdownOpen && "rotate-180"
+                                    )}
+                                />
+                            </button>
 
                             {/* Address Dropdown */}
                             {isAddressDropdownOpen && !isLoadingAddresses && addresses.length > 0 && (
@@ -198,7 +198,7 @@ export default function Navbar() {
                                     </div>
                                 </div>
                             )}
-                            </div>
+                        </div>
                         )}
                     </div>
 

@@ -115,6 +115,14 @@ export const useAuthStore = create<AuthState>()(
                     isRefreshing: false,
                     tempAuthData: null,
                 });
+                
+                // Clear permission prompt dismissals on logout
+                // This allows the prompts to show again for a fresh session
+                if (typeof window !== 'undefined') {
+                    localStorage.removeItem('notification_prompt_dismissed');
+                    localStorage.removeItem('notification_permission_previous');
+                    localStorage.removeItem('location_permission_dismissed');
+                }
             },
 
             setHasHydrated: (state) => set({ _hasHydrated: state }),

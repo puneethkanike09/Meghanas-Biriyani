@@ -1,10 +1,12 @@
 "use client";
 
-import { useFCM } from "@/hooks/useFCM";
+import { useNotifications } from "@/hooks/useNotifications";
+import { useAuthStore } from "@/store/useAuthStore";
 import { ReactNode } from "react";
 
 export function FCMProvider({ children }: { children: ReactNode }) {
-    useFCM();
+    const { user } = useAuthStore();
+    useNotifications(user?.id);
     
     return <>{children}</>;
 }

@@ -3,8 +3,11 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { loadGoogleMaps, getCurrentLocation, reverseGeocode, getPlacePredictions, getPlaceDetails } from "@/lib/google-maps";
 import { LocationService } from "@/services/location.service";
+import { PermissionService } from "@/services/permission.service";
 import { toast } from "sonner";
 import Image from "next/image";
+import Loader from "@/components/ui/Loader";
+import Button from "@/components/ui/Button";
 
 interface LocationMapProps {
     onLocationChange: (location: {
@@ -47,6 +50,7 @@ export default function LocationMap({
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const isUpdatingRef = useRef(false);
+    const toastShownRef = useRef(false);
 
     // Update address from coordinates
     const updateAddressFromCoordinates = useCallback(async (lat: number, lng: number) => {
@@ -69,14 +73,46 @@ export default function LocationMap({
             let pincode = "";
             let country = "";
 
+            // First pass: Extract city with priority (locality > sublocality_level_1 > administrative_area_level_3)
+            // Always prioritize locality first, then fall back to sublocality_level_1 if locality not found
+            for (const component of components) {
+                const types = component.types;
+                if (types.includes("locality")) {
+                    // Prefer "locality" as it's the most specific city name (e.g., "Bengaluru", "Thiruvail")
+                    city = component.long_name;
+                    break; // Found the city, stop looking
+                }
+            }
+
+            // If locality not found, try sublocality_level_1 (e.g., "Vamanjoor")
+            if (!city) {
+                for (const component of components) {
+                    const types = component.types;
+                    if (types.includes("sublocality_level_1") && !types.includes("sublocality_level_2") && !types.includes("sublocality_level_3")) {
+                        city = component.long_name;
+                        break;
+                    }
+                }
+            }
+
+            // If still not found, try administrative_area_level_3
+            if (!city) {
+                for (const component of components) {
+                    const types = component.types;
+                    if (types.includes("administrative_area_level_3")) {
+                        city = component.long_name;
+                        break;
+                    }
+                }
+            }
+
+            // Second pass: Extract other components
             components.forEach((component) => {
                 const types = component.types;
                 if (types.includes("street_number")) {
                     streetNumber = component.long_name;
                 } else if (types.includes("route")) {
                     route = component.long_name;
-                } else if (types.includes("locality") || types.includes("sublocality_level_1") || types.includes("sublocality")) {
-                    if (!city) city = component.long_name;
                 } else if (types.includes("administrative_area_level_1")) {
                     state = component.long_name;
                 } else if (types.includes("postal_code")) {
@@ -88,6 +124,37 @@ export default function LocationMap({
 
             // Combine street number and route
             street = [streetNumber, route].filter(Boolean).join(" ") || locationData.formatted_address;
+
+            // If city still not found, try to extract from formatted_address
+            // This is a fallback for cases where Google Maps doesn't return city in components
+            // Format examples:
+            // "851, 8th - Cross Rd, Koramangala 8th Block, Koramangala, Bengaluru, Karnataka 560095, India"
+            // "Bengaluru, Karnataka, India"
+            if (!city && locationData.formatted_address) {
+                const addressParts = locationData.formatted_address.split(',').map(p => p.trim());
+                // Look for the city - it's usually before the state
+                // State typically contains "Karnataka", "Maharashtra", etc. or state codes like "KA", "MH"
+                for (let i = 0; i < addressParts.length; i++) {
+                    const part = addressParts[i];
+                    // Check if this part contains state name or code
+                    if (part && /(Karnataka|Maharashtra|Delhi|Tamil Nadu|KA|MH|DL|TN)/i.test(part)) {
+                        // City is likely the previous part
+                        if (i > 0) {
+                            city = addressParts[i - 1];
+                            // Remove pincode if it's in the same part (e.g., "Karnataka 560095")
+                            const statePart = part.split(/\s+/);
+                            if (statePart.length > 1 && /^\d+$/.test(statePart[statePart.length - 1])) {
+                                // Pincode is in state part, city is correct
+                            }
+                        }
+                        break;
+                    }
+                }
+                // If still not found, try second-to-last part (before country)
+                if (!city && addressParts.length >= 2) {
+                    city = addressParts[addressParts.length - 2];
+                }
+            }
 
             // Check nearest branch and delivery availability
             let isWithin5km = true;
@@ -210,38 +277,31 @@ export default function LocationMap({
 
     // Request location permission with Sonner toast
     const requestLocationPermission = useCallback(async (): Promise<GeolocationPosition | null> => {
-        if (!navigator.geolocation) {
-            toast.error("Location not supported", {
-                description: "Your browser doesn't support location services.",
-            });
+        // Prevent duplicate toasts in the same render cycle
+        if (toastShownRef.current) {
             return null;
         }
 
-        // Check permission state using Permissions API (if available) to avoid triggering browser prompt
-        let permissionState: PermissionState | null = null;
-        try {
-            if (navigator.permissions && navigator.permissions.query) {
-                const result = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
-                permissionState = result.state;
+        // Check permission state using PermissionService (doesn't trigger browser prompt)
+        const permissionState = await PermissionService.getLocationPermissionState();
 
-                // If permission is already granted, get location silently (no prompt)
-                if (permissionState === 'granted') {
-                    try {
-                        const position = await getCurrentLocation();
-                        setHasLocationPermission(true);
-                        return position;
-                    } catch {
-                        // Fall through to show toast
-                    }
-                }
-
-                // If permission is denied, don't show toast
-                if (permissionState === 'denied') {
-                    return null;
-                }
+        // If permission is already granted, get location silently (no prompt)
+        if (permissionState === 'granted') {
+            toastShownRef.current = true;
+            try {
+                const position = await getCurrentLocation();
+                setHasLocationPermission(true);
+                return position;
+            } catch {
+                // If getting location fails even with permission, don't show toast
+                return null;
             }
-        } catch {
-            // Permissions API not supported or failed, continue to show toast
+        }
+
+        // If permission is denied, don't show toast
+        if (permissionState === 'denied') {
+            toastShownRef.current = true;
+            return null;
         }
 
         // Check if toast was previously dismissed
@@ -260,18 +320,15 @@ export default function LocationMap({
 
         const canShowAgain = !wasDismissed || dismissedTimestamp < sevenDaysAgo;
 
+        // If dismissed recently, don't try to get location (would trigger prompt)
+        // Just return null - user can manually set location on map
         if (!canShowAgain) {
-            // Try to get location silently if dismissed (might work if user granted permission in settings)
-            try {
-                const position = await getCurrentLocation();
-                setHasLocationPermission(true);
-                return position;
-            } catch {
-                return null;
-            }
+            toastShownRef.current = true;
+            return null;
         }
 
         // Show toast FIRST (don't trigger browser prompt yet)
+        toastShownRef.current = true;
         return new Promise((resolve) => {
             // Show toast quickly (500ms delay)
             setTimeout(() => {
@@ -283,6 +340,7 @@ export default function LocationMap({
                         label: 'Allow',
                         onClick: async () => {
                             // Only NOW trigger the browser's permission prompt when user clicks "Allow"
+                            // Use getCurrentLocation directly - it will trigger the browser prompt
                             try {
                                 const position = await getCurrentLocation();
                                 setHasLocationPermission(true);
@@ -317,7 +375,7 @@ export default function LocationMap({
                         },
                     },
                 });
-            }, 500); // Show toast after 500ms (much faster)
+            }, 500); // Show toast after 500ms
         });
     }, []);
 
@@ -425,15 +483,11 @@ export default function LocationMap({
                 });
                 mapListeners.push(idleListener);
 
-                // Initial address update
-                if (center) {
-                    updateAddressFromCoordinates(center.lat, center.lng);
-                }
-
                 setIsLoading(false);
 
-                // Try to get user's current location (non-blocking)
-                requestLocationPermission().then((position) => {
+                // Try to get user's current location first (non-blocking)
+                // If permission is granted, use user's location; otherwise use default/initial center
+                requestLocationPermission().then(async (position) => {
                     if (position && isMounted && mapInstanceRef.current) {
                         const newCenter = {
                             lat: position.coords.latitude,
@@ -444,10 +498,29 @@ export default function LocationMap({
                         if (markerRef.current) {
                             markerRef.current.setPosition(newCenter);
                         }
-                        updateAddressFromCoordinates(newCenter.lat, newCenter.lng);
+                        // Small delay to ensure map and form are fully ready before updating address
+                        // This prevents race conditions on page refresh
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        if (isMounted) {
+                            await updateAddressFromCoordinates(newCenter.lat, newCenter.lng);
+                        }
+                    } else {
+                        // No permission or failed to get location - use default/initial center
+                        if (center && isMounted) {
+                            await new Promise(resolve => setTimeout(resolve, 100));
+                            if (isMounted) {
+                                await updateAddressFromCoordinates(center.lat, center.lng);
+                            }
+                        }
                     }
-                }).catch(() => {
-                    // Use default or initial location
+                }).catch(async () => {
+                    // Failed to get location - use default/initial center
+                    if (center && isMounted) {
+                        await new Promise(resolve => setTimeout(resolve, 100));
+                        if (isMounted) {
+                            await updateAddressFromCoordinates(center.lat, center.lng);
+                        }
+                    }
                 });
             } catch (error: any) {
                 if (!isMounted) return;
@@ -463,6 +536,7 @@ export default function LocationMap({
 
         return () => {
             isMounted = false;
+            toastShownRef.current = false; // Reset toast ref on unmount
 
             // Clear update timeout
             if (updateTimeoutRef.current) {
@@ -573,18 +647,16 @@ export default function LocationMap({
                 />
                 {isLoading && (
                     <div className="absolute inset-0 flex items-center justify-center bg-gray-100 z-10">
-                        <div className="text-center">
-                            <div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-300 border-t-tango mx-auto mb-2"></div>
-                            <p className="text-sm text-gray-600">Loading map...</p>
-                        </div>
+                        <Loader message="Loading map..." />
                     </div>
                 )}
 
                 {/* Map Type Toggle Button */}
                 {!isLoading && mapInstanceRef.current && (
                     <div className="absolute top-4 right-4 z-20">
-                        <button
+                        <Button
                             type="button"
+                            variant="neutral"
                             onClick={() => {
                                 if (mapInstanceRef.current) {
                                     const newMapType = mapType === "roadmap"
@@ -594,19 +666,19 @@ export default function LocationMap({
                                     setMapType(newMapType);
                                 }
                             }}
-                            className="bg-white rounded-lg shadow-md px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors border border-gray-200 flex items-center gap-2"
+                            icon={
+                                <Image
+                                    src="/assets/profile/icons/Location.svg"
+                                    alt={mapType === "satellite" ? "Map" : "Satellite"}
+                                    width={18}
+                                    height={18}
+                                    className="h-[18px] w-[18px]"
+                                />
+                            }
+                            iconPosition="left"
                         >
-                            <Image
-                                src={mapType === "satellite"
-                                    ? "/assets/navbar/icons/Search.svg"
-                                    : "/assets/profile/icons/Location.svg"}
-                                alt={mapType === "satellite" ? "Map" : "Satellite"}
-                                width={16}
-                                height={16}
-                                className="h-4 w-4"
-                            />
-                            <span>{mapType === "satellite" ? "Map" : "Satellite"}</span>
-                        </button>
+                            {mapType === "satellite" ? "Map" : "Satellite"}
+                        </Button>
                     </div>
                 )}
             </div>
