@@ -30,6 +30,20 @@ interface LocationMapProps {
 
 const LOCATION_PERMISSION_DISMISSED_KEY = 'location_permission_dismissed';
 
+// Helper function to create pin element for AdvancedMarkerElement
+const createPinElement = () => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+        <svg width="30" height="42" viewBox="0 0 24 34" fill="none"
+            xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"
+                fill="#F97316" stroke="#FFFFFF" stroke-width="2"/>
+            <circle cx="12" cy="9.5" r="2.5" fill="#FFFFFF"/>
+        </svg>
+    `;
+    return div;
+};
+
 export default function LocationMap({
     onLocationChange,
     initialLocation,
@@ -37,7 +51,7 @@ export default function LocationMap({
 }: LocationMapProps) {
     const mapRef = useRef<HTMLDivElement>(null);
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
-    const markerRef = useRef<google.maps.Marker | null>(null);
+    const markerRef = useRef<google.maps.marker.AdvancedMarkerElement | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [hasLocationPermission, setHasLocationPermission] = useState(false);
     const [currentLocation, setCurrentLocation] = useState<{ lat: number; lng: number } | null>(
@@ -253,7 +267,7 @@ export default function LocationMap({
                 // Update map center and marker
                 mapInstanceRef.current.setCenter({ lat, lng });
                 mapInstanceRef.current.setZoom(15);
-                markerRef.current.setPosition({ lat, lng });
+                markerRef.current.position = { lat, lng };
                 setCurrentLocation({ lat, lng });
 
                 // Clear search
@@ -416,9 +430,12 @@ export default function LocationMap({
                 }
 
                 // Create map with the determined center (user location or default)
+                // Advanced Markers require a mapId - use env variable or default
+                const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || 'DEMO_MAP_ID';
                 const map = new google.maps.Map(mapRef.current, {
                     center,
                     zoom: 15,
+                    mapId, // Required for Advanced Markers
                     mapTypeId: mapType as google.maps.MapTypeId,
                     mapTypeControl: false,
                     streetViewControl: false,
@@ -437,22 +454,11 @@ export default function LocationMap({
                 });
                 mapListeners.push(mapTypeChangedListener);
 
-                // Create marker (pin) at center with pin pointer icon
-                const pinPath = "M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z";
-                const marker = new google.maps.Marker({
-                    position: center,
+                // Create marker (pin) at center with AdvancedMarkerElement
+                const marker = new google.maps.marker.AdvancedMarkerElement({
                     map,
-                    draggable: false, // Pin stays fixed, map moves
-                    animation: google.maps.Animation.DROP,
-                    icon: {
-                        path: pinPath,
-                        fillColor: "#F97316", // Tango color
-                        fillOpacity: 1,
-                        strokeColor: "#FFFFFF",
-                        strokeWeight: 2,
-                        scale: 1.2,
-                        anchor: new google.maps.Point(12, 22), // Anchor at bottom center of pin
-                    },
+                    position: center,
+                    content: createPinElement(),
                 });
 
                 markerRef.current = marker;
@@ -464,7 +470,7 @@ export default function LocationMap({
                     if (newCenter && marker) {
                         const lat = newCenter.lat();
                         const lng = newCenter.lng();
-                        marker.setPosition({ lat, lng });
+                        marker.position = { lat, lng };
                         setCurrentLocation({ lat, lng });
                         // Don't call updateAddressFromCoordinates here - let idle event handle it
                     }
@@ -478,7 +484,7 @@ export default function LocationMap({
                     if (newCenter && marker) {
                         const lat = newCenter.lat();
                         const lng = newCenter.lng();
-                        marker.setPosition({ lat, lng });
+                        marker.position = { lat, lng };
                         setCurrentLocation({ lat, lng });
                     }
                 });
@@ -525,7 +531,7 @@ export default function LocationMap({
                             setHasLocationPermission(true);
                             mapInstanceRef.current.setCenter(newCenter);
                             if (markerRef.current) {
-                                markerRef.current.setPosition(newCenter);
+                                markerRef.current.position = newCenter;
                             }
                             // Update address from new location
                             await new Promise(resolve => setTimeout(resolve, 100));
@@ -573,7 +579,7 @@ export default function LocationMap({
             // Clear marker
             if (markerRef.current) {
                 try {
-                    markerRef.current.setMap(null);
+                    markerRef.current.map = null;
                 } catch (e) {
                     // Ignore cleanup errors
                 }
